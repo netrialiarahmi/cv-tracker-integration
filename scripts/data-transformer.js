@@ -1,0 +1,409 @@
+/**
+ * Data Transformer - Transforms Planner CSV data to Hiring Tracker JSON format
+ */
+
+const fs = require('fs');
+const config = require('./config');
+const { getColumnValue } = require('./excel-parser');
+
+/**
+ * Get current date/time in Jakarta timezone
+ * @returns {string} Formatted datetime string
+ */
+function getCurrentDateTime() {
+  const now = new Date();
+  
+  // Convert to Jakarta timezone (UTC+7)
+  const jakartaTime = new Date(now.toLocaleString('en-US', { timeZone: config.timezone }));
+  
+  const year = jakartaTime.getFullYear();
+  const month = String(jakartaTime.getMonth() + 1).padStart(2, '0');
+  const day = String(jakartaTime.getDate()).padStart(2, '0');
+  const hours = String(jakartaTime.getHours()).padStart(2, '0');
+  const minutes = String(jakartaTime.getMinutes()).padStart(2, '0');
+  const seconds = String(jakartaTime.getSeconds()).padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+/**
+ * Map bucket name and progress to stage checkboxes
+ * @param {string} bucketName - Bucket name from Planner
+ * @param {string} progress - Progress status
+ * @param {Object} existingStages - Existing stages for HOLD/CANCELED preservation
+ * @returns {Object} Stage checkboxes object
+ */
+function mapBucketToStages(bucketName, progress, existingStages = null) {
+  // If completed, all stages are true
+  if (progress === config.completedStatus) {
+    return {
+      initialScreening: true,
+      interview: true,
+      skillTest: true,
+      finalInterview: true,
+      offering: true,
+      contractSign: true,
+      onBoarding: true
+    };
+  }
+  
+  // For HOLD, CANCELED, or In Progress - preserve existing stages
+  if (existingStages && (
+    bucketName.includes(config.specialBuckets.hold) ||
+    bucketName.includes(config.specialBuckets.canceled) ||
+    bucketName === config.specialBuckets.inProgress
+  )) {
+    return existingStages;
+  }
+  
+  // Map bucket to stages
+  const stages = config.bucketStages[bucketName];
+  if (stages) {
+    return { ...stages };
+  }
+  
+  // Default to initial screening false if bucket not recognized
+  console.warn(`⚠️  Unknown bucket name: "${bucketName}", using default stages`);
+  return {
+    initialScreening: false,
+    interview: false,
+    skillTest: false,
+    finalInterview: false,
+    offering: false,
+    contractSign: false,
+    onBoarding: false
+  };
+}
+
+/**
+ * Extract division from labels
+ * @param {string} labelsStr - Semicolon-separated labels
+ * @param {Object} existing - Existing data entry
+ * @returns {string} Division name
+ */
+function extractDivision(labelsStr, existing = null) {
+  if (!labelsStr) {
+    return existing?.Division || config.defaults.division;
+  }
+  
+  const labels = labelsStr.split(';').map(l => l.trim()).filter(l => l);
+  
+  // Check each label against division mapping
+  for (const label of labels) {
+    // Skip ignore labels
+    if (config.ignoreLabels.includes(label)) {
+      continue;
+    }
+    
+    // Check exact match
+    if (config.divisionMapping[label]) {
+      return config.divisionMapping[label];
+    }
+    
+    // Check partial match
+    for (const [key, value] of Object.entries(config.divisionMapping)) {
+      if (label.includes(key) || key.includes(label)) {
+        return value;
+      }
+    }
+  }
+  
+  // Return existing division if available
+  return existing?.Division || config.defaults.division;
+}
+
+/**
+ * Extract PIC from Assigned To field
+ * @param {string} assignedTo - Assigned To value
+ * @returns {string} PIC name (lowercase first name)
+ */
+function extractPIC(assignedTo) {
+  if (!assignedTo) {
+    return config.defaults.pic;
+  }
+  
+  // Handle multiple assignees (semicolon separated) - take first
+  const assignees = assignedTo.split(';').map(a => a.trim()).filter(a => a);
+  const firstAssignee = assignees[0] || '';
+  
+  // Check mapping
+  if (config.picMapping[firstAssignee]) {
+    return config.picMapping[firstAssignee];
+  }
+  
+  // Check partial match
+  for (const [key, value] of Object.entries(config.picMapping)) {
+    if (firstAssignee.includes(key) || key.includes(firstAssignee)) {
+      return value;
+    }
+  }
+  
+  // Default
+  return config.picMapping.default;
+}
+
+/**
+ * Extract hire type from labels
+ * @param {string} labelsStr - Semicolon-separated labels
+ * @returns {string} Hire type
+ */
+function extractHireType(labelsStr) {
+  if (!labelsStr) {
+    return config.defaults.hireType;
+  }
+  
+  const labels = labelsStr.split(';').map(l => l.trim()).filter(l => l);
+  
+  if (labels.includes(config.hireTypeLabels.replacement)) {
+    return 'Replacement';
+  }
+  
+  if (labels.includes(config.hireTypeLabels.additional)) {
+    return 'Additional';
+  }
+  
+  return config.defaults.hireType;
+}
+
+/**
+ * Extract replacement name from description
+ * @param {string} description - Description text
+ * @returns {string} Name of person being replaced
+ */
+function extractReplacementFor(description) {
+  if (!description) {
+    return config.defaults.replacementFor;
+  }
+  
+  const descLower = description.toLowerCase();
+  
+  for (const keyword of config.replacementKeywords) {
+    const index = descLower.indexOf(keyword);
+    if (index !== -1) {
+      // Extract text after keyword (next few words)
+      const afterKeyword = description.substring(index + keyword.length).trim();
+      
+      // Try to extract name (first 2-3 words, up to punctuation)
+      const match = afterKeyword.match(/^[:\s]*([A-Za-z\s]+?)(?:[,.\n]|$)/);
+      if (match && match[1]) {
+        return match[1].trim();
+      }
+    }
+  }
+  
+  return config.defaults.replacementFor;
+}
+
+/**
+ * Merge notes from existing and new description
+ * @param {string} existingNotes - Existing notes
+ * @param {string} newDescription - New description from Planner
+ * @returns {string} Merged notes
+ */
+function mergeNotes(existingNotes, newDescription) {
+  // Clean up description
+  const cleanDesc = newDescription ? newDescription.replace(/[\r\n]+/g, ' ').trim() : '';
+  
+  // If no new description, keep existing
+  if (!cleanDesc) {
+    return existingNotes || config.defaults.notes;
+  }
+  
+  // If no existing notes, use new description
+  if (!existingNotes) {
+    return cleanDesc;
+  }
+  
+  // If they're the same, just return one
+  if (existingNotes === cleanDesc) {
+    return existingNotes;
+  }
+  
+  // Otherwise append (but limit length)
+  const combined = `${existingNotes} | ${cleanDesc}`;
+  return combined.length > 500 ? combined.substring(0, 497) + '...' : combined;
+}
+
+/**
+ * Check if position should be frozen
+ * @param {string} bucketName - Bucket name
+ * @returns {boolean} True if frozen
+ */
+function isFrozen(bucketName) {
+  return bucketName.includes(config.specialBuckets.hold) ||
+         bucketName.includes(config.specialBuckets.canceled);
+}
+
+/**
+ * Find existing entry by job position
+ * @param {Array} existingData - Existing hiring data
+ * @param {string} jobPosition - Job position to find
+ * @returns {Object|null} Existing entry or null
+ */
+function findExisting(existingData, jobPosition) {
+  if (!existingData || !Array.isArray(existingData)) {
+    return null;
+  }
+  
+  return existingData.find(item => 
+    item['Job Position'] && 
+    item['Job Position'].trim() === jobPosition.trim()
+  ) || null;
+}
+
+/**
+ * Transform single CSV row to hiring tracker format
+ * @param {Object} row - CSV row
+ * @param {Object} existing - Existing data entry
+ * @returns {Object} Transformed entry
+ */
+function transformRow(row, existing = null) {
+  const taskName = getColumnValue(row, config.columns.taskName);
+  const bucketName = getColumnValue(row, config.columns.bucketName);
+  const progress = getColumnValue(row, config.columns.progress);
+  const assignedTo = getColumnValue(row, config.columns.assignedTo);
+  const labels = getColumnValue(row, config.columns.labels);
+  const description = getColumnValue(row, config.columns.description);
+  const createdDate = getColumnValue(row, config.columns.createdDate);
+  
+  // Get existing stages for preservation
+  const existingStages = existing ? {
+    initialScreening: existing['Initial screening'],
+    interview: existing['HR & User Interview (Stage 1)'],
+    skillTest: existing['Skill Test'],
+    finalInterview: existing['Final Interview'],
+    offering: existing['Offering'],
+    contractSign: existing['Contract Sign'],
+    onBoarding: existing['On Boarding']
+  } : null;
+  
+  // Map stages
+  const stages = mapBucketToStages(bucketName, progress, existingStages);
+  
+  // Extract metadata
+  const division = extractDivision(labels, existing);
+  const pic = extractPIC(assignedTo);
+  const hireType = extractHireType(labels);
+  const replacementFor = extractReplacementFor(description);
+  const freeze = isFrozen(bucketName);
+  const notes = mergeNotes(existing?.Notes, description);
+  
+  // Build transformed entry
+  return {
+    Division: division,
+    'Job Position': taskName,
+    'Initial screening': stages.initialScreening,
+    'HR & User Interview (Stage 1)': stages.interview,
+    'Skill Test': stages.skillTest,
+    'Final Interview': stages.finalInterview,
+    'Offering': stages.offering,
+    'Contract Sign': stages.contractSign,
+    'On Boarding': stages.onBoarding,
+    PIC: pic,
+    Notes: notes,
+    'Last Updated': getCurrentDateTime(),
+    'Has Skill Test': stages.skillTest,
+    'Hire Type': hireType,
+    'Replacement For': replacementFor,
+    'Job Description': existing?.['Job Description'] || config.defaults.jobDescription,
+    Attachments: Array.isArray(existing?.Attachments) ? existing.Attachments : config.defaults.attachments,
+    Freeze: freeze,
+    'Created Date': createdDate || existing?.['Created Date'] || config.defaults.createdDate
+  };
+}
+
+/**
+ * Transform entire CSV data to hiring tracker format
+ * @param {Array} csvData - Parsed CSV data
+ * @param {Array} existingData - Existing hiring data
+ * @returns {Array} Transformed data
+ */
+function transformData(csvData, existingData = []) {
+  console.log(`🔄 Transforming ${csvData.length} records...`);
+  
+  const transformed = [];
+  const updatedPositions = new Set();
+  
+  // Transform each CSV row
+  for (const row of csvData) {
+    const taskName = getColumnValue(row, config.columns.taskName);
+    
+    if (!taskName) {
+      console.warn('⚠️  Skipping row with empty task name');
+      continue;
+    }
+    
+    const existing = findExisting(existingData, taskName);
+    const transformedRow = transformRow(row, existing);
+    transformed.push(transformedRow);
+    updatedPositions.add(taskName);
+    
+    if (existing) {
+      console.log(`  ↻ Updated: ${taskName}`);
+    } else {
+      console.log(`  + Added: ${taskName}`);
+    }
+  }
+  
+  // Add existing entries that weren't in CSV (preserve them)
+  for (const existing of existingData) {
+    const jobPosition = existing['Job Position'];
+    if (!updatedPositions.has(jobPosition)) {
+      transformed.push(existing);
+      console.log(`  ✓ Preserved: ${jobPosition}`);
+    }
+  }
+  
+  console.log(`✅ Transformation complete: ${transformed.length} total entries`);
+  return transformed;
+}
+
+/**
+ * Load existing hiring data
+ * @param {string} filePath - Path to existing JSON file
+ * @returns {Array} Existing data or empty array
+ */
+function loadExistingData(filePath) {
+  try {
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      const data = JSON.parse(content);
+      console.log(`📂 Loaded ${data.length} existing entries`);
+      return data;
+    }
+  } catch (error) {
+    console.warn('⚠️  Could not load existing data:', error.message);
+  }
+  return [];
+}
+
+/**
+ * Save transformed data to JSON file
+ * @param {Array} data - Data to save
+ * @param {string} filePath - Output file path
+ */
+function saveData(data, filePath) {
+  try {
+    const jsonContent = JSON.stringify(data, null, 4);
+    fs.writeFileSync(filePath, jsonContent, 'utf-8');
+    console.log(`💾 Saved ${data.length} entries to ${filePath}`);
+  } catch (error) {
+    console.error('❌ Error saving data:', error.message);
+    throw error;
+  }
+}
+
+module.exports = {
+  transformData,
+  transformRow,
+  loadExistingData,
+  saveData,
+  getCurrentDateTime,
+  mapBucketToStages,
+  extractDivision,
+  extractPIC,
+  extractHireType,
+  extractReplacementFor,
+  mergeNotes,
+  findExisting
+};

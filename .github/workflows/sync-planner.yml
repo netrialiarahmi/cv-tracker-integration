@@ -1,0 +1,61 @@
+name: Sync Microsoft Planner Data
+
+on:
+  schedule:
+    # Run every day at 07:00 Asia/Jakarta
+    - cron: '0 0 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required to commit and push changes
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run Planner sync
+        env:
+          MICROSOFT_EMAIL: ${{ secrets.MICROSOFT_EMAIL }}
+          MICROSOFT_PASSWORD: ${{ secrets.MICROSOFT_PASSWORD }}
+          PLANNER_URL: ${{ secrets.PLANNER_URL }}
+          DATA_FILE: data/hiring-data.json
+          TIMEZONE: Asia/Jakarta
+        run: node scripts/sync-planner.js
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code data/hiring-data.json || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config user.name 'GitHub Action'
+          git config user.email 'action@github.com'
+          git add data/hiring-data.json
+          git commit -m "🔄 Update hiring data from Planner [skip ci]"
+          git push
+      
+      - name: No changes
+        if: steps.git-check.outputs.changed != 'true'
+        run: echo "ℹ️ No changes detected in hiring data"

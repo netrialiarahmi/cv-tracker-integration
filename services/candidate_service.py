@@ -1,0 +1,216 @@
+"""
+Candidate management service.
+Business logic for escalating candidates, adding comments, and fetching screening results.
+"""
+
+import os
+import json
+import requests
+import pandas as pd
+from io import StringIO
+from datetime import datetime
+from typing import List, Dict, Any, Optional
+from config.settings import (
+    CV_MATCHING_REPO, CV_MATCHING_BRANCH, CANDIDATES_FILE,
+    CV_MATCHING_RESULTS_DIR
+)
+from models.candidate import Candidate
+
+
+def _get_github_token() -> Optional[str]:
+    """Get GitHub token from environment or Streamlit secrets."""
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        return token
+    try:
+        import streamlit as st
+        return st.secrets.get("GITHUB_TOKEN")
+    except Exception:
+        return None
+
+
+def _get_github_headers() -> dict:
+    """Get GitHub API headers."""
+    token = _get_github_token()
+    headers = {"Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"token {token}"
+    return headers
+
+
+def load_candidates() -> List[Dict[str, Any]]:
+    """Load escalated candidates from local JSON file."""
+    if os.path.exists(CANDIDATES_FILE):
+        try:
+            with open(CANDIDATES_FILE, "r") as f:
+                content = f.read().strip()
+                if content:
+                    return json.loads(content)
+        except (json.JSONDecodeError, ValueError):
+            pass
+    return []
+
+
+def save_candidates(candidates: List[Dict[str, Any]]) -> None:
+    """Save candidates to local JSON file and backup to GitHub."""
+    os.makedirs(os.path.dirname(CANDIDATES_FILE), exist_ok=True)
+    with open(CANDIDATES_FILE, "w") as f:
+        json.dump(candidates, f, indent=4)
+    _backup_candidates_to_github(candidates)
+
+
+def _backup_candidates_to_github(candidates: List[Dict[str, Any]]) -> bool:
+    """Backup candidates.json to the hiring-tracker-v2 GitHub repo."""
+    from config.settings import GITHUB_BACKUP_REPO, GITHUB_BACKUP_BRANCH, GITHUB_BACKUP_ENABLED
+    import base64
+
+    if not GITHUB_BACKUP_ENABLED:
+        return False
+
+    token = _get_github_token()
+    if not token:
+        return False
+
+    try:
+        file_content = json.dumps(candidates, indent=4)
+        encoded_content = base64.b64encode(file_content.encode()).decode()
+        api_url = f"https://api.github.com/repos/{GITHUB_BACKUP_REPO}/contents/{CANDIDATES_FILE}"
+        headers = _get_github_headers()
+
+        sha = None
+        try:
+            response = requests.get(api_url, headers=headers, params={"ref": GITHUB_BACKUP_BRANCH}, timeout=10)
+            if response.status_code == 200:
+                sha = response.json().get("sha")
+        except Exception:
+            pass
+
+        commit_data = {
+            "message": f"Auto-backup: Update candidates.json - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "content": encoded_content,
+            "branch": GITHUB_BACKUP_BRANCH,
+        }
+        if sha:
+            commit_data["sha"] = sha
+
+        response = requests.put(api_url, headers=headers, json=commit_data, timeout=30)
+        return response.status_code in [200, 201]
+    except Exception:
+        return False
+
+
+def fetch_screening_results(position_name: str) -> Optional[pd.DataFrame]:
+    """
+    Fetch screening results for a position from the cv-matching-auto repo.
+    Reads the position-specific results CSV via GitHub API.
+    """
+    import re
+    safe_name = re.sub(r'[^\w\s]', '', position_name)
+    safe_name = re.sub(r'\s+', '_', safe_name)
+    safe_name = re.sub(r'_+', '_', safe_name)
+    path = f"{CV_MATCHING_RESULTS_DIR}/results_{safe_name}.csv"
+
+    headers = _get_github_headers()
+    raw_url = f"https://raw.githubusercontent.com/{CV_MATCHING_REPO}/{CV_MATCHING_BRANCH}/{path}"
+
+    try:
+        response = requests.get(raw_url, headers=headers, timeout=15)
+        if response.status_code == 200:
+            df = pd.read_csv(StringIO(response.text))
+            return df
+    except Exception:
+        pass
+
+    return None
+
+
+def fetch_job_positions_from_cv_matching() -> Optional[pd.DataFrame]:
+    """
+    Fetch job_positions.csv from cv-matching-auto repo.
+    Returns DataFrame with position names and descriptions.
+    """
+    headers = _get_github_headers()
+    raw_url = f"https://raw.githubusercontent.com/{CV_MATCHING_REPO}/{CV_MATCHING_BRANCH}/job_positions.csv"
+
+    try:
+        response = requests.get(raw_url, headers=headers, timeout=15)
+        if response.status_code == 200:
+            df = pd.read_csv(StringIO(response.text))
+            return df
+    except Exception:
+        pass
+
+    return None
+
+
+def escalate_candidate(screening_row: Dict[str, Any], position_key: str,
+                       division: str, escalated_by: str) -> Candidate:
+    """
+    Escalate a candidate from screening results to the hiring tracker.
+    Creates a Candidate record and saves it.
+    """
+    candidate = Candidate.from_screening_result(
+        screening_row, position_key, division, escalated_by
+    )
+    candidates = load_candidates()
+
+    # Check for duplicate (same email + position)
+    for existing in candidates:
+        if (existing.get("email") == candidate.email and
+                existing.get("position_key") == candidate.position_key and
+                candidate.email):
+            return Candidate(existing)  # Already escalated
+
+    candidates.append(candidate.to_dict())
+    save_candidates(candidates)
+    return candidate
+
+
+def add_comment_to_candidate(candidate_id: str, author: str, division: str,
+                             text: str, action: str = "comment") -> bool:
+    """Add a comment to an existing candidate and update their status if needed."""
+    candidates = load_candidates()
+    for i, c in enumerate(candidates):
+        if c.get("id") == candidate_id:
+            candidate = Candidate(c)
+            candidate.add_comment(author, division, text, action)
+
+            if action == "approve":
+                candidate.status = Candidate.STATUS_APPROVED
+            elif action == "reject":
+                candidate.status = Candidate.STATUS_REJECTED
+
+            candidates[i] = candidate.to_dict()
+            save_candidates(candidates)
+            return True
+    return False
+
+
+def update_candidate_status(candidate_id: str, new_status: str) -> bool:
+    """Update a candidate's status."""
+    candidates = load_candidates()
+    for i, c in enumerate(candidates):
+        if c.get("id") == candidate_id:
+            c["status"] = new_status
+            candidates[i] = c
+            save_candidates(candidates)
+            return True
+    return False
+
+
+def get_candidates_for_position(position_key: str) -> List[Candidate]:
+    """Get all escalated candidates for a specific position."""
+    candidates = load_candidates()
+    return [
+        Candidate(c) for c in candidates
+        if c.get("position_key") == position_key
+    ]
+
+
+def get_candidates_for_division(division: str) -> List[Candidate]:
+    """Get all escalated candidates for a specific division."""
+    candidates = load_candidates()
+    return [
+        Candidate(c) for c in candidates
+        if c.get("division") == division
+    ]

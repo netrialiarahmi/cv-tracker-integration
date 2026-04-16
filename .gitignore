@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Backup files
+app_old.py
+app_new.py
+*_old.py
+*_backup.py
+
+# Data files (local only)
+credentials.json
+hr_roles.json
+
+# Node.js
+node_modules/
+
+# Downloads and test files
+downloads/
+test-output.json
+
+# Environment
+.env
+
+# Streamlit
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Virtual Environment
+venv/
+env/
+ENV/
+screenshots/
