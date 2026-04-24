@@ -1,0 +1,159 @@
+"""
+Authentication logic for HR roles and division users.
+Handles login validation, logout, and HR roles configuration loading.
+"""
+
+import streamlit as st
+import os
+import json
+from typing import Dict, Any, Optional
+from src.config.settings import HR_ROLES_FILE, DEFAULT_HR_ROLES, DIVISION_USERNAMES
+from src.controllers.session_manager import qp_clear
+
+
+def get_hr_roles() -> Dict[str, Any]:
+    """
+    Load HR roles configuration from multiple sources with priority:
+    1. .streamlit/secrets.toml (for manual edits)
+    2. st.secrets (Streamlit-managed)
+    3. hr_roles.json (runtime-managed)
+    4. Default values
+    
+    Returns:
+        Dictionary containing superadmin and admins configuration
+    """
+    # Try reading .streamlit/secrets.toml first so manual edits are visible immediately
+    toml_path = os.path.join(".streamlit", "secrets.toml")
+    if os.path.exists(toml_path):
+        try:
+            try:
+                import tomllib as toml  # Python 3.11+
+            except Exception:
+                import toml  # fallback if package installed
+            with open(toml_path, "rb") as f:
+                toml_data = toml.load(f)
+            hr = toml_data.get("hr_roles", {}) or {}
+            result = {"admins": {}}
+
+            # admins
+            for admin_name, admin_data in hr.get("admins", {}).items():
+                if isinstance(admin_data, dict):
+                    pwd = admin_data.get("password", "")
+                else:
+                    pwd = str(admin_data)
+                result["admins"][admin_name] = {"password": pwd}
+
+            # superadmin: support both plural and legacy single entry
+            if "superadmins" in hr and isinstance(hr["superadmins"], dict):
+                first_user = next(iter(hr["superadmins"]), None)
+                if first_user:
+                    entry = hr["superadmins"][first_user]
+                    pwd = entry.get("password", "") if isinstance(entry, dict) else str(entry)
+                    result["superadmin"] = {"username": first_user, "password": pwd}
+                else:
+                    result["superadmin"] = {"username": "", "password": ""}
+            elif "superadmin" in hr and isinstance(hr["superadmin"], dict):
+                sa = hr["superadmin"]
+                result["superadmin"] = {"username": sa.get("username", ""), "password": sa.get("password", "")}
+            else:
+                result.setdefault("superadmin", {"username": "", "password": ""})
+
+            return result
+        except Exception:
+            # If file parsing fails, continue to try st.secrets / json fallback
+            pass
+
+    # If no/invalid TOML, try st.secrets (Streamlit-managed)
+    try:
+        hr_data = st.secrets.get("hr_roles")
+        if hr_data:
+            result = {"admins": {}}
+            for admin_name, admin_data in hr_data.get("admins", {}).items():
+                result["admins"][admin_name] = {
+                    "password": admin_data.get("password", "") if isinstance(admin_data, dict) else str(admin_data)
+                }
+            if "superadmins" in hr_data and isinstance(hr_data["superadmins"], dict):
+                first_user = next(iter(hr_data["superadmins"]), None)
+                if first_user:
+                    entry = hr_data["superadmins"][first_user]
+                    pwd = entry.get("password", "") if isinstance(entry, dict) else str(entry)
+                    result["superadmin"] = {"username": first_user, "password": pwd}
+                else:
+                    result["superadmin"] = {"username": "", "password": ""}
+            elif "superadmin" in hr_data and isinstance(hr_data["superadmin"], dict):
+                sa = hr_data["superadmin"]
+                result["superadmin"] = {"username": sa.get("username", ""), "password": sa.get("password", "")}
+            else:
+                result.setdefault("superadmin", {"username": "", "password": ""})
+            return result
+    except Exception:
+        pass
+
+    # fallback to hr_roles.json (runtime-managed) or defaults
+    if os.path.exists(HR_ROLES_FILE):
+        with open(HR_ROLES_FILE) as f:
+            return json.load(f)
+    return DEFAULT_HR_ROLES
+
+
+def logout() -> None:
+    """
+    Clear all session state and query parameters, then trigger a rerun.
+    """
+    # Clear all session state
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    # Clear query params
+    qp_clear()
+    st.rerun()
+
+
+def authenticate_user(username: str, password: str, admin_name: str = None) -> Optional[Dict[str, str]]:
+    """
+    Unified authentication — auto-detect role from username + password.
+    Check order: superadmin → admins → divisions.
+
+    Returns:
+        Dict with role info on success: {"role", "division", "hr_admin", "display_name"}
+        None on failure.
+    """
+    hr_roles = get_hr_roles()
+    username_lower = username.strip().lower()
+
+    # 1. Check superadmin
+    sa = hr_roles.get("superadmin", {})
+    if username_lower == sa.get("username", "").lower() and password == sa.get("password", ""):
+        return {
+            "role": "HR Superadmin",
+            "division": "Human Resource",
+            "hr_admin": None,
+            "display_name": "HR Superadmin",
+        }
+
+    # 2. Check HR admins
+    for admin_key, admin_data in hr_roles.get("admins", {}).items():
+        if username_lower == admin_key.lower():
+            admin_pass = admin_data.get("password", "") if isinstance(admin_data, dict) else str(admin_data)
+            if password == admin_pass:
+                display = admin_data.get("name", admin_key) if isinstance(admin_data, dict) else admin_key
+                return {
+                    "role": "HR Admin",
+                    "division": "Human Resource",
+                    "hr_admin": admin_key,
+                    "display_name": display,
+                }
+            break  # username matched but wrong password
+
+    # 3. Check divisions by short username
+    division_name = DIVISION_USERNAMES.get(username_lower)
+    if division_name:
+        credentials = st.session_state.get("credentials", {})
+        if password == credentials.get(division_name, ""):
+            return {
+                "role": "Division",
+                "division": division_name,
+                "hr_admin": None,
+                "display_name": division_name,
+            }
+
+    return None

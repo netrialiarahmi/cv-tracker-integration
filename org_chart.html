@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organization Structure — KG MEDIA (April 2026)</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  min-height: 100vh;
+}
+ 
+/* ── Header ── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.header h1 {
+  font-size: 15px; font-weight: 700; color: #1a237e;
+  white-space: nowrap;
+}
+.search-box {
+  position: relative; flex: 0 1 300px;
+}
+.search-box input {
+  width: 100%; padding: 6px 12px 6px 32px;
+  border: 1px solid #ccc; border-radius: 20px;
+  font-size: 13px; outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-box input:focus {
+  border-color: #5c6bc0;
+  box-shadow: 0 0 0 3px rgba(92,107,192,.15);
+}
+.search-box::before {
+  content: '\1F50D'; position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%); font-size: 13px; opacity: .4;
+}
+.header-actions {
+  margin-left: auto; display: flex; gap: 6px;
+}
+.header-actions button {
+  padding: 5px 12px; border: 1px solid #ccc; border-radius: 6px;
+  background: #fff; font-size: 12px; cursor: pointer;
+  color: #555; transition: all .15s;
+}
+.header-actions button:hover { background: #f5f5f5; border-color: #999; }
+.badge {
+  font-size: 11px; color: #888; white-space: nowrap;
+}
+
+/* ── Org Tree ── */
+.org-tree {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 20px 80px;
+  min-width: min-content;
+  overflow-x: auto;
+}
+
+/* ── Card ── */
+.card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  min-width: 180px;
+  max-width: 260px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  user-select: none;
+}
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+  transform: translateY(-2px);
+}
+.card--expanded {
+  border-color: #5c6bc0;
+}
+
+/* Avatar */
+.avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 6px;
+  font-weight: 700; font-size: 15px;
+  color: #fff;
+}
+
+.card-name {
+  font-weight: 600; font-size: 13px; color: #222;
+  line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-sub {
+  font-size: 11px; color: #888;
+  margin-top: 2px;
+  line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* Expand badge */
+.expand-badge {
+  position: absolute;
+  bottom: -12px; left: 50%;
+  transform: translateX(-50%);
+  background: #fff; border: 1px solid #ddd;
+  border-radius: 10px; padding: 1px 8px;
+  font-size: 10px; color: #666;
+  white-space: nowrap;
+  transition: all .15s;
+  z-index: 2;
+}
+.card:hover .expand-badge {
+  background: #5c6bc0; color: #fff; border-color: #5c6bc0;
+}
+
+/* ── Children container ── */
+.children-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  position: relative;
+}
+.children-row {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  position: relative;
+  padding-top: 24px;
+}
+.child-branch {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 8px;
+  position: relative;
+}
+
+/* ── Connector lines ── */
+.children-row::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 24px;
+}
+
+/* Vertical line from parent down */
+.children-wrap > .vline {
+  width: 1px; height: 24px;
+  background: #ccc;
+}
+
+/* Horizontal line across children */
+.children-row > .hline {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  background: #ccc;
+}
+
+/* Vertical line from hline down to each child */
+.child-branch::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 24px;
+  background: #ccc;
+}
+
+/* ── Level colors ── */
+.level-0 .avatar { background: #42a5f5; }
+.level-1 .avatar { background: #5c6bc0; }
+.level-2 .avatar { background: #26a69a; }
+.level-3 .avatar { background: #66bb6a; }
+.level-4 .avatar { background: #ffa726; }
+.level-5 .avatar { background: #ef5350; }
+
+.level-0 { border-left: 3px solid #42a5f5; }
+.level-1 { border-left: 3px solid #5c6bc0; }
+.level-2 { border-left: 3px solid #26a69a; }
+.level-3 { border-left: 3px solid #66bb6a; }
+.level-4 { border-left: 3px solid #ffa726; }
+.level-5 { border-left: 3px solid #ef5350; }
+
+/* Employee leaf card */
+.card--leaf {
+  background: #fafbff;
+  border-style: dashed;
+  min-width: 150px;
+}
+.card--leaf .card-name { font-size: 12px; }
+.card--leaf .card-sub { color: #ef5350; font-weight: 500; }
+
+/* ── Search highlight ── */
+.card--match {
+  border-color: #ffd54f !important;
+  box-shadow: 0 0 0 3px rgba(255,213,79,.4), 0 4px 12px rgba(0,0,0,.1) !important;
+  z-index: 10;
+}
+.card--dimmed {
+  opacity: .2;
+}
+
+/* ── Scroll container ── */
+.scroll-wrap {
+  width: 100%;
+  overflow: auto;
+  padding-top: 56px;
+}
+
+/* ── Animation ── */
+.children-row { animation: fadeSlide .3s ease; }
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>&#x1F3E2; Organization Structure — KG MEDIA</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search employee, position, division..." autocomplete="off">
+  </div>
+  <div class="header-actions">
+    <button onclick="collapseAll()">Collapse All</button>
+    <button onclick="expandLevel(2)">&#x25B8; Division</button>
+    <button onclick="expandLevel(3)">&#x25B8; Department</button>
+  </div>
+  <div class="badge" id="infoBadge"></div>
+</div>
+
+<div class="scroll-wrap">
+  <div class="org-tree" id="orgTree"></div>
+</div>
+
+<script>
+(function() {
+  const DATA = {"name": "KOMPAS GRAMEDIA / GROUP OF MEDIA (574)", "level": 0, "size": 574, "children": [{"name": "KG MEDIA (7)", "level": 1, "size": 7, "children": [{"name": "Secretary to CEO", "level": 5, "size": 1}, {"name": "Strategy Management Division (6)", "level": 2, "size": 6, "children": [{"name": "Business Intelligent Department (2)", "level": 3, "size": 2, "children": [{"name": "Business Intelligence Manager", "level": 5, "size": 1}, {"name": "Data Management Assistant", "level": 5, "size": 1}]}, {"name": "Strategy Management Department (3)", "level": 3, "size": 3, "children": [{"name": "Strategy Management Manager", "level": 5, "size": 1}, {"name": "Strategy Management Officer (2)", "level": 5, "size": 2}]}, {"name": "Secretary to GM Strategy Management", "level": 5, "size": 1}]}]}, {"name": "KOMPAS.COM Directorate (340)", "level": 1, "size": 340, "children": [{"name": "KOMPAS.COM News Division (273)", "level": 2, "size": 273, "children": [{"name": "Kompas.com News - Video & Social Media Department (96)", "level": 3, "size": 96, "children": [{"name": "Social Media Production Section (7)", "level": 4, "size": 7, "children": [{"name": "Social Media Production Lead", "level": 5, "size": 1}, {"name": "Social Media News Production Co-Lead (2)", "level": 5, "size": 2}, {"name": "News Content Creator (Social Media) (4)", "level": 5, "size": 4}]}, {"name": "Managing Editor Kompas.com News - Video & Social Media", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Video", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Social Media", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Video (Solo)", "level": 5, "size": 1}, {"name": "News Video Program Section 1 (6)", "level": 4, "size": 6, "children": [{"name": "News Video Program Lead 1", "level": 5, "size": 1}, {"name": "News Video Program Producer (3)", "level": 5, "size": 3}, {"name": "News Video Program Assistant Producer (2)", "level": 5, "size": 2}]}, {"name": "Warehouse & Video Production Section (11)", "level": 4, "size": 11, "children": [{"name": "Warehouse & Video Production Lead", "level": 5, "size": 1}, {"name": "Video Editor Program (5)", "level": 5, "size": 5}, {"name": "Videographer Program (4)", "level": 5, "size": 4}, {"name": "Creative Designer", "level": 5, "size": 1}]}, {"name": "Digital Content Distribution Section (8)", "level": 4, "size": 8, "children": [{"name": "Social Media Distribution Lead", "level": 5, "size": 1}, {"name": "Social Media Distribution Strategist", "level": 5, "size": 1}, {"name": "Social Media Distribution Officer (4)", "level": 5, "size": 4}, {"name": "Social Media Distribution CoLead", "level": 5, "size": 1}, {"name": "Social Media Graphic Designer", "level": 5, "size": 1}]}, {"name": "News Video Program Section 2 (2)", "level": 4, "size": 2, "children": [{"name": "News Video Program Lead 2", "level": 5, "size": 1}, {"name": "News Video Program Assistant Producer", "level": 5, "size": 1}]}, {"name": "Daily News Video Section (9)", "level": 4, "size": 9, "children": [{"name": "Koordinator Liputan (2)", "level": 5, "size": 2}, {"name": "Daily News Video Lead", "level": 5, "size": 1}, {"name": "Video Journalist (6)", "level": 5, "size": 6}]}, {"name": "Social Media Creative Section (4)", "level": 4, "size": 4, "children": [{"name": "Social Media Creative Co-Lead", "level": 5, "size": 1}, {"name": "Creative Content Creator (Social Media)", "level": 5, "size": 1}, {"name": "Social Media Creative Lead", "level": 5, "size": 1}, {"name": "Host & Creative", "level": 5, "size": 1}]}, {"name": "News Video Production Section (39)", "level": 4, "size": 39, "children": [{"name": "News Video Producer (8)", "level": 5, "size": 8}, {"name": "News Video Production Lead (3)", "level": 5, "size": 3}, {"name": "Video Editor (8)", "level": 5, "size": 8}, {"name": "News Content Creator Specialist (4)", "level": 5, "size": 4}, {"name": "News Content Creator (14)", "level": 5, "size": 14}, {"name": "Live Streamer (2)", "level": 5, "size": 2}]}, {"name": "Creative Video Section (4)", "level": 4, "size": 4, "children": [{"name": "Creative Video Lead", "level": 5, "size": 1}, {"name": "Video Program Assistant Producer (2)", "level": 5, "size": 2}, {"name": "Program Producer", "level": 5, "size": 1}]}, {"name": "News Video Program Section 3 (2)", "level": 4, "size": 2, "children": [{"name": "News Video Program Lead 3", "level": 5, "size": 1}, {"name": "ONR Assistant Producer", "level": 5, "size": 1}]}]}, {"name": "Kompas.com News - Text Department (175)", "level": 3, "size": 175, "children": [{"name": "Kanal Money (14)", "level": 4, "size": 14, "children": [{"name": "Money Assistant Editor (2)", "level": 5, "size": 2}, {"name": "Money Specialist & Assistant Editor", "level": 5, "size": 1}, {"name": "Money Editor", "level": 5, "size": 1}, {"name": "Content Writer Money (3)", "level": 5, "size": 3}, {"name": "Reporter Money (7)", "level": 5, "size": 7}]}, {"name": "In Depth Editor", "level": 5, "size": 1}, {"name": "Language Editing Officer & SEO", "level": 5, "size": 1}, {"name": "Managing Editor Kompas.com News - Text", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Text II", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Text I", "level": 5, "size": 1}, {"name": "Assistant Managing Editor Kompas.com News - Text (Solo)", "level": 5, "size": 1}, {"name": "Sekretaris Redaksi Solo", "level": 5, "size": 1}, {"name": "Kanal Health & Lifestyle (6)", "level": 4, "size": 6, "children": [{"name": "Lifestyle Assistant Editor", "level": 5, "size": 1}, {"name": "Health & Lifestyle Editor", "level": 5, "size": 1}, {"name": "Reporter Lifestyle", "level": 5, "size": 1}, {"name": "Content Writer Health & Lifestyle", "level": 5, "size": 1}, {"name": "Content Creator Lifestyle", "level": 5, "size": 1}, {"name": "Content Writer Lifestyle", "level": 5, "size": 1}]}, {"name": "Kanal Otomotif (19)", "level": 4, "size": 19, "children": [{"name": "Otomotif Assistant Editor (4)", "level": 5, "size": 4}, {"name": "Otomotif Editor", "level": 5, "size": 1}, {"name": "Reporter Otomotif (8)", "level": 5, "size": 8}, {"name": "Videographer Otomotif", "level": 5, "size": 1}, {"name": "Video Editor Otomotif", "level": 5, "size": 1}, {"name": "Reporter Otomotif Solo (2)", "level": 5, "size": 2}, {"name": "Video Superintendent Otomotif", "level": 5, "size": 1}, {"name": "Host/Creative Otomotif", "level": 5, "size": 1}]}, {"name": "Kanal Kolom (2)", "level": 4, "size": 2, "children": [{"name": "Kolom Editor", "level": 5, "size": 1}, {"name": "Kolom Assistant Editor", "level": 5, "size": 1}]}, {"name": "Desk Regional Barat (7)", "level": 4, "size": 7, "children": [{"name": "Regional Assistant Editor (4)", "level": 5, "size": 4}, {"name": "Regional Editor (Barat)", "level": 5, "size": 1}, {"name": "Content Writer Regional (Barat) (2)", "level": 5, "size": 2}]}, {"name": "Kanal Edukasi (5)", "level": 4, "size": 5, "children": [{"name": "Edukasi Editor", "level": 5, "size": 1}, {"name": "Reporter Edukasi (2)", "level": 5, "size": 2}, {"name": "Content Writer Edukasi", "level": 5, "size": 1}, {"name": "Edukasi Assistant Editor", "level": 5, "size": 1}]}, {"name": "Desk Regional Timur (6)", "level": 4, "size": 6, "children": [{"name": "Regional Assistant Editor (Timur) (3)", "level": 5, "size": 3}, {"name": "Regional Editor (Timur)", "level": 5, "size": 1}, {"name": "Content Writer Regional (Timur) (2)", "level": 5, "size": 2}]}, {"name": "Kanal Tekno (11)", "level": 4, "size": 11, "children": [{"name": "Tekno Editor", "level": 5, "size": 1}, {"name": "Tekno Assistant Editor (3)", "level": 5, "size": 3}, {"name": "Reporter Tekno (5)", "level": 5, "size": 5}, {"name": "Content Writer Tekno (2)", "level": 5, "size": 2}]}, {"name": "Kanal Cahaya (3)", "level": 4, "size": 3, "children": [{"name": "Editor Cahaya", "level": 5, "size": 1}, {"name": "Assistant Editor Cahaya", "level": 5, "size": 1}, {"name": "Content Writer Cahaya", "level": 5, "size": 1}]}, {"name": "Desk Nasional (19)", "level": 4, "size": 19, "children": [{"name": "Nasional Assistant Editor (5)", "level": 5, "size": 5}, {"name": "Nasional Reporter (12)", "level": 5, "size": 12}, {"name": "Nasional Editor", "level": 5, "size": 1}, {"name": "Content Writer Nasional", "level": 5, "size": 1}]}, {"name": "Kanal Properti, Homey, Agri & IKN (4)", "level": 4, "size": 4, "children": [{"name": "Property, Homey, Agri, IKN Editor", "level": 5, "size": 1}, {"name": "Content Writer Properti", "level": 5, "size": 1}, {"name": "Reporter Properti (2)", "level": 5, "size": 2}]}, {"name": "Kanal Lestari (3)", "level": 4, "size": 3, "children": [{"name": "Lestari Editor", "level": 5, "size": 1}, {"name": "Reporter Lestari (2)", "level": 5, "size": 2}]}, {"name": "Desk Hype (9)", "level": 4, "size": 9, "children": [{"name": "Hype Editor", "level": 5, "size": 1}, {"name": "Hype Assistant Editor (2)", "level": 5, "size": 2}, {"name": "Content Writer Hype (2)", "level": 5, "size": 2}, {"name": "Reporter Hype (3)", "level": 5, "size": 3}, {"name": "Hype Assistant Editor Lirik Sinopsis", "level": 5, "size": 1}]}, {"name": "Desk Regional Tengah (5)", "level": 4, "size": 5, "children": [{"name": "Regional Assistant Editor (Tengah) (2)", "level": 5, "size": 2}, {"name": "Regional Editor (Tengah)", "level": 5, "size": 1}, {"name": "Content Writer Regional (Tengah) (2)", "level": 5, "size": 2}]}, {"name": "Kanal Cek Fakta (5)", "level": 4, "size": 5, "children": [{"name": "Fact Check Editor", "level": 5, "size": 1}, {"name": "Reporter Fact Check (4)", "level": 5, "size": 4}]}, {"name": "Desk Megapolitan (19)", "level": 4, "size": 19, "children": [{"name": "Megapolitan Assistant Editor (5)", "level": 5, "size": 5}, {"name": "Content Writer Megapolitan (2)", "level": 5, "size": 2}, {"name": "Reporter Megapolitan (11)", "level": 5, "size": 11}, {"name": "Megapolitan Editor", "level": 5, "size": 1}]}, {"name": "Kanal Properti (1)", "level": 4, "size": 1, "children": [{"name": "Properti Assistant Editor", "level": 5, "size": 1}]}, {"name": "Kanal JEO & Sains (1)", "level": 4, "size": 1, "children": [{"name": "Content Writer Sains", "level": 5, "size": 1}]}, {"name": "Desk Tren (10)", "level": 4, "size": 10, "children": [{"name": "Tren Editor Solo", "level": 5, "size": 1}, {"name": "Assistant Editor Tren Solo (3)", "level": 5, "size": 3}, {"name": "Reporter Tren Solo (6)", "level": 5, "size": 6}]}, {"name": "Kanal Travel & Food (7)", "level": 4, "size": 7, "children": [{"name": "Travel & Food Assistant Editor (2)", "level": 5, "size": 2}, {"name": "Travel & Food Editor", "level": 5, "size": 1}, {"name": "Reporter Travel & Food (2)", "level": 5, "size": 2}, {"name": "Content Writer Travel & Food (2)", "level": 5, "size": 2}]}, {"name": "Kanal Olahraga (5)", "level": 4, "size": 5, "children": [{"name": "Olahraga Editor", "level": 5, "size": 1}, {"name": "Olahraga Assistant Editor", "level": 5, "size": 1}, {"name": "Content Writer Olahraga (3)", "level": 5, "size": 3}]}, {"name": "Kanal Skola (1)", "level": 4, "size": 1, "children": [{"name": "Skola Editor Solo", "level": 5, "size": 1}]}, {"name": "Kanal Ohayo (1)", "level": 4, "size": 1, "children": [{"name": "Ohayo Editor", "level": 5, "size": 1}]}, {"name": "Desk Global (5)", "level": 4, "size": 5, "children": [{"name": "Global Editor Solo", "level": 5, "size": 1}, {"name": "Global Assistant Editor Solo", "level": 5, "size": 1}, {"name": "Content Writer Global (3)", "level": 5, "size": 3}]}]}, {"name": "Editorial Secretary (2)", "level": 5, "size": 2}]}, {"name": "Kompas.com Sales Division (38)", "level": 2, "size": 38, "children": [{"name": "Kompas.com Sales Department - Government 2 & Brand 3 (9)", "level": 3, "size": 9, "children": [{"name": "Kompas.com Sales Gov & Brand - Section 1 (4)", "level": 4, "size": 4, "children": [{"name": "Account Executive (3)", "level": 5, "size": 3}, {"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}]}, {"name": "Kompas.com Sales Assistant Manager - Government", "level": 5, "size": 1}, {"name": "Kompas.com Sales Gov & Brand - Section 2 (4)", "level": 4, "size": 4, "children": [{"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}, {"name": "Account Executive (3)", "level": 5, "size": 3}]}]}, {"name": "Kompas.com Sales Department - Government 1 (6)", "level": 3, "size": 6, "children": [{"name": "Kompas.com Sales Gov. 1 - Section 1 (5)", "level": 4, "size": 5, "children": [{"name": "Account Executive (4)", "level": 5, "size": 4}, {"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}]}, {"name": "Kompas.com Senior Sales Manager - Government", "level": 5, "size": 1}]}, {"name": "Kompas.com Sales Department - Brand 1 (10)", "level": 3, "size": 10, "children": [{"name": "Kompas.com Sales Brand 1 - Section 3 (3)", "level": 4, "size": 3, "children": [{"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}, {"name": "Account Executive (2)", "level": 5, "size": 2}]}, {"name": "Kompas.com Sales Manager", "level": 5, "size": 1}, {"name": "Kompas.com Sales Brand 1 - Section 1 (3)", "level": 4, "size": 3, "children": [{"name": "Account Executive (2)", "level": 5, "size": 2}, {"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}]}, {"name": "Kompas.com Sales Brand 1 - Section 2 (3)", "level": 4, "size": 3, "children": [{"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}, {"name": "Account Executive (2)", "level": 5, "size": 2}]}]}, {"name": "Kompas.com Sales Department - Brand 2 (10)", "level": 3, "size": 10, "children": [{"name": "Kompas.com Sales Manager", "level": 5, "size": 1}, {"name": "Kompas.com Sales Brand 2 - Section 1 (2)", "level": 4, "size": 2, "children": [{"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}, {"name": "Account Executive", "level": 5, "size": 1}]}, {"name": "Kompas.com Sales Brand 2 - Section 3 (3)", "level": 4, "size": 3, "children": [{"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}, {"name": "Account Executive (2)", "level": 5, "size": 2}]}, {"name": "Kompas.com Sales Brand 2 - Section 2 (4)", "level": 4, "size": 4, "children": [{"name": "Account Executive (3)", "level": 5, "size": 3}, {"name": "Kompas.com Sales Superintendent", "level": 5, "size": 1}]}]}, {"name": "Kompas.com Sales Administration Section (3)", "level": 4, "size": 3, "children": [{"name": "Kompas.com Sales Admin Superintendent", "level": 5, "size": 1}, {"name": "Kompas.com Sales Admin. Support (2)", "level": 5, "size": 2}]}]}, {"name": "Managing Director Kompas.com", "level": 5, "size": 1}, {"name": "Business Incubation Division (3)", "level": 2, "size": 3, "children": [{"name": "Business Incubation Section (3)", "level": 4, "size": 3, "children": [{"name": "Business Incubation Lead (3)", "level": 5, "size": 3}]}]}, {"name": "Kompas.com Marketing Division (25)", "level": 2, "size": 25, "children": [{"name": "GM Kompas.com Marketing", "level": 5, "size": 1}, {"name": "Kompascom Strategic Marketing 1 Department (10)", "level": 3, "size": 10, "children": [{"name": "Strategic Marketing - 2 Section (5)", "level": 4, "size": 5, "children": [{"name": "Marketing Packages Support (2)", "level": 5, "size": 2}, {"name": "Strategic Marketing Officer (2)", "level": 5, "size": 2}, {"name": "Sr. Strategic Marketing Officer", "level": 5, "size": 1}]}, {"name": "Strategic Marketing Assistant Manager", "level": 5, "size": 1}, {"name": "Strategic Marketing - 1 Section (4)", "level": 4, "size": 4, "children": [{"name": "Marketing Package & Socmed Ads Optimization Officer", "level": 5, "size": 1}, {"name": "Strategic Marketing Superintendent 1", "level": 5, "size": 1}, {"name": "Strategic Marketing Officer (2)", "level": 5, "size": 2}]}]}, {"name": "Kompas.com Marketing Communication Department (6)", "level": 3, "size": 6, "children": [{"name": "Kompas.com Marketing Communication Section (5)", "level": 4, "size": 5, "children": [{"name": "Marketing Communication Officer (4)", "level": 5, "size": 4}, {"name": "Marketing Communication Superintendent", "level": 5, "size": 1}]}, {"name": "Kompas.com Marketing Communication Assistant Manager", "level": 5, "size": 1}]}, {"name": "Activation Department (4)", "level": 3, "size": 4, "children": [{"name": "Activation Administrative Assistant", "level": 5, "size": 1}, {"name": "Activation Officer (2)", "level": 5, "size": 2}, {"name": "Activation Section (1)", "level": 4, "size": 1, "children": [{"name": "Activation Officer", "level": 5, "size": 1}]}]}, {"name": "Kompascom Strategic Marketing 2 Department (4)", "level": 3, "size": 4, "children": [{"name": "Strategic Marketing Officer (3)", "level": 5, "size": 3}, {"name": "Kompas.com Marketing Manager", "level": 5, "size": 1}]}]}]}, {"name": "Technology Directorate (72)", "level": 1, "size": 72, "children": [{"name": "Product & Data Division (36)", "level": 2, "size": 36, "children": [{"name": "Product Department (18)", "level": 3, "size": 18, "children": [{"name": "Product Manager (4)", "level": 5, "size": 4}, {"name": "Sr. Product Manager", "level": 5, "size": 1}, {"name": "Product Designer (6)", "level": 5, "size": 6}, {"name": "Principal Product Manager (3)", "level": 5, "size": 3}, {"name": "Senior Product Designer", "level": 5, "size": 1}, {"name": "SEO Specialist (3)", "level": 5, "size": 3}]}, {"name": "General Manager Product & Data", "level": 5, "size": 1}, {"name": "Data & Customer Intelligence Department (17)", "level": 3, "size": 17, "children": [{"name": "Data & Marketing Technology Section (6)", "level": 4, "size": 6, "children": [{"name": "Data & Marketing Technology Lead", "level": 5, "size": 1}, {"name": "Data Engineer (4)", "level": 5, "size": 4}, {"name": "Software Engineer", "level": 5, "size": 1}]}, {"name": "Data Science & Analytic Section (8)", "level": 4, "size": 8, "children": [{"name": "Data Science & Analytic Lead", "level": 5, "size": 1}, {"name": "Data Analyst (4)", "level": 5, "size": 4}, {"name": "AI Engineer (3)", "level": 5, "size": 3}]}, {"name": "Prod. & Marketing Tech Operation Section (2)", "level": 4, "size": 2, "children": [{"name": "Marketing Technology Officer (2)", "level": 5, "size": 2}]}, {"name": "Associate Data Scientist", "level": 5, "size": 1}]}]}, {"name": "Technology Engineering Division (35)", "level": 2, "size": 35, "children": [{"name": "Kompas.com Engineering Department (9)", "level": 3, "size": 9, "children": [{"name": "Kompas.com Engineering Manager", "level": 5, "size": 1}, {"name": "Kompasiana,Pasangiklan&Unmnd SoftEng Sec (4)", "level": 4, "size": 4, "children": [{"name": "Media Solutions Software Engineering Superintendent", "level": 5, "size": 1}, {"name": "Pasangiklan.com Software Engineer", "level": 5, "size": 1}, {"name": "Kompasiana Software Engineer", "level": 5, "size": 1}, {"name": "Software Engineer", "level": 5, "size": 1}]}, {"name": "Kompas.com Engineering Section (4)", "level": 4, "size": 4, "children": [{"name": "Kompas.com Software Engineer (4)", "level": 5, "size": 4}]}]}, {"name": "General Manager Technology Engineering", "level": 5, "size": 1}, {"name": "Grid & KompasTV Engineering Department (2)", "level": 3, "size": 2, "children": [{"name": "Grid & KompasTV Engineering Manager", "level": 5, "size": 1}, {"name": "Grid.ID Software Engineer", "level": 5, "size": 1}]}, {"name": "Development Department (17)", "level": 3, "size": 17, "children": [{"name": "Development Manager", "level": 5, "size": 1}, {"name": "Front End Section (5)", "level": 4, "size": 5, "children": [{"name": "Product Engineering Superintendent", "level": 5, "size": 1}, {"name": "UIUX Engineer (3)", "level": 5, "size": 3}, {"name": "Product Engineer", "level": 5, "size": 1}]}, {"name": "Core Development Section (5)", "level": 4, "size": 5, "children": [{"name": "Core & Apps Software Engineering Superintendent", "level": 5, "size": 1}, {"name": "Software Engineer (4)", "level": 5, "size": 4}]}, {"name": "Apps Development Section (4)", "level": 4, "size": 4, "children": [{"name": "Android/IOS App Superintendent", "level": 5, "size": 1}, {"name": "Mobile Apps Engineer (2)", "level": 5, "size": 2}, {"name": "Android/iOS Engineer", "level": 5, "size": 1}]}, {"name": "QA Section (2)", "level": 4, "size": 2, "children": [{"name": "QA Engineer (2)", "level": 5, "size": 2}]}]}, {"name": "Infrastructure Department (2)", "level": 3, "size": 2, "children": [{"name": "Network Administrator (2)", "level": 5, "size": 2}]}, {"name": "DevOps Department (4)", "level": 3, "size": 4, "children": [{"name": "DevOps Section (1)", "level": 4, "size": 1, "children": [{"name": "DevOps Superintendent", "level": 5, "size": 1}]}, {"name": "DevOps Engineer (2)", "level": 5, "size": 2}, {"name": "Sr. Dev Ops Engineer", "level": 5, "size": 1}]}]}, {"name": "Senior General Manager Technology", "level": 5, "size": 1}]}, {"name": "Marketing Directorate (82)", "level": 1, "size": 82, "children": [{"name": "Kompasiana Department (23)", "level": 2, "size": 23, "children": [{"name": "Kompasiana Department (23)", "level": 3, "size": 23, "children": [{"name": "Kompasiana Manager", "level": 5, "size": 1}, {"name": "Kompasiana Administration Support", "level": 5, "size": 1}, {"name": "Kompasiana Content & Community Section (9)", "level": 4, "size": 9, "children": [{"name": "Kompasiana Content & Community Lead", "level": 5, "size": 1}, {"name": "Kompasiana Designer", "level": 5, "size": 1}, {"name": "Kompasiana Content & Community Co-Lead", "level": 5, "size": 1}, {"name": "Kompasiana Community Moderator", "level": 5, "size": 1}, {"name": "Kompasiana Content Moderator", "level": 5, "size": 1}, {"name": "Kompasiana Community Officer (2)", "level": 5, "size": 2}, {"name": "Kompasiana Jr. Associate Moderator", "level": 5, "size": 1}, {"name": "Kompasiana Sr. Associate Moderator", "level": 5, "size": 1}]}, {"name": "Kompasiana Marketing Section (6)", "level": 4, "size": 6, "children": [{"name": "Implementor (2)", "level": 5, "size": 2}, {"name": "Kompasiana Marketing Strategic Lead", "level": 5, "size": 1}, {"name": "Marketing Communication Officer", "level": 5, "size": 1}, {"name": "Kompasiana Strategic Marketing Officer (2)", "level": 5, "size": 2}]}, {"name": "Kompasiana Sales Section (4)", "level": 4, "size": 4, "children": [{"name": "Kompasiana Account Executive (3)", "level": 5, "size": 3}, {"name": "Kompasiana Sales Superintendent", "level": 5, "size": 1}]}, {"name": "Kompasiana Social Media Section (2)", "level": 4, "size": 2, "children": [{"name": "Kompasiana Social Media Specialist", "level": 5, "size": 1}, {"name": "Kompasiana Social Media Superintendent", "level": 5, "size": 1}]}]}]}, {"name": "Integrated Marketing KG MEDIA Division (46)", "level": 2, "size": 46, "children": [{"name": "Lative Ads Department (27)", "level": 3, "size": 27, "children": [{"name": "Video Section (5)", "level": 4, "size": 5, "children": [{"name": "Video Officer", "level": 5, "size": 1}, {"name": "Content Marketing Video Assistant Producer", "level": 5, "size": 1}, {"name": "Videographer", "level": 5, "size": 1}, {"name": "Producer Content Marketing Superintendent", "level": 5, "size": 1}, {"name": "Content Marketing Video Producer", "level": 5, "size": 1}]}, {"name": "Social Media Section (7)", "level": 4, "size": 7, "children": [{"name": "Post Campaign Analyst", "level": 5, "size": 1}, {"name": "Social Media Superintendent", "level": 5, "size": 1}, {"name": "Social Media Content Creator", "level": 5, "size": 1}, {"name": "Social Media Specialist (2)", "level": 5, "size": 2}, {"name": "Video Editor (2)", "level": 5, "size": 2}]}, {"name": "Native Ads Kompas.com Section (9)", "level": 4, "size": 9, "children": [{"name": "Lative Ads Kompas.com Superintendent", "level": 5, "size": 1}, {"name": "Lative Ads Kompas.com 2nd Superintendent", "level": 5, "size": 1}, {"name": "Content Editor (2)", "level": 5, "size": 2}, {"name": "Content Writer (5)", "level": 5, "size": 5}]}, {"name": "Solo Content Section (4)", "level": 4, "size": 4, "children": [{"name": "Solo Content Superintendent", "level": 5, "size": 1}, {"name": "Content Writer", "level": 5, "size": 1}, {"name": "Content Marketing Officer (2)", "level": 5, "size": 2}]}, {"name": "Lative Ads Manager", "level": 5, "size": 1}, {"name": "Lative Ads Asst. Manager", "level": 5, "size": 1}]}, {"name": "Creative Department (11)", "level": 3, "size": 11, "children": [{"name": "Creative Manager", "level": 5, "size": 1}, {"name": "Creative Section (10)", "level": 4, "size": 10, "children": [{"name": "Creative Front End Superintendent", "level": 5, "size": 1}, {"name": "Creative Designer (3)", "level": 5, "size": 3}, {"name": "Creative Marketing Superintendent", "level": 5, "size": 1}, {"name": "Front End Developer (2)", "level": 5, "size": 2}, {"name": "Creative Campaign", "level": 5, "size": 1}, {"name": "Creative Officer", "level": 5, "size": 1}, {"name": "Graphic Designer", "level": 5, "size": 1}]}]}, {"name": "Marketing Research Department (7)", "level": 3, "size": 7, "children": [{"name": "Marketing Research & Analytics Manager", "level": 5, "size": 1}, {"name": "User Researcher (2)", "level": 5, "size": 2}, {"name": "Marketing Analytics Section (1)", "level": 4, "size": 1, "children": [{"name": "Marketing Analytics Superintendent", "level": 5, "size": 1}]}, {"name": "Marketing Research Section (3)", "level": 4, "size": 3, "children": [{"name": "Marketing Research Officer (3)", "level": 5, "size": 3}]}]}, {"name": "Digital & Print Marketing Admin Support", "level": 5, "size": 1}]}, {"name": "StratX Division (6)", "level": 2, "size": 6, "children": [{"name": "Strategic Solution Department (4)", "level": 3, "size": 4, "children": [{"name": "Media Planner Sr. Lead", "level": 5, "size": 1}, {"name": "Head of Strategic", "level": 5, "size": 1}, {"name": "Research Section (2)", "level": 4, "size": 2, "children": [{"name": "Researcher (2)", "level": 5, "size": 2}]}]}, {"name": "StratX Admin Support", "level": 5, "size": 1}, {"name": "Account & Project Management Department (1)", "level": 3, "size": 1, "children": [{"name": "Account & Project Management Section (1)", "level": 4, "size": 1, "children": [{"name": "Account & Project Management Lead", "level": 5, "size": 1}]}]}]}, {"name": "Chief Marketing Officer", "level": 5, "size": 1}, {"name": "Administration Support", "level": 5, "size": 1}, {"name": "Marketing Communication KG MEDIA Division (5)", "level": 2, "size": 5, "children": [{"name": "Marketing Communication KG MEDIA Department (4)", "level": 3, "size": 4, "children": [{"name": "Social Media Strategist", "level": 5, "size": 1}, {"name": "Video Creator", "level": 5, "size": 1}, {"name": "Brand Copy Writer", "level": 5, "size": 1}, {"name": "Marketing Communication Officer KG MEDIA", "level": 5, "size": 1}]}, {"name": "NewsMedia & TV Marketing Comm Department (1)", "level": 3, "size": 1, "children": [{"name": "Media Partnership", "level": 5, "size": 1}]}]}]}, {"name": "Sales Directorate (38)", "level": 1, "size": 38, "children": [{"name": "Sales Operations & Programmatic Division (18)", "level": 2, "size": 18, "children": [{"name": "Direct Sales Operation Department (13)", "level": 3, "size": 13, "children": [{"name": "Direct Sales Ad Ops Section (3)", "level": 4, "size": 3, "children": [{"name": "Direct Sales Ad Ops Superintendent", "level": 5, "size": 1}, {"name": "Ad Ops - Direct Sales (2)", "level": 5, "size": 2}]}, {"name": "Creative Design Section (6)", "level": 4, "size": 6, "children": [{"name": "Designer (5)", "level": 5, "size": 5}, {"name": "Creative Advertising 2nd Superintendent", "level": 5, "size": 1}]}, {"name": "Direct Sales Operations Asst. Manager", "level": 5, "size": 1}, {"name": "Sales Support Section (3)", "level": 4, "size": 3, "children": [{"name": "Sales Support Superintendent", "level": 5, "size": 1}, {"name": "Sales Support (2)", "level": 5, "size": 2}]}]}, {"name": "Programmatic Sales Operation Department (5)", "level": 3, "size": 5, "children": [{"name": "Programmatic Partnership Section (3)", "level": 4, "size": 3, "children": [{"name": "Programmatic Officer (3)", "level": 5, "size": 3}]}, {"name": "Prog. Sales Operation Asst. Manager", "level": 5, "size": 1}, {"name": "Programmatic Sales Operation Manager", "level": 5, "size": 1}]}]}, {"name": "VCBL & Pasangiklan Division (18)", "level": 2, "size": 18, "children": [{"name": "VCBL Operation Department (6)", "level": 3, "size": 6, "children": [{"name": "VCBL Operation Asst. Manager", "level": 5, "size": 1}, {"name": "Data Analyst (2)", "level": 5, "size": 2}, {"name": "VCBL+ Section (3)", "level": 4, "size": 3, "children": [{"name": "VCBL Ads. Operation Executive (2)", "level": 5, "size": 2}, {"name": "VCBL+ Superintendent", "level": 5, "size": 1}]}]}, {"name": "Pasangiklan.com Department (3)", "level": 3, "size": 3, "children": [{"name": "Pasangiklan.com Manager", "level": 5, "size": 1}, {"name": "Product Business Development Executive", "level": 5, "size": 1}, {"name": "Account Executive", "level": 5, "size": 1}]}, {"name": "General Manager VCBL & Pasangiklan Division", "level": 5, "size": 1}, {"name": "VCBL Sales Department (8)", "level": 3, "size": 8, "children": [{"name": "Sales VCBL+ Section (6)", "level": 4, "size": 6, "children": [{"name": "VCBL Account Executive (5)", "level": 5, "size": 5}, {"name": "VCBL + Sales Superintendent", "level": 5, "size": 1}]}, {"name": "VCBL Sales Asst. Manager", "level": 5, "size": 1}, {"name": "Sales VCBL Section 1 (1)", "level": 4, "size": 1, "children": [{"name": "VCBL Sales Superintendent", "level": 5, "size": 1}]}]}]}, {"name": "Integrated Marketing KG MEDIA Division (1)", "level": 2, "size": 1, "children": [{"name": "Marketing Research Department (1)", "level": 3, "size": 1, "children": [{"name": "Marketing Research Section (1)", "level": 4, "size": 1, "children": [{"name": "Marketing Research Superintendent", "level": 5, "size": 1}]}]}]}, {"name": "Account Executive KG MEDIA", "level": 5, "size": 1}]}, {"name": "Operation Directorate (29)", "level": 1, "size": 29, "children": [{"name": "Finance & Accounting Media 2 Division (5)", "level": 2, "size": 5, "children": [{"name": "BMA Section (3)", "level": 4, "size": 3, "children": [{"name": "AP / BMA Superintendent", "level": 5, "size": 1}, {"name": "AP Admin (2)", "level": 5, "size": 2}]}, {"name": "Accounting Section (2)", "level": 4, "size": 2, "children": [{"name": "Accounting Officer", "level": 5, "size": 1}, {"name": "Accounting Admin", "level": 5, "size": 1}]}]}, {"name": "Human Resources Media 1 Division (8)", "level": 2, "size": 8, "children": [{"name": "Human Resources Digital - People Operation Department (3)", "level": 3, "size": 3, "children": [{"name": "Human Resources Digital - People Operation Manager", "level": 5, "size": 1}, {"name": "People Operation Section (2)", "level": 4, "size": 2, "children": [{"name": "People Operation Superintendent", "level": 5, "size": 1}, {"name": "Legal & Industrial Relation Analyst", "level": 5, "size": 1}]}]}, {"name": "Human Resources Digital - Organization & People Development Department (4)", "level": 3, "size": 4, "children": [{"name": "Organization, Talent Acquisition & Development Section (3)", "level": 4, "size": 3, "children": [{"name": "Talent Development Analyst", "level": 5, "size": 1}, {"name": "Talent Acquisition & External Relation Analyst", "level": 5, "size": 1}, {"name": "Performance & Data Analyst", "level": 5, "size": 1}]}, {"name": "Human Resources Digital - Organization & People Development Manager", "level": 5, "size": 1}]}, {"name": "Secretary to GM HR Media 1 & HR Support", "level": 5, "size": 1}]}, {"name": "General Affairs Media Division (7)", "level": 2, "size": 7, "children": [{"name": "Procurement & Asset Management Department (5)", "level": 3, "size": 5, "children": [{"name": "Asset Management Section (3)", "level": 4, "size": 3, "children": [{"name": "Asset Management Officer (2)", "level": 5, "size": 2}, {"name": "Asset Management Superintendent", "level": 5, "size": 1}]}, {"name": "Procurement Section (2)", "level": 4, "size": 2, "children": [{"name": "Procurement Officer (2)", "level": 5, "size": 2}]}]}, {"name": "General Services & Fleet Management Department (2)", "level": 3, "size": 2, "children": [{"name": "Fleet Management Section (1)", "level": 4, "size": 1, "children": [{"name": "Fleet Management Superintendent", "level": 5, "size": 1}]}, {"name": "General Services Section (1)", "level": 4, "size": 1, "children": [{"name": "General Services Attendant", "level": 5, "size": 1}]}]}]}, {"name": "Account Receivable Department (6)", "level": 3, "size": 6, "children": [{"name": "AR 2 Section (4)", "level": 4, "size": 4, "children": [{"name": "AR 2 Superintendent", "level": 5, "size": 1}, {"name": "AR Billing (2)", "level": 5, "size": 2}, {"name": "AR Collection", "level": 5, "size": 1}]}, {"name": "AR 1 Section (2)", "level": 4, "size": 2, "children": [{"name": "AR Collection", "level": 5, "size": 1}, {"name": "Cashier", "level": 5, "size": 1}]}]}, {"name": "Human Resources Media Division (3)", "level": 2, "size": 3, "children": [{"name": "Human Resources Expertise Department (1)", "level": 3, "size": 1, "children": [{"name": "Human Resources Analyst", "level": 5, "size": 1}]}, {"name": "Media Academy Department (2)", "level": 3, "size": 2, "children": [{"name": "Learning Analyst (2)", "level": 5, "size": 2}]}]}]}, {"name": "Sustainability - KG MEDIA Directorate (4)", "level": 1, "size": 4, "children": [{"name": "Sustainability - KG MEDIA Division (4)", "level": 2, "size": 4, "children": [{"name": "Sustainability Partnership Department (1)", "level": 3, "size": 1, "children": [{"name": "Sustainability Partnership Manager", "level": 5, "size": 1}]}, {"name": "Sustainability Business Development Department (1)", "level": 3, "size": 1, "children": [{"name": "Sustainability Business Development Manager", "level": 5, "size": 1}]}, {"name": "General Manager Sustainability - KG MEDIA", "level": 5, "size": 1}, {"name": "Sustainability Operation Department (1)", "level": 3, "size": 1, "children": [{"name": "Sustainability Operation Manager", "level": 5, "size": 1}]}]}]}, {"name": "KOMPASTV Directorate (1)", "level": 1, "size": 1, "children": [{"name": "Managing Director", "level": 5, "size": 1}]}, {"name": "National News Directorate (1)", "level": 1, "size": 1, "children": [{"name": "Technology, Product & Data Division (1)", "level": 2, "size": 1, "children": [{"name": "GM Technology, Product & Data", "level": 5, "size": 1}]}]}]};
+
+  const LEVEL_NAMES = ['Company','Directorate','Division','Department','Section','Position'];
+
+  // Track expanded state by path
+  const expanded = new Set();
+  let matchSet = new Set();
+
+  // ── Render a single node ──
+  function renderNode(node, path) {
+    const el = document.createElement('div');
+    el.className = 'children-wrap';
+
+    const card = document.createElement('div');
+    card.className = `card level-${node.level}`;
+    card.dataset.path = path;
+
+    if (expanded.has(path)) card.classList.add('card--expanded');
+
+    const isLeaf = !node.children || node.children.length === 0;
+    if (isLeaf) card.classList.add('card--leaf');
+
+    // Avatar
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = getInitials(node.name);
+    card.appendChild(avatar);
+
+    // Name
+    const nameEl = document.createElement('div');
+    nameEl.className = 'card-name';
+    nameEl.textContent = node.name;
+    card.appendChild(nameEl);
+
+    // Subtitle
+    const subEl = document.createElement('div');
+    subEl.className = 'card-sub';
+    if (isLeaf) {
+      subEl.textContent = `Position · ${node.size} ${node.size > 1 ? 'people' : 'person'}`;
+    } else {
+      subEl.textContent = LEVEL_NAMES[node.level] || '';
+      if (node.size) subEl.textContent += ` · ${node.size} people`;
+    }
+    card.appendChild(subEl);
+
+    // Expand badge
+    if (node.children && node.children.length > 0) {
+      const badge = document.createElement('div');
+      badge.className = 'expand-badge';
+      const isExp = expanded.has(path);
+      badge.textContent = isExp ? `▲ ${node.children.length}` : `▼ ${node.children.length}`;
+      card.appendChild(badge);
+
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (expanded.has(path)) {
+          // Collapse this + all children
+          for (const p of [...expanded]) {
+            if (p === path || p.startsWith(path + '/')) expanded.delete(p);
+          }
+        } else {
+          expanded.add(path);
+        }
+        renderTree();
+      });
+    }
+
+    // Search highlight
+    if (matchSet.size > 0) {
+      if (matchSet.has(path)) {
+        card.classList.add('card--match');
+      } else {
+        card.classList.add('card--dimmed');
+      }
+    }
+
+    el.appendChild(card);
+
+    // Render children if expanded (LAZY — only renders when expanded)
+    if (expanded.has(path) && node.children && node.children.length > 0) {
+      // Vertical connector
+      const vline = document.createElement('div');
+      vline.className = 'vline';
+      el.appendChild(vline);
+
+      const row = document.createElement('div');
+      row.className = 'children-row';
+
+      // Horizontal connector
+      if (node.children.length > 1) {
+        const hline = document.createElement('div');
+        hline.className = 'hline';
+        row.appendChild(hline);
+        // Position hline after render
+        requestAnimationFrame(() => {
+          const branches = row.querySelectorAll(':scope > .child-branch');
+          if (branches.length >= 2) {
+            const first = branches[0];
+            const last = branches[branches.length - 1];
+            const rowRect = row.getBoundingClientRect();
+            const fl = first.getBoundingClientRect().left + first.getBoundingClientRect().width / 2 - rowRect.left;
+            const ll = last.getBoundingClientRect().left + last.getBoundingClientRect().width / 2 - rowRect.left;
+            hline.style.left = fl + 'px';
+            hline.style.width = (ll - fl) + 'px';
+          }
+        });
+      }
+
+      node.children.forEach((child, ci) => {
+        const branch = document.createElement('div');
+        branch.className = 'child-branch';
+        const childPath = path + '/' + ci;
+        const childNode = renderNode(child, childPath);
+        branch.appendChild(childNode);
+        row.appendChild(branch);
+      });
+
+      el.appendChild(row);
+    }
+
+    return el;
+  }
+
+  function getInitials(name) {
+    // Remove parenthetical counts like "(123)"
+    const clean = name.replace(/\s*\(\d+\)\s*$/, '').trim();
+    const words = clean.split(/[\s\-]+/).filter(w => w.length > 0);
+    if (words.length === 0) return '?';
+    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
+
+  // ── Full render ──
+  function renderTree() {
+    const container = document.getElementById('orgTree');
+    container.innerHTML = '';
+    const tree = renderNode(DATA, 'root');
+    container.appendChild(tree);
+    updateInfo();
+  }
+
+  function updateInfo() {
+    const cards = document.querySelectorAll('.card');
+    document.getElementById('infoBadge').textContent =
+      `Showing ${cards.length} nodes · Total ${DATA.size} employees · April 2026`;
+  }
+
+  // ── Expand / Collapse controls ──
+  window.collapseAll = function() {
+    expanded.clear();
+    renderTree();
+  };
+
+  window.expandLevel = function(maxLevel) {
+    expanded.clear();
+    function walk(node, path) {
+      if (node.level < maxLevel && node.children) {
+        expanded.add(path);
+        node.children.forEach((c, i) => walk(c, path + '/' + i));
+      }
+    }
+    walk(DATA, 'root');
+    renderTree();
+  };
+
+  // ── Search ──
+  const searchInput = document.getElementById('searchInput');
+  let searchTimeout;
+
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(doSearch, 300);
+  });
+
+  function doSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    matchSet = new Set();
+
+    if (!query) {
+      renderTree();
+      return;
+    }
+
+    // Find all matching paths and expand ancestors
+    function walk(node, path) {
+      let found = false;
+      if (node.name.toLowerCase().includes(query)) {
+        found = true;
+        matchSet.add(path);
+      }
+      if (node.children) {
+        node.children.forEach((c, i) => {
+          const cp = path + '/' + i;
+          if (walk(c, cp)) {
+            found = true;
+            matchSet.add(path);  // ancestor matches too
+          }
+        });
+      }
+      if (found) {
+        expanded.add(path);  // auto-expand path to match
+      }
+      return found;
+    }
+    walk(DATA, 'root');
+    renderTree();
+
+    // Scroll to first match
+    requestAnimationFrame(() => {
+      const match = document.querySelector('.card--match:not(.card--dimmed)');
+      if (match) match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      searchInput.blur();
+      matchSet = new Set();
+      renderTree();
+    }
+  });
+
+  // Initial render — show root + directorates
+  expanded.add('root');
+  renderTree();
+})();
+</script>
+</body>
+</html>

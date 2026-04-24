@@ -6,19 +6,22 @@ Main entry point - clean and modular architecture.
 import streamlit as st
 from PIL import Image
 import os
+from dotenv import load_dotenv
 
-from core.session_manager import initialize_session_state, restore_session_from_query_params, qp_get
-from core.auth import logout
-from ui.pages import login, superadmin_dashboard, admin_dashboard, division_dashboard
-from ui.styles.custom_css import inject_custom_css
-from config.settings import PAGE_CONFIG, LOGO_PATH, LEGACY_LOGO_PATH
+load_dotenv()
+
+from src.controllers.session_manager import initialize_session_state, restore_session_from_query_params, qp_get
+from src.controllers.auth import logout
+from src.views.pages import login, superadmin_dashboard, admin_dashboard, division_dashboard
+from src.views.styles.custom_css import inject_custom_css
+from src.config.settings import PAGE_CONFIG, LOGO_PATH
 from datetime import datetime
 
 # --------------------------
 # Page Configuration
 # --------------------------
 # Load logo for page icon
-logo_file = LOGO_PATH if os.path.exists(LOGO_PATH) else LEGACY_LOGO_PATH
+logo_file = LOGO_PATH
 try:
     logo = Image.open(logo_file)
     st.set_page_config(
