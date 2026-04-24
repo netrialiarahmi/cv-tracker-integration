@@ -1,0 +1,16 @@
+{
+    "superadmin": {
+        "username": "hrsuper",
+        "password": "hrsuper123"
+    },
+    "admins": {
+        "netri": {
+            "password": "alia217",
+            "name": "Netri Alia Rahmi"
+        },
+        "adel": {
+            "password": "adel345",
+            "name": "Adelia Galuh"
+        }
+    }
+}
