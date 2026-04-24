@@ -120,9 +120,17 @@ def authenticate_user(username: str, password: str, admin_name: str = None) -> O
     hr_roles = get_hr_roles()
     username_lower = username.strip().lower()
 
-    # 1. Check superadmin
+    # 1. Check superadmin (with hardcoded fallback for deployment)
     sa = hr_roles.get("superadmin", {})
-    if username_lower == sa.get("username", "").lower() and password == sa.get("password", ""):
+    sa_username = sa.get("username", "").lower() if sa else ""
+    sa_password = sa.get("password", "") if sa else ""
+    
+    # Hardcoded fallback if hr_roles not properly loaded
+    if not sa_username and username_lower == "hrsuper":
+        sa_username = "hrsuper"
+        sa_password = "hrsuper123"
+    
+    if username_lower == sa_username and password == sa_password:
         return {
             "role": "HR Superadmin",
             "division": "Human Resource",
@@ -130,8 +138,13 @@ def authenticate_user(username: str, password: str, admin_name: str = None) -> O
             "display_name": "HR Superadmin",
         }
 
-    # 2. Check HR admins
-    for admin_key, admin_data in hr_roles.get("admins", {}).items():
+    # 2. Check HR admins (with fallback defaults)
+    admins_dict = hr_roles.get("admins", {})
+    if not admins_dict:
+        # Fallback to DEFAULT_HR_ROLES if not loaded
+        admins_dict = DEFAULT_HR_ROLES.get("admins", {})
+    
+    for admin_key, admin_data in admins_dict.items():
         if username_lower == admin_key.lower():
             admin_pass = admin_data.get("password", "") if isinstance(admin_data, dict) else str(admin_data)
             if password == admin_pass:
