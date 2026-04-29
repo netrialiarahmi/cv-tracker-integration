@@ -183,8 +183,8 @@ const config = {
     'default': 'adelia'
   },
 
-  // Replacement keywords
-  replacementKeywords: ['replace', 'pengganti', 'replacement'],
+  // Replacement keywords (matched with word boundaries)
+  replacementKeywords: ['replacement', 'replace', 'pengganti', 'repl'],
 
   // Fields to preserve from existing data
   preserveFields: [

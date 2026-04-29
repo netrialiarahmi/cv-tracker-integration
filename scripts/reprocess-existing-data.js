@@ -18,6 +18,7 @@ const path = require('path');
 const {
   extractReplacementFor,
   dedupeNotes,
+  hasReplacementKeyword,
 } = require('./data-transformer');
 const { resolveDivision } = require('./division-lookup');
 
@@ -69,8 +70,18 @@ function main() {
       notesFixed++;
     }
 
-    // 2) Re-detect Replacement For from cleaned Notes
-    const detectedName = extractReplacementFor(cleanedNotes);
+    // 2) Re-detect Replacement For from cleaned Notes; fall back to the
+    //    Job Position itself for tasks named like "Account Executive
+    //    Pasangiklan (replace Rio)" or "Strategic Marketing (Replace Yemima)".
+    let detectedName = extractReplacementFor(cleanedNotes);
+    let detectedFrom = detectedName ? 'notes' : '';
+    if (!detectedName) {
+      const fromTitle = extractReplacementFor(taskName);
+      if (fromTitle) {
+        detectedName = fromTitle;
+        detectedFrom = 'title';
+      }
+    }
     if (detectedName) {
       if ((out['Replacement For'] || '') !== detectedName) {
         out['Replacement For'] = detectedName;
@@ -78,9 +89,23 @@ function main() {
       }
       // 3) Force Hire Type = Replacement when a name was found
       if (out['Hire Type'] !== 'Replacement') {
+        console.log(
+          `  ↻ "${taskName}" → Hire Type=Replacement, For="${detectedName}" (from ${detectedFrom})`
+        );
         out['Hire Type'] = 'Replacement';
         hireTypeFixed++;
       }
+    } else if (
+      out['Hire Type'] !== 'Replacement' &&
+      (hasReplacementKeyword(taskName) || hasReplacementKeyword(cleanedNotes))
+    ) {
+      // Replacement intent detected but no specific name (e.g.
+      // "Reporter Tren | Replacement")
+      console.log(
+        `  ↻ "${taskName}" → Hire Type=Replacement (keyword only, no name)`
+      );
+      out['Hire Type'] = 'Replacement';
+      hireTypeFixed++;
     }
 
     // 4) Division auto-correction

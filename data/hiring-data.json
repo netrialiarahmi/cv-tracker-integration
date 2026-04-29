@@ -11,9 +11,9 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Melly & Miftah",
-        "Last Updated": "2026-04-16 10:13:50",
+        "Last Updated": "2026-04-29 17:29:03",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -37,7 +37,7 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Ardhi Ridwansyah | Replace Dinda Aulia",
-        "Last Updated": "2026-04-16 10:13:50",
+        "Last Updated": "2026-04-29 17:29:06",
         "Has Skill Test": false,
         "Hire Type": "Replacement",
         "Replacement For": "Ardhi Ridwansyah",
@@ -63,7 +63,7 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Lulu Lukyani",
-        "Last Updated": "2026-04-16 10:13:50",
+        "Last Updated": "2026-04-29 17:29:10",
         "Has Skill Test": false,
         "Hire Type": "Replacement",
         "Replacement For": "Lulu Lukyani",
@@ -97,8 +97,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/25/2026",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -121,6 +123,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/19/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -143,6 +149,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/18/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -157,10 +167,10 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Puspa (rolling ke Cahaya per 1 Feb)",
-        "Last Updated": "2026-04-16 10:13:50",
+        "Last Updated": "2026-04-29 17:29:14",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Puspa",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -183,9 +193,9 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Erlangga & Yogarta",
-        "Last Updated": "2026-04-16 10:13:51",
+        "Last Updated": "2026-04-29 17:29:18",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -217,6 +227,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/05/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -231,7 +245,7 @@
         "On Boarding": false,
         "PIC": "adel",
         "Notes": "Replace Zahra Jodea",
-        "Last Updated": "2026-04-16 10:13:51",
+        "Last Updated": "2026-04-29 17:29:23",
         "Has Skill Test": false,
         "Hire Type": "Replacement",
         "Replacement For": "Zahra Jodea",
@@ -259,7 +273,7 @@
         "Notes": "Kandidat a.n. Anam sudah join 14/07/2025 Konpro | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandidat yang dikasih dari mas Very. tp dari hasil final interview kemarin sudah muncul 1 kandidat kuat yg OK_x000d_ _x000d_ Update : mundur step ke interview lagi krn ada kandidat rekomendasi dari mas very_x000d_ _x000d_ Update : Offering an. Muhammad Fahmi_x000d_ _x000d_ Update 04/03 : Tolak Offering | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandida...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "Anam Rowi",
         "Job Description": "",
         "Attachments": [],
@@ -291,6 +305,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/04/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -313,6 +331,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/04/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -329,8 +351,8 @@
         "Notes": "Replace Rayhan (reporter ->social media)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Rayhan",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -485,7 +507,7 @@
         "Notes": "Replace Gloria maternity leaves 3 bulan | Replace Gloria maternity leaves 3 bulan - belum ada MRF | Replace Gloria maternity leaves 3 bulan - belum a...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -517,8 +539,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/18/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -567,8 +591,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/18/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -591,8 +617,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/18/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -615,6 +643,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/18/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -631,7 +663,7 @@
         "Notes": "Replace Idris? yg di rolling | Replace Idris yg di rolling | Replace Idris yg...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "Idris yg di rolling",
         "Job Description": "",
         "Attachments": [],
@@ -683,7 +715,7 @@
         "Notes": "Replacement: _x000d_ _x000d_ 1. Kiki yang pindah ke Money_x000d_ 2. Haryanti yang promosi jadi CW Nasional_x000d_ 3. Singgih yang promosi jadi CW Megapolitan | Replacement: _x000d_ _x000d_ 1. Kiki pindah ke Money_x000d_ 2. Haryanti promosi jadi CW Nasional_x000d_ 3. Singgih promosi jadi CW Megapolitan | Replacement: _x000d_ _x000d_ 1. Kiki pindah ke ...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -735,8 +767,8 @@
         "Notes": "Replace Elsa Catriana (rotasi ke socmed) dan Agustinus Rangga",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Elsa Catriana",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -793,6 +825,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "09/23/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -815,6 +851,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -831,12 +871,16 @@
         "Notes": "Additional_x000d_ _x000d_ Secara kebutuhan : _x000d_ _x000d_ 1. Jabar (1) - hold_x000d_ 2. Medan (1) - hold_x000d_ 3. My edisi lokasi Jakarta (2) - hold_x000d_ 4. Epaper (WITA) (3-5) * *3-5 orang pure epaper, kalau bisa dari WITA, tapi bebas aja*_x000d_ 5. replace Adam (1)_x000d_ _x000d_ yang diprioritaskan untuk nomor 3 - 4 - 5 | Additional_x000d_ _x000d_ Secara kebutuhan :_x000d_ _x000d_ 1. Jabar (1) - hold_x000d_ 2. Medan (1) - hold_x000d_ 3. My edisi lokasi Jakarta (2) - hold_x000d_ 4. Ep...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Adam",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "09/01/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -859,6 +903,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/27/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -881,6 +929,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "06/18/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -949,12 +1001,16 @@
         "Notes": "Replace Michael Hangga (Onggo) -> Khairina (internal)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Michael Hangga",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "05/07/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1055,6 +1111,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "02/25/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1097,12 +1157,16 @@
         "Notes": "Update : di Hold oleh mas Gemi -> diganti dgn posisi Video Creator?",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Anselmus Nicko",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "02/20/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1145,12 +1209,16 @@
         "Notes": "sekaligus rangkep kerjaan maternity leave_x000d_ _x000d_ Update : ngobrol sama Omar tadi pagi. jadinya dicari dulu freelance DE dengan budget yg sama seperti Ziza (15 -> tbc) dengan masa kerja 3 bulan. sudah ada 1 kandidat an. Anan dia korban layoff dari BukaLapak. Anan-nya sudah bersedia 3 bulan. untuk budget-nya, info dari omar itu di angka 15 juta. apakah benar mbak? mohon konfirmasinya. terima kasih _x000d_ _x000d_ Tapi hari ini ada interview DE, proyeksinya utk replace DE yg dari RubyH (konpro)_x000d_ _x000d_ Update : deal di angka 10. freelance. selama 3 bulan. mulai dari tgl 17 Februari 2025",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "DE yg dari RubyH",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "02/03/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1167,12 +1235,16 @@
         "Notes": "Replace Bimo_x000d_ Update : Interview hari ini (11/02/2025) - jam 14.00 bersama mba sasty_x000d_ Update : dijadwalin ke mas Bowo kandidat an. Joseph_x000d_ _x000d_ **Hold. Mei 2025 dicek lagi.**",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "01/30/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1189,12 +1261,16 @@
         "Notes": "- konfirmasi ulang ke user terkait dng: position name & spec (mas ihwan mau hire untuk spec yg lebih rendah dr Zul katanya. Penting: r**ajin bekerja, gigih, customer oriented**_x000d_ - Formnya Paralel dimintakan ke user_x000d_ _x000d_ Update 14/2/25: Sudah konfirm untuk nyari yang level officer aja, akan dimaksimalkan fidel",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Zul",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "01/28/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1211,8 +1287,8 @@
         "Notes": "Reporter (jakarta) untuk replace Masya (CW Solo)_x000d_ ---------_x000d_ Last process: done interview (7/3), skill test (9/3), dan psikotes (10/3). _x000d_ Update 21/04 : user minta stepnya psikotes dulu sebelum skill test dan interview. Schedule psikotes: 22/04._x000d_ Update 28/04 : interview dan skill test tanggal 29 & 30 April 2025._x000d_ Update 30/04 : update dari user, jadinya yg dicari posisi content writer solo (sesuai posisi masya), jadi proses untuk reporter...bye?",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Masya",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
@@ -1243,6 +1319,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1291,6 +1371,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "01/20/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1313,6 +1397,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "01/14/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1355,12 +1443,16 @@
         "Notes": "Kebutuhan pengganti 2 orang magang kampus merdeka + 1 orang pengganti Nana.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "12/18/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1377,7 +1469,7 @@
         "Notes": "Replacement Abram_x000d_ _x000d_ Update : Pandu re-offered. 11/02/2025 dia kasih kabar finalnya._x000d_ kemarin setelah ngobrol sama Pandu, ada kemungkinan dia ttp pengen angkanya diatas 10 (which di 12) tp statusnya konpro_x000d_ _x000d_ Update : Pandu mentok di 10,5 nett PKWT. take it or leave it. ada kandidat lagi yg diinterview an. Bagus. mau ditanyain dl terkait angkanya. kalo on budget, lanjut skill test",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -1409,6 +1501,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "11/01/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1425,12 +1521,16 @@
         "Notes": "Dear Mba Ita & Mba Vinda,_x000d_ Mohon di review permintaan posisi Producer IP berikut untuk replace Harun yang sudah resign per 11 Sept 2024. Terima kasiih..",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "09/12/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1479,6 +1579,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": "08/02/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1495,12 +1599,16 @@
         "Notes": "Bagian keterangan replacement tetap selalu dilengkapi ya: Nama, NIK, dsb nya. Tks",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": false,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": true,
         "Created Date": "08/01/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1601,6 +1709,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/27/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1623,6 +1735,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/05/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1692,7 +1808,7 @@
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
-        "Replacement For": "",
+        "Replacement For": "Thomi",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -1749,8 +1865,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/12/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1773,6 +1891,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/12/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1790,13 +1912,15 @@
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
-        "Replacement For": "",
+        "Replacement For": "Dwi",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "04/15/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1871,6 +1995,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/12/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -1939,8 +2067,8 @@
         "Notes": "Replace Fajriana Nur Afifah (effective resign 6/12/25)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Fajriana Nur Afifah",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -1963,7 +2091,7 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "Replace Ardhi Ridwansyah | Replace Dinda Aulia",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:20",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
         "Replacement For": "Ardhi Ridwansyah",
@@ -2043,12 +2171,16 @@
         "Notes": "Pengganti Thalissa & Nova under mba Pamela.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/08/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2196,7 +2328,7 @@
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
-        "Replacement For": "",
+        "Replacement For": "Lia",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2219,10 +2351,10 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "A21/5/25: CV send to user_x000d_ _x000d_ 27/5/25: interview batch 1; masih belum ada yg oke banget, hold dulu_x000d_ _x000d_ 4/6/25: akan interview batch 2_x000d_ _x000d_ 10/6/25: CV sent to user, belum ada yg diplih jadi masih cari kandidat_x000d_ _x000d_ 18/6/25: sudah interview batch 2, maju ke mas vian cuma karena gap secara CV aja udah lumayan jadi menurut mas vian gaperlu interview sama dia_x000d_ _x000d_ 20/6/25: sudah kirim CV ke mba fina lagi_x000d_ _x000d_ 23/6/25: mba fina belum milih lagi_x000d_ _x000d_ 31/7/2025: interview dengan mba fina tapi belum ada yang dipilih _x000d_ _x000d_ 04/08/2025: kirim 1 CV ke mba Fina atas nama Liasanta (Lias)_x000d_ _x000d_ 05/8/25: Interview dan lanjut ke Psikotes (Lias) _x000d_ _x000d_ 7/8/25 : offering Liasanta_x000d_ _x000d_ 18/08/25: Psikotes Ghaly Marcheleo. Mbak Fina minta pembanding cowo 1_x000d_ _x000d_ 21/08/25: Interview Muhammad Rafif. Mba Fina jadi proses kandidat sebelumnya, atas nama Ghaly Marcheleo tapi perlu paralel nyari kandidat lainnya _x000d_ _x000d_ 25/08/2025: mau offering ghaly_x000d_ _x000d_ 01/09/2025: Initial interview dengan 3 kandidat, Alfath, Arya, dan Safitri Eka. Akan segera coba dinaikan ke Mba Fina _x000d_ _x000d_ 02/09/2025: Interview dengan Mba Fina dengan Alfath dan Arya. Mbak fina masih kurang cocok dengan keduanya, masih butuh kandidat lain lagi _x000d_ _x000d_ 03/09/2025: Initial interview Usman Nurul (Applied di linkedIn) dan Meivi (Approach di Linkedin) tapi skill set belum cocok. Dari Mba Fina minta tambahan 5 kandidat_x000d_ _x000d_ 03/04/2025: Besok Kamis (03/09) initial interview 2 kandidat a.n Ikhlasul Akmal (approach di Linkedin) dan Refo Gazi (approach di Linkedin). Bisa dicoba untuk diteruskan ke Mba Fina. _x000d_ _x000d_ 08/09/2025: Initial interview 4 kandidat a.n Alisha Deviana, Jodi Tridharma, Keisha Arfi Imititsal, dan Dinda Gusti Rahayu. _x000d_ _x000d_ 10/09/2025: Initial Muhammad Agung (approach di linkedin). Ngirim 5 CV ke Mba Fina a.n Alisha, Muhammad Purnomo Agung, Keisha, Ikhlasul, dan Refo Gazi. Dari Mba Fina mau lanjutin Refo Gazi interview, tapi nunggu ada pembanding lainnya_x000d_ _x000d_ 15/09/2025: Interview Refo Gazi dengan Mbak Fina. Mbak Fina ok untuk lanjut psikotest, tapi masih minta pembading (yang bisa canvassing dan dari media kalo possible) _x000d_ _x000d_ 16/09/2025: Initial interview Ardi Dwi (approach dilinkedin). Skill set ok, bisa diteruskan ke Mba Fina _x000d_ _x000d_ 23/09/2023: Meneruskan CV ke Mba Fina. Dari Mba Fina menolak untuk proses karena angkanya tinggi _x000d_ _x000d_ 26/07/2025: Initial interview 4 kandidat (Faisal, Masiroh, Dini Tamara, dan KGS Abdul). Interview kandidat a.m Masiroh dengan Mbak Fina hari Selasa (30/09) _x000d_ _x000d_ 29/09/2025: Akan interview kandidat a.n Masiroh hari Selasa (30/09)_x000d_ _x000d_ 01/10/2025: Interview 2 kandidat atas nama Faisal dan Abdul Rasyid dengan Mba Fina",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:31",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Rio",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2383,6 +2515,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2405,6 +2541,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2421,8 +2561,8 @@
         "Notes": "Replace Haris (paid intern) - Media Academy",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Haris",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2583,6 +2723,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2599,8 +2743,8 @@
         "Notes": "Pengganti Farid Assifa (pindah ke Cahaya)_x000d_ POH SOLO",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Farid Assifa",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2631,8 +2775,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/16/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2681,6 +2827,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/23/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2755,8 +2905,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/22/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2773,8 +2925,8 @@
         "Notes": "Citra mulai magang per 1 Oktober 2025 | Pengganti Ahmat (VE) | Pengganti Ahmat (VE)...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Ahmat",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2799,8 +2951,8 @@
         "Notes": "Pengganti Gloria (rotasi ke Sains)_x000d_ POH SOLO_x000d_ _x000d_ 18/08/2025: Initial interview 6 kandidat_x000d_ _x000d_ 27/08/2025 : Initial interview 5 kandidat _x000d_ _x000d_ 28/08/2025: besok, jumat 28 aug, initial 4 kandidat a.n Gregorius Bramantyo (15.00), Lohanna Wibbi (15.30), Rezky Amaliah (16.00), dan Ayu Sabrina (16.30)_x000d_ _x000d_ 01/09/2025: initial interview lagi kandidat atas nama ayu sabrina (diresched dari yang sebelumnya karena kendala sinyal). _x000d_ _x000d_ 03/09/2025: besok Kamis (04/09) initial lagi dua kandidat a.n Fardi Rizal dan Folly Akbar _x000d_ _x000d_ 11/09/2025: lagi nunggu jadwal interview dari user _x000d_ _x000d_ 17/09/2025: Interview 4 kandidat (Vachri, Folly, Lohanna, dan Ayu) dengan user hari Senin (22/09)_x000d_ _x000d_ 22/09/2025: lanjut skill test dan psikotest (Vachri, Folly, dan Wibbi). Masih nunggu skill testnya dari user _x000d_ _x000d_ 24/09/2025: Vachri, Folly, dan Wibbi sudah mengirimkan hasil skill test. Dari Mba Dea pilih Vachri",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Gloria",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -2831,6 +2983,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "10/07/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2905,6 +3061,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "07/30/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2927,6 +3087,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "07/30/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -2949,6 +3113,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/28/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3017,12 +3185,16 @@
         "Notes": "Pengganti Kenari & Cornelia",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3045,6 +3217,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/28/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3119,6 +3295,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/28/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3167,6 +3347,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/23/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3189,6 +3373,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3231,8 +3419,8 @@
         "Notes": "Pengganti Achmad Nasrudin Yahya (rotasi ke video program)._x000d_ _x000d_ 25/08/2025: Ngirim 6 CV ke Mbak Ambar atas nama Alethea, Ilham, Muhammad Rezky, Regi, Toni, dan Yasminah_x000d_ _x000d_ 01/09/2025: interview awal september dengan user, belum diinfoin lebih lanjut terkait tanggalnya_x000d_ _x000d_ 02/09/2025: Akan interview hari Senin _x000d_ _x000d_ 08/09/2025: Reschedule interview ke hari Selasa (09/09) 4 kandidat atas nama Muhammad Jibril, Toni Hermawan, Regi Pratasyah, Ilham Hermawan_x000d_ _x000d_ 09/09/2025: keempat kandidat di lanjutkan untuk skill test, deadline hari ini. Masih tahap review user_x000d_ _x000d_ 22/09/2025: kemaren (17/09) interview Omarali. Dilanjutkan ke skill test, masih direview Mba Ambar _x000d_ _x000d_ 23/09/2025: Kemaren interview Omarali. Dilanjutkan ke skill tets, masih direview Mba Ambar",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Achmad Nasrudin Yahya",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -3281,10 +3469,10 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "form sudah dimintakan cuma belum dikirimkan balik_x000d_ _x000d_ 10/5/25: CV sent to user, form request belum dikembalikan_x000d_ _x000d_ 23/6/25: sudah di fu, form sudah ttd mba kadek",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:34",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Nirmala",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -3315,6 +3503,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "07/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3337,6 +3529,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3353,7 +3549,7 @@
         "Notes": "Pengganti Rahmi Izzati_x000d_ _x000d_ (18/08/2025) Hari Selasa 19 Agustus dan 20 Agustus, akan interview online dengan Mbak Deasy. 19 Agustus interview kandidat atas nama Syahril Fasha, Muhammad Zidane, dan Muhammad Arif (pukul 16.00 - 17.30). 20 Agustus interview kandidat atas nama Muhammad Zidan Erlangga, Muhammad Rizqi Widiarna, dan Bintang akbar (pukul 13.00 - 14.30) _x000d_ _x000d_ (21/08/2025) Psikotest Sayhril Fasha, Muhammad Zidan, dan Bintang Akbar _x000d_ _x000d_ (22/08/2025) Skill test Syahril Fasha, Muhammad Zidan, dan Bintang Akbar _x000d_ _x000d_ (25/08/2025) Sudah ngirim skill test ke user _x000d_ _x000d_ (27/08/2025) Dari user proses Syahril dan Zidan untuk bisa presentasi skill test. Presentasi skill test akan online by Zoom hari Selasa 2 Sept, jam 9 - 10._x000d_ _x000d_ (02/09/2025) Dari user, prioritasin offering Sayhril_x000d_ _x000d_ (03.09/2025) Offering syahril fasha_x000d_ _x000d_ (08/09/2025) Join Syahril Fasha",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -3385,6 +3581,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3433,6 +3633,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3455,6 +3659,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/01/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3581,6 +3789,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/12/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3603,6 +3815,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/22/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3671,12 +3887,16 @@
         "Notes": "Replace Vinne & Naiaka yang sudah selesai magang._x000d_ _x000d_ Request dari user, kandidat dari mahasiswa UMN.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "05/20/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3699,6 +3919,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/05/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3741,7 +3965,7 @@
         "Notes": "Sudah deal kandidat a.n. Adam, join freelance 1 September 2025 | Replace Atha_x000d_ _x000d_ (05/08/2025) Interview dengan kandidat a.n Phillipe, Adam, dan Fikri Fauzi_x000d_ _x000d_ (06/08/2025) Skill test untuk kandidat Phillipe dan Ada, deadline pengerjaan Sabtu pukul 5 sore _x000d_ _x000d_ (12/08/2025) dari mba deasy pilih Philipe | Replace Atha_x000d_ _x000d_ (05/08/2025) Interview dengan kandidat a.n Phillipe, Adam, dan Fikri Fauzi_x000d_ _x000d_ (06/08/2025) Skill test untuk kandidat P...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -3843,7 +4067,7 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "Replace Ardhi Ridwansyah | Replace Dinda Aulia | Replacement Muhammad Daffa dan Faesal_x000d_ _x000d_ Skill test dan Interview 5 kandidat (30/07/2025, interview 10.00 - 15.00)_x000d_ _x000d_ - Ardhi_x000d_ - Nathania_x000d_ - Nisfah_x000d_ - Nurul_x000d_ - Ridho Danu_x000d_ _x000d_ Psikotest Ardhi dan Ridho Danu (start 01/08/2025)_x000d_ _x000d_ Offering Ardi Dan...",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:24",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
         "Replacement For": "Ardhi Ridwansyah",
@@ -3877,6 +4101,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/05/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3899,6 +4127,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/05/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -3967,8 +4199,8 @@
         "Notes": "- Ada tambahan kebutuhan Reporter memakai slot replacement asred Oik Yusuf (card sendiri)_x000d_ _x000d_ ---------_x000d_ _x000d_ Update: Masih on reviewed by user. udah ditambahin cv lagi._x000d_ Update 28/04 : 4 kandidat yg sudah interview+skill test not fit user, sudah langsung kasih cv lagi tapi belum ada feedback dari user._x000d_ _x000d_ Update 07/05 : Masih menunggu update mengenai review cv dari user_x000d_ Update 19/06 : kirim cv ke user | Replace Rayhan | Replace Ra...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "asred Oik Yusuf",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -3999,6 +4231,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "06/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4021,8 +4257,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "04/30/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4039,7 +4277,7 @@
         "Notes": "Replace ....",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4117,8 +4355,8 @@
         "Notes": "Additional di undernya Mas Soni,_x000d_ _x000d_ Replace Felicia (freelance). _x000d_ _x000d_ Freelance direplace Konpro",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Felicia",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -4221,7 +4459,7 @@
         "Notes": "Kandidat a.n. Anam sudah join 14/07/2025 Konpro | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandidat yang dikasih dari mas Very. tp dari hasil final interview kemarin sudah muncul 1 kandidat kuat yg OK_x000d_ _x000d_ Update : mundur step ke interview lagi krn ada kandidat rekomendasi dari mas very_x000d_ _x000d_ Update : Offering an. Muhammad Fahmi_x000d_ _x000d_ Update 04/03 : Tolak Offering | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandida...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4253,6 +4491,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/05/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4275,6 +4517,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "05/20/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4297,6 +4543,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "06/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4319,6 +4569,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "06/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4387,7 +4641,7 @@
         "Notes": "Kandidat a.n. emirah join 2 juni 2025 | Replace Ine_x000d_ _x000d_ - Update 18/03 : Interview 3 kandidat (setelah diberikan skill test)_x000d_ - Update 21/04 : kandidat a/n Ilham mundur. Sourcing CV kandidat lagi yg on budget._x000d_ - Update 30/04 : skill test 10 orang kandidat, deadlinenya 7 mei 2025. | Replace Ine_x000d_ _x000d_ - Update 18/03 : Interview 3 kandidat (setelah diberikan skill test)_x000d_ - Update 21/04 : kandidat a/n Ilham mundur. Sourcing CV kandidat lagi yg on budget._x00...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4491,7 +4745,7 @@
         "Notes": "Replace Yudi & Max_x000d_ _x000d_ 1. Yudi (freelance 10 April 2025 - 9 Mei 2025)_x000d_ 2. Rafiansyah (join 1 Mei 2025, konpro), withdraw_x000d_ 3. Ada usulan untuk OS dinaikin jadi \"organik\"_x000d_ _x000d_ Komposisi tim AI sebelumnya : _x000d_ _x000d_ (2 OS + 2 karyawan)_x000d_ _x000d_ OS A (Mahanti Indah Ajeng)_x000d_ _x000d_ OS B (Farihin)_x000d_ _x000d_ Maxalmina (resign)_x000d_ _x000d_ Stefanus Yudi Irwan (freelance)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4523,6 +4777,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "06/11/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4537,10 +4795,10 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "13/5/25: Sourcing CV - rencana tp maunya internal_x000d_ _x000d_ 2/6/25: Kata mas rubbi akan ada kabar kandidat internal yg mau diajukan_x000d_ _x000d_ 5/6/25: kandidat internal Abdul - sedang dilengkapi form oleh mas rubbi_x000d_ _x000d_ 16/6/25: on going proses bersama HR terkait abdul",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:38",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Indra",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -4565,7 +4823,7 @@
         "Notes": "Replace Adlan & Raka, merge jadi satu. Hilang 2 ganti 1._x000d_ _x000d_ Kandidat a.n. M. Rafi Zharfansyah. Secara angka masih di atas dari yg range diajukan._x000d_ _x000d_ Ada kandidat ke2 yang diajukan a.n. Amie Sanyoto",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4617,8 +4875,8 @@
         "Notes": "Replace Melvina (melvina rotasi sbg reporter edukasi, memakai slot asred mas wahyu)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Melvina",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -4721,7 +4979,7 @@
         "Notes": "Kandidat a.n. Anam sudah join 14/07/2025 Konpro | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandidat yang dikasih dari mas Very. tp dari hasil final interview kemarin sudah muncul 1 kandidat kuat yg OK_x000d_ _x000d_ Update : mundur step ke interview lagi krn ada kandidat rekomendasi dari mas very_x000d_ _x000d_ Update : Offering an. Muhammad Fahmi_x000d_ _x000d_ Update 04/03 : Tolak Offering | Replace Satya_x000d_ _x000d_ Update : Satya masih mempertimbangkan kandida...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -4797,7 +5055,7 @@
         "On Boarding": true,
         "PIC": "adel",
         "Notes": "Replace Ardhi Ridwansyah | Replace Dinda Aulia | Rachel & Rama resign, cari pengganti._x000d_ ---------_x000d_ Untuk pengganti Rizky Syahrial yang dipindahkan sebagai video journalist, dan Firda & Shela yang dipindahkan sebagai reporter nasional._x000d_ ---------_x000d_ Rachel (pengganti Rizky) join per 28 Januari 2025._x000d_ ---------_x000d_ Current process: Of...",
-        "Last Updated": "2026-03-17 08:51:46",
+        "Last Updated": "2026-04-29 17:35:28",
         "Has Skill Test": true,
         "Hire Type": "Replacement",
         "Replacement For": "Ardhi Ridwansyah",
@@ -4909,6 +5167,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/19/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -4925,8 +5187,8 @@
         "Notes": "Replace Elsa Catriana (rotasi ke socmed) dan Agustinus Rangga | nunggu feedback dr kinoy: Pengganti Rully yang dipromosi (?) menjadi Asisten Produser di tim Mba Sabrina._x000d_ _x000d_ update 7 Maret'25: sudah offering kandidat a.n Azura, tapi menolak, sudah kasih CV lagi ke mba kinoy_x000d_ _x000d_ update 11 April'25: sudah deal offering menunggu tgl join (Suparjo)_x000d_ _x000d_ 13/5/25: sudah ttd kontrak, menunggu on boarding tgl 26 mei",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Rully yang dipromosi",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -4951,8 +5213,8 @@
         "Notes": "ada kandidat sebelumnya yang sedang dipertimbangkan, lalu sudah ada kandidat pembanding juga yang sudah skill test._x000d_ _x000d_ 22/4/25: menunggu feedback user untuk lanjut interview _x000d_ _x000d_ 2/5/25: sudah interview kandidat pembanding, akan ada 1 yg mau diproses offer a.n fachri_x000d_ _x000d_ 8/5/25 : offering a.n. fahri_x000d_ _x000d_ 16/5/25: sudah ttd kontrak, on board 19 mei",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Yemima",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -5003,12 +5265,16 @@
         "Notes": "replace Safira yang selesai magang di bulan Mei 2025.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "04/08/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5051,8 +5317,8 @@
         "Notes": "on going interview dan skill test beberapa kandidat._x000d_ _x000d_ Sudah deal kandidat a.n. Angela Jeanne. Expected join 13 Mei 2025_x000d_ _x000d_ 13/5/25: sudah on boarding (Angela)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Rayhan",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -5077,7 +5343,7 @@
         "Notes": "nunggu konfirmasi join date (Amartya), join date 13 Mei 2025_x000d_ _x000d_ replace Zulfikar_x000d_ _x000d_ 5/5/25: sudah ttd kontrak, menuggu on board di tgl 13 mei_x000d_ _x000d_ 13/5/25: sudah on boarding (Amartya)",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -5109,6 +5375,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/02/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5177,8 +5447,8 @@
         "Notes": "",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "sales miya",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -5209,6 +5479,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5335,6 +5609,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5409,6 +5687,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "04/04/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5477,12 +5759,16 @@
         "Notes": "Sudah akan on board tgl 7 April (periode 2 bulan): Andre Binsar",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "04/04/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5531,6 +5817,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/06/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5553,6 +5843,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "03/18/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5575,6 +5869,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "10/22/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5623,6 +5921,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/28/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5697,6 +5999,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "10/28/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5713,12 +6019,16 @@
         "Notes": "Pengganti Annisa Ilmi yang resign per 18 Januari 2025._x000d_ ----------_x000d_ Cemara (pengganti Ilmi) join per 23 Januari 2025.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/20/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5735,8 +6045,8 @@
         "Notes": "- Ada tambahan kebutuhan Reporter memakai slot replacement asred Oik Yusuf (card sendiri)_x000d_ _x000d_ ---------_x000d_ _x000d_ Update: Masih on reviewed by user. udah ditambahin cv lagi._x000d_ Update 28/04 : 4 kandidat yg sudah interview+skill test not fit user, sudah langsung kasih cv lagi tapi belum ada feedback dari user._x000d_ _x000d_ Update 07/05 : Masih menunggu update mengenai review cv dari user_x000d_ Update 19/06 : kirim cv ke user | Replace Rayhan | Replace Ra...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "asred Oik Yusuf",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -5767,6 +6077,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5789,6 +6103,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/05/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5837,6 +6155,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/17/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5859,6 +6181,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/17/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5881,6 +6207,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5929,6 +6259,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/21/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5971,12 +6305,16 @@
         "Notes": "Replace Musfi yg pindah ke Marcomm_x000d_ _x000d_ Update : tinggal nego. cuma belum ada angka pasti dari mba Vinda. minta tolong diinfo ya mbak utk angka maksimal nego kandidat_x000d_ Update : kandidat minta tambahin di angka 6,5. dikembalikan lagi ke perusahaan bisa kasih di angka brp. terima kasiih. (pertimbangannya di biaya kosan dan disana ada insentif)_x000d_ _x000d_ Update : ttd di tgl 28 feb",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/06/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -5993,12 +6331,16 @@
         "Notes": "Update: 1 aja: sosmed_x000d_ _x000d_ Pengganti magang kampus merdeka untuk posisi video editor (1) dan social media (1)._x000d_ _x000d_ Update:_x000d_ budget magang 1jt/bulan, saat ini sudah ada magang socmed a/n Vinne yg mengerjakan project suci 11 memakai budget tsb sampai dengan tgl 6 Mei 2025.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "magang kampus merdeka untuk posisi video editor",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/17/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6041,7 +6383,7 @@
         "Notes": "Pengganti Tito yang diakhiri kontraknya per akhir Januari 2025._x000d_ _x000d_ Jadwal ketemu legal di Rabu, 13 Feb",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -6067,8 +6409,8 @@
         "Notes": "Replacement Retia (pindah ke Tren) dan Additional.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Retia",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -6119,12 +6461,16 @@
         "Notes": "Pengganti Betty yang resign per akhir Januari 2025._x000d_ -----------_x000d_ Nama posisi diganti menjadi Production Staff. _x000d_ Regitania join per 28 Januari 2025, sign contract 24 Januari 2025. | Pengganti Betty yang resign per akhir Januari 2025._x000d_ -----------_x000d_ Nama posisi diganti menjadi Production Staff. _x000d_ Regitania join per 28 Januari 2025, sign contract 24 Januari 2025. | Pengganti Betty yang resign per akhir Januari 2025._x000d_ -----------_x000d_ Nama posisi digan...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/13/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6147,6 +6493,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/20/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6169,6 +6519,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6237,14 +6591,16 @@
         "Notes": "Replace Lely last day 24 Jan 2025_x000d_ _x000d_ Update : Interview Final di tanggal 12/05/2025. Kandidatnya an. Hirzi dan Seprian_x000d_ _x000d_ Update : Lanjut offering an. Seprian. minta tolong dibantu utk angka negonya yaa",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/06/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6287,8 +6643,8 @@
         "Notes": "Kebutuhan replacement 2 orang, Anggie dan Dariz._x000d_ ------------_x000d_ Shafa (pengganti Anggie) join per 6 Januari 2025._x000d_ Salsabila (pengganti Dariz) join per 22 Januari 2025.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Anggie",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -6319,6 +6675,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/31/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6361,8 +6721,8 @@
         "Notes": "replace Laksmi Pradipta - end contract 31 Des 2024_x000d_ -----------_x000d_ Iqbal (pengganti Laksmi) join per 27 Januari 2025.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Laksmi",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -6393,6 +6753,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/06/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6409,8 +6773,8 @@
         "Notes": "",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Ellen",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -6435,12 +6799,16 @@
         "Notes": "untuk pengganti sementara Rizkia Afidah (sekre) cuti melahirkan._x000d_  _x000d_ Progress: mau interview Rabu, 12 Feb | untuk pengganti sementara Rizkia Afidah (sekre) cuti melahirkan._x000d_  _x000d_ Progress: mau interview Rabu, 12 Feb | untuk pengganti s...",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "sementara Rizkia Afidah",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/06/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6463,6 +6831,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/07/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6505,12 +6877,16 @@
         "Notes": "Repl. Rizkia",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Rizkia",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "01/24/2025",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6533,6 +6909,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "11/14/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6633,8 +7013,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/19/2024",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6735,6 +7117,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/23/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6751,12 +7137,16 @@
         "Notes": "Joined: Handika_x000d_ _x000d_ Ast. Produser pengganti Fahdin (under Oky Ivan) yang resign per akhir November 2024.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Fahdin",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "10/28/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6779,6 +7169,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "10/23/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6847,12 +7241,16 @@
         "Notes": "Mohon di review permintaan pengganti Finance AP Support yang akan resign per 18 Okt 2024 atas nama Resti Amelia.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
         "Created Date": "09/13/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6869,8 +7267,8 @@
         "Notes": "done ttd kontrak",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Danael",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -6901,8 +7299,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/21/2024",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6951,6 +7351,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/30/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -6967,8 +7371,8 @@
         "Notes": "done ttd kontrak.",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Audie",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
@@ -7077,6 +7481,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "08/01/2024",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7093,7 +7501,7 @@
         "Notes": "@Rully, kindly check angka proposal offeringnya. Sudah ada._x000d_ _x000d_ Form acc by mb ita sudah ditambahkan di attachment card ini",
         "Last Updated": "2026-03-17 08:51:46",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
+        "Hire Type": "Replacement",
         "Replacement For": "",
         "Job Description": "",
         "Attachments": [],
@@ -7151,8 +7559,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "12/18/2025",
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7175,6 +7585,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": "02/05/2026",
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7249,6 +7663,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7271,6 +7689,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7293,6 +7715,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7315,6 +7741,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7389,6 +7819,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7411,6 +7845,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7433,6 +7871,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7455,6 +7897,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7477,6 +7923,10 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7499,8 +7949,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7523,8 +7975,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7547,8 +8001,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7597,8 +8053,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7621,8 +8079,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7645,8 +8105,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7669,8 +8131,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7693,8 +8157,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7717,8 +8183,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7741,8 +8209,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7765,8 +8235,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7789,8 +8261,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7813,6 +8287,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7835,8 +8313,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7859,8 +8339,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Data & Customer Intelligence Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7883,8 +8365,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7907,8 +8391,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -7931,8 +8417,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Development Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8189,8 +8677,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8213,8 +8703,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8237,8 +8729,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
         "Directorate": "Technology Directorate",
         "Department": "Product Department",
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8261,6 +8755,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8387,6 +8885,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8409,6 +8911,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8457,6 +8963,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     },
     {
@@ -8479,6 +8989,10 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
+        "Planner Division": null,
+        "Directorate": null,
+        "Department": null,
+        "Section": null,
         "Status": "Contract"
     }
 ]

@@ -224,29 +224,49 @@ function extractReplacementFor(description) {
   if (!description) {
     return config.defaults.replacementFor;
   }
-  
-  const descLower = description.toLowerCase();
 
   // Try longer keywords first ('replacement' before 'replace') so we don't
-  // partially match and chop the next word.
+  // partially match and chop the next word. Use a word-boundary regex so
+  // 'replace' inside 'replacement' is not falsely matched.
   const keywords = [...config.replacementKeywords].sort((a, b) => b.length - a.length);
 
   for (const keyword of keywords) {
-    const index = descLower.indexOf(keyword);
-    if (index !== -1) {
-      // Extract text after keyword (next few words)
-      const afterKeyword = description.substring(index + keyword.length).trim();
+    // Word-boundary match. For 'repl' we also accept a trailing '.' as in
+    // 'Repl. Ellen'. \b is a word boundary so 'replace' won't match
+    // inside 'replacement'.
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\b${escaped}\\b\\.?`, 'i');
+    const m = re.exec(description);
+    if (!m) continue;
 
-      // Try to extract name (first 2-3 words, up to punctuation OR | / ; separators).
-      const match = afterKeyword.match(/^[:\s]*([A-Za-z][A-Za-z\s.'-]*?)(?:[,.\n|;]|$)/);
-      if (match && match[1]) {
-        const name = match[1].trim();
-        if (name) return name;
-      }
+    const afterKeyword = description.substring(m.index + m[0].length).trim();
+    // Try to extract name (first 2-3 words, up to punctuation OR
+    // | / ; ( ) separators — handles "(replace Rio)" in task names).
+    const match = afterKeyword.match(/^[:\s]*([A-Za-z][A-Za-z\s.'-]*?)(?:[,.\n|;()/\\]|$)/);
+    if (match && match[1]) {
+      const name = match[1].trim();
+      // Filter out trivial residues / accidental matches
+      if (name && name.length >= 2) return name;
     }
   }
-  
+
   return config.defaults.replacementFor;
+}
+
+/**
+ * Check whether text contains a replacement keyword (word-boundary match).
+ * Useful when the position is clearly a replacement but no specific name
+ * is mentioned (e.g. "Reporter Tren | Replacement").
+ */
+function hasReplacementKeyword(text) {
+  if (!text) return false;
+  const keywords = [...config.replacementKeywords].sort((a, b) => b.length - a.length);
+  for (const keyword of keywords) {
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\b${escaped}\\b\\.?`, 'i');
+    if (re.test(text)) return true;
+  }
+  return false;
 }
 
 /**
@@ -357,10 +377,21 @@ function transformRow(row, existing = null) {
   const division = extractDivision(labels, existing);
   const pic = extractPIC(assignedTo);
   let hireType = extractHireType(labels);
-  const replacementFor = extractReplacementFor(description);
-  // If notes mention "replacement <name>" / "pengganti <name>" but the label
-  // wasn't set, treat the position as a Replacement automatically.
+  // Look for replacement names in Notes first, then in the Task Name
+  // (e.g. "Account Executive Pasangiklan (replace Rio)").
+  let replacementFor = extractReplacementFor(description);
+  if (!replacementFor) {
+    replacementFor = extractReplacementFor(taskName);
+  }
+  // If a replacement name was found anywhere but the Planner label still
+  // says Additional, treat the position as a Replacement automatically.
   if (replacementFor && hireType !== 'Replacement') {
+    hireType = 'Replacement';
+  }
+  // Even without a name, the keyword in title/notes is a strong signal
+  // (e.g. "Reporter Tren | Replacement").
+  if (hireType !== 'Replacement' &&
+      (hasReplacementKeyword(taskName) || hasReplacementKeyword(description))) {
     hireType = 'Replacement';
   }
   const freeze = isFrozen(bucketName);
@@ -507,5 +538,6 @@ module.exports = {
   resolveBucketAlias,
   mergeNotes,
   dedupeNotes,
+  hasReplacementKeyword,
   findExisting
 };
