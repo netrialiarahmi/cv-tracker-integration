@@ -143,9 +143,11 @@ const config = {
   // Default status when no keyword matches
   defaultStatus: 'Contract',
 
-  // Preferred sheet name to read (case-insensitive). Falls back to current
-  // detection logic (most-known-columns, then most-rows) when not present.
+  // Preferred sheet name(s) to read (case-insensitive). The Planner export
+  // tab is sometimes "Consolidate Data" and sometimes "Consolidated Data".
+  // Falls back to current detection logic when none are present.
   preferredSheetName: 'Consolidate Data',
+  preferredSheetNames: ['Consolidated Data', 'Consolidate Data'],
 
   // Short bucket-name aliases used in the "Consolidate Data" tab.
   // Each maps a short/alt label to one of the canonical keys in `bucketStages`.

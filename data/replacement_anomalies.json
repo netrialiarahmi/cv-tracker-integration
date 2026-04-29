@@ -1,65 +1,7 @@
 [
   {
-    "category": "truncated_notes",
-    "job_position": "Marcomm Intern",
-    "replacement_for": "Petrick",
-    "notes": "Ada kebutuhan Intern di Marcomm (3 orang) Unpaid Kebutuhannya untuk handle campaign & community (kompas.com) Update per 27/08/2025: Kandidat a/n Lika, Petrick, dan Dinda akan mulai magang pada 1 Septe",
-    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
-  },
-  {
-    "category": "truncated_notes",
-    "job_position": "Data Engineer OVAL",
-    "replacement_for": "Filipus Samuel",
-    "notes": "Replace Filipus Samuel. | Replace Filipus Samuel - belum ada MRF | Replace Filipus Samuel - belum ada MRF. Additional? | Replace F...",
-    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
-  },
-  {
     "category": "missing_name",
-    "job_position": "Socmed Admin - Distribution",
-    "notes": "Kebutuhan pengganti 2 orang magang kampus merdeka + 1 orang pengganti Nana.",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "ambiguous_multiple",
-    "job_position": "Sustainability Lead Project",
-    "replacement_for": "Abram",
-    "notes": "Replacement Abram Update : Pandu re-offered. 11/02/2025 dia kasih kabar finalnya. kemarin setelah ngobrol sama Pandu, ada kemungkinan dia ttp pengen angkanya diatas 10 (which di 12) tp statusnya konpr",
-    "reason": "Notes mention multiple targets joined by \"atau\"/\"or\"; replacement target ambiguous"
-  },
-  {
-    "category": "missing_name",
-    "job_position": "Ast. Manager Sales VCBL -> GH Sales VCBL",
-    "notes": "Sales Group Head menggunakan slot Mbak Chia",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "missing_name",
-    "job_position": "Account Executive VCBL",
-    "notes": "(11/08/2025) Initial interview Daniella Wilfredlynne Ginting (daftar ke AE Pasangiklan.com), Regina Sophia (memang daftar ke AE VCBL), dan Jayanti (approach dari Linkedin) (12/08/2025) initial intervi",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "missing_name",
-    "job_position": "Submission MRF_Software Engineer_Replacement",
-    "notes": "Horizon",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "truncated_notes",
-    "job_position": "Marcomm Intern",
-    "replacement_for": "Petrick",
-    "notes": "Ada kebutuhan Intern di Marcomm (3 orang) Unpaid Kebutuhannya untuk handle campaign & community (kompas.com) Update per 27/08/2025: Kandidat a/n Lika, Petrick, dan Dinda akan mulai magang pada 1 Septe",
-    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
-  },
-  {
-    "category": "missing_name",
-    "job_position": "Socmed Admin Intern",
-    "notes": "(05/08/2025) interview 2 kandidat, ok join atas nama Amirah di tanggal 18",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "missing_name",
-    "job_position": "Business Development Analyst",
+    "job_position": "Sales Support Kompascom (Replacement)",
     "notes": "",
     "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
   },
@@ -71,35 +13,16 @@
     "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
   },
   {
-    "category": "missing_name",
-    "job_position": "Creative Product Marketing",
-    "notes": "Replace ....",
-    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
-  },
-  {
-    "category": "truncated_notes",
-    "job_position": "Live Streamer Solo",
-    "replacement_for": "Pramudya",
-    "notes": "Kandidat a.n. Pras, join 14 Juli Freelance. 1 Agustus Konpro | Replace Pramudya. | Replace Pramud...",
-    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
-  },
-  {
-    "category": "label_text_conflict",
-    "job_position": "Host & Creative (Additional)",
-    "notes": "Additional di undernya Mas Soni, Replace Felicia (freelance). Freelance direplace Konpro",
-    "reason": "Title marked Additional but notes mention \"replace\" keyword"
-  },
-  {
     "category": "ambiguous_multiple",
-    "job_position": "Content Marketing Solo",
-    "replacement_for": "Dwi",
-    "notes": "Kandidat a.n. Tsabitha deal, Join date 02/06/2025 | Replace Dwi atau Inang yang akan dipromosi. | Replace Dwi atau Inang yang aka...",
+    "job_position": "Sustainability Lead Project",
+    "replacement_for": "Abram",
+    "notes": "Replacement Abram Update : Pandu re-offered. 11/02/2025 dia kasih kabar finalnya. kemarin setelah ngobrol sama Pandu, ada kemungkinan dia ttp pengen angkanya diatas 10 (which di 12) tp statusnya konpr",
     "reason": "Notes mention multiple targets joined by \"atau\"/\"or\"; replacement target ambiguous"
   },
   {
     "category": "missing_name",
-    "job_position": "Freelance Learning analyst Media Academy (replace)",
-    "notes": "Sudah akan on board tgl 7 April (periode 2 bulan): Andre Binsar",
+    "job_position": "Socmed Admin - Distribution",
+    "notes": "Kebutuhan pengganti 2 orang magang kampus merdeka + 1 orang pengganti Nana.",
     "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
   },
   {
@@ -118,8 +41,91 @@
   },
   {
     "category": "missing_name",
-    "job_position": "Sales Support Kompascom (Replacement)",
+    "job_position": "Freelance Learning analyst Media Academy (replace)",
+    "notes": "Sudah akan on board tgl 7 April (periode 2 bulan): Andre Binsar",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "ambiguous_multiple",
+    "job_position": "Content Marketing Solo",
+    "replacement_for": "Dwi",
+    "notes": "Kandidat a.n. Tsabitha deal, Join date 02/06/2025 | Replace Dwi atau Inang yang akan dipromosi. | Replace Dwi atau Inang yang aka...",
+    "reason": "Notes mention multiple targets joined by \"atau\"/\"or\"; replacement target ambiguous"
+  },
+  {
+    "category": "truncated_notes",
+    "job_position": "Live Streamer Solo",
+    "replacement_for": "Pramudya",
+    "notes": "Kandidat a.n. Pras, join 14 Juli Freelance. 1 Agustus Konpro | Replace Pramudya. | Replace Pramud...",
+    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Creative Product Marketing",
+    "notes": "Replace ....",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "label_text_conflict",
+    "job_position": "Host & Creative (Additional)",
+    "notes": "Additional di undernya Mas Soni, Replace Felicia (freelance). Freelance direplace Konpro",
+    "reason": "Title marked Additional but notes mention \"replace\" keyword"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Business Development Analyst",
     "notes": "",
     "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Socmed Admin Intern",
+    "notes": "(05/08/2025) interview 2 kandidat, ok join atas nama Amirah di tanggal 18",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Account Executive VCBL",
+    "notes": "(11/08/2025) Initial interview Daniella Wilfredlynne Ginting (daftar ke AE Pasangiklan.com), Regina Sophia (memang daftar ke AE VCBL), dan Jayanti (approach dari Linkedin) (12/08/2025) initial intervi",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "truncated_notes",
+    "job_position": "Marcomm Intern",
+    "replacement_for": "Petrick",
+    "notes": "Ada kebutuhan Intern di Marcomm (3 orang) Unpaid Kebutuhannya untuk handle campaign & community (kompas.com) Update per 27/08/2025: Kandidat a/n Lika, Petrick, dan Dinda akan mulai magang pada 1 Septe",
+    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Ast. Manager Sales VCBL -> GH Sales VCBL",
+    "notes": "Sales Group Head menggunakan slot Mbak Chia",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Submission MRF_Software Engineer_Replacement",
+    "notes": "Horizon",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "missing_name",
+    "job_position": "Data Reliability Admin",
+    "notes": "Asilah akan mengakhiri kontraknya di bulan Desember 2025. Selama masa transisi tersebut, butuh waktu handover untuk replacement",
+    "reason": "Labelled Replacement but no replaceable name parsed from title or notes"
+  },
+  {
+    "category": "truncated_notes",
+    "job_position": "Data Engineer OVAL",
+    "replacement_for": "Filipus Samuel",
+    "notes": "Replace Filipus Samuel. | Replace Filipus Samuel - belum ada MRF | Replace Filipus Samuel - belum ada MRF. Additional? | Replace F...",
+    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
+  },
+  {
+    "category": "truncated_notes",
+    "job_position": "Marcomm Intern",
+    "replacement_for": "Petrick",
+    "notes": "Ada kebutuhan Intern di Marcomm (3 orang) Unpaid Kebutuhannya untuk handle campaign & community (kompas.com) Update per 27/08/2025: Kandidat a/n Lika, Petrick, dan Dinda akan mulai magang pada 1 Septe",
+    "reason": "Notes appear truncated mid-name (further replacement target may be cut off)"
   }
 ]

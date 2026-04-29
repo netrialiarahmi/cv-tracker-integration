@@ -78,13 +78,20 @@ async function parseExcelFile(filePath) {
     return best;
   };
 
-  // 1) Prefer the configured sheet name (e.g. "Consolidate Data") when present
-  const preferredName = (require('./config').preferredSheetName || '').toLowerCase().trim();
+  // 1) Prefer the configured sheet name(s) (e.g. "Consolidated Data" / "Consolidate Data") when present
+  const cfg = require('./config');
+  const preferredNamesList = []
+    .concat(cfg.preferredSheetNames || [])
+    .concat(cfg.preferredSheetName ? [cfg.preferredSheetName] : [])
+    .map(n => String(n || '').toLowerCase().trim())
+    .filter(Boolean);
+  const preferredName = preferredNamesList[0] || '';
   let preferredIndex = -1;
-  if (preferredName) {
+  for (const name of preferredNamesList) {
     preferredIndex = workbook.worksheets.findIndex(ws =>
-      String(ws.name || '').toLowerCase().trim() === preferredName
+      String(ws.name || '').toLowerCase().trim() === name
     );
+    if (preferredIndex >= 0) break;
   }
   if (preferredIndex >= 0) {
     const preferredMatch = scanWorksheet(preferredIndex);
