@@ -1,0 +1,75 @@
+name: Sync CV Matching Results
+
+on:
+  schedule:
+    # Run every day at 08:00 WIB (01:00 UTC), after cv-matching-auto finishes at 07:30 WIB
+    - cron: '0 1 * * *'
+
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout hiring-tracker-v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: hiring-tracker
+
+      - name: Checkout cv-matching-auto
+        uses: actions/checkout@v4
+        with:
+          repository: netrialiarahmi/cv-matching-auto
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          path: cv-matching
+
+      - name: Copy screening results
+        run: |
+          # Create target dir
+          mkdir -p hiring-tracker/data/processed
+
+          # Copy all position-specific results CSVs
+          if ls cv-matching/data/processed/results_*.csv 1>/dev/null 2>&1; then
+            cp cv-matching/data/processed/results_*.csv hiring-tracker/data/processed/
+            echo "Copied $(ls cv-matching/data/processed/results_*.csv | wc -l) result file(s)"
+          else
+            echo "No results_*.csv files found in cv-matching/data/processed/"
+          fi
+
+          # Copy job_positions.csv for position list
+          if [ -f cv-matching/data/job_positions.csv ]; then
+            cp cv-matching/data/job_positions.csv hiring-tracker/data/job_positions.csv
+            echo "Copied job_positions.csv"
+          else
+            echo "job_positions.csv not found"
+          fi
+
+      - name: Check for changes
+        id: git-check
+        working-directory: hiring-tracker
+        run: |
+          git diff --exit-code data/processed/ data/job_positions.csv 2>/dev/null \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        working-directory: hiring-tracker
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/processed/ data/job_positions.csv 2>/dev/null || true
+          TIMESTAMP=$(TZ=Asia/Jakarta date '+%Y-%m-%d %H:%M WIB')
+          git commit -m "🤖 Auto-sync: CV Matching results — ${TIMESTAMP}"
+          git push
+
+      - name: No changes found
+        if: steps.git-check.outputs.changed == 'false'
+        run: echo "No new screening results to sync."
