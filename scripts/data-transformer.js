@@ -5,6 +5,7 @@
 const fs = require('fs');
 const config = require('./config');
 const { getColumnValue } = require('./excel-parser');
+const { resolveDivision } = require('./division-lookup');
 
 /**
  * Get current date/time in Jakarta timezone
@@ -61,7 +62,14 @@ function mapBucketToStages(bucketName, progress, existingStages = null) {
   if (stages) {
     return { ...stages };
   }
-  
+
+  // Try alias / partial matching for short bucket labels (e.g., "Initial",
+  // "Final Interview", "Onboarding") used in the Consolidate Data tab.
+  const aliasMatch = resolveBucketAlias(bucketName);
+  if (aliasMatch && config.bucketStages[aliasMatch]) {
+    return { ...config.bucketStages[aliasMatch] };
+  }
+
   // Default to initial screening false if bucket not recognized
   console.warn(`⚠️  Unknown bucket name: "${bucketName}", using default stages`);
   return {
@@ -73,6 +81,48 @@ function mapBucketToStages(bucketName, progress, existingStages = null) {
     contractSign: false,
     onBoarding: false
   };
+}
+
+/**
+ * Resolve a short / alternative bucket label to a canonical bucket key.
+ * Tries exact alias match first, then substring match against known bucket names.
+ * @param {string} bucketName
+ * @returns {string|null} Canonical bucket key or null
+ */
+function resolveBucketAlias(bucketName) {
+  if (!bucketName) return null;
+  const key = bucketName.toLowerCase().trim();
+  const aliases = config.bucketAliases || {};
+  if (aliases[key]) return aliases[key];
+
+  // Substring match against alias keys (e.g. "Initial Screening - HR" → "initial screening")
+  for (const aliasKey of Object.keys(aliases)) {
+    if (key.includes(aliasKey)) return aliases[aliasKey];
+  }
+
+  // Substring match against canonical bucket names
+  for (const canonical of Object.keys(config.bucketStages)) {
+    if (canonical.toLowerCase().includes(key) || key.includes(canonical.toLowerCase())) {
+      return canonical;
+    }
+  }
+  return null;
+}
+
+/**
+ * Detect employment status from labels + task name.
+ * @param {string} labelsStr - Semicolon-separated labels
+ * @param {string} taskName - Task name (job title)
+ * @returns {string} Status (Intern / Freelance / Contract)
+ */
+function extractStatus(labelsStr, taskName) {
+  const haystack = `${labelsStr || ''} ${taskName || ''}`.toLowerCase();
+  for (const { keyword, value } of (config.statusKeywords || [])) {
+    if (haystack.includes(keyword.toLowerCase())) {
+      return value;
+    }
+  }
+  return config.defaultStatus || config.defaults.status || 'Contract';
 }
 
 /**
@@ -176,8 +226,12 @@ function extractReplacementFor(description) {
   }
   
   const descLower = description.toLowerCase();
-  
-  for (const keyword of config.replacementKeywords) {
+
+  // Try longer keywords first ('replacement' before 'replace') so we don't
+  // partially match and chop the next word.
+  const keywords = [...config.replacementKeywords].sort((a, b) => b.length - a.length);
+
+  for (const keyword of keywords) {
     const index = descLower.indexOf(keyword);
     if (index !== -1) {
       // Extract text after keyword (next few words)
@@ -283,14 +337,38 @@ function transformRow(row, existing = null) {
   // Extract metadata
   const division = extractDivision(labels, existing);
   const pic = extractPIC(assignedTo);
-  const hireType = extractHireType(labels);
+  let hireType = extractHireType(labels);
   const replacementFor = extractReplacementFor(description);
+  // If notes mention "replacement <name>" / "pengganti <name>" but the label
+  // wasn't set, treat the position as a Replacement automatically.
+  if (replacementFor && hireType !== 'Replacement') {
+    hireType = 'Replacement';
+  }
   const freeze = isFrozen(bucketName);
   const notes = mergeNotes(existing?.Notes, description);
+  const status = extractStatus(labels, taskName);
+  const completedDate = getColumnValue(row, config.columns.completedDate);
+
+  // Auto-correct Division using the Employee-Report-derived lookup.
+  // Falls back to the Planner-derived division when the lookup has no entry.
+  const resolved = resolveDivision(taskName, division);
+  const finalDivision = resolved.division || division;
+  if (
+    resolved.source !== 'planner' &&
+    resolved.division &&
+    division &&
+    resolved.division.trim().toLowerCase() !== division.trim().toLowerCase()
+  ) {
+    console.log(`  ⇄ Division corrected for "${taskName}": "${division}" → "${resolved.division}" (${resolved.source})`);
+  }
   
   // Build transformed entry
   return {
-    Division: division,
+    Division: finalDivision,
+    'Planner Division': division,
+    Directorate: resolved.directorate || existing?.Directorate || '',
+    Department: resolved.department || existing?.Department || '',
+    Section: resolved.section || existing?.Section || '',
     'Job Position': taskName,
     'Initial screening': stages.initialScreening,
     'HR & User Interview (Stage 1)': stages.interview,
@@ -308,7 +386,9 @@ function transformRow(row, existing = null) {
     'Job Description': existing?.['Job Description'] || config.defaults.jobDescription,
     Attachments: Array.isArray(existing?.Attachments) ? existing.Attachments : config.defaults.attachments,
     Freeze: freeze,
-    'Created Date': createdDate || existing?.['Created Date'] || config.defaults.createdDate
+    'Created Date': createdDate || existing?.['Created Date'] || config.defaults.createdDate,
+    'Completed Date': completedDate || existing?.['Completed Date'] || '',
+    Status: status || existing?.Status || config.defaults.status
   };
 }
 
@@ -404,6 +484,8 @@ module.exports = {
   extractPIC,
   extractHireType,
   extractReplacementFor,
+  extractStatus,
+  resolveBucketAlias,
   mergeNotes,
   findExisting
 };

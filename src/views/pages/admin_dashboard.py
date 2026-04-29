@@ -10,6 +10,7 @@ from src.views.components.data_table import render_reference_table
 from src.services.hiring_service import render_position_form
 from src.config.settings import BASE_STAGES
 from src.models.hiring import calculate_position_progress, get_progress_badge
+from src.utils.helpers import filter_by_year_range, available_years as _available_years
 
 
 AD_SECTION_IDS = {
@@ -27,6 +28,8 @@ def _init_admin_state() -> None:
     st.session_state.setdefault("ad_nav_target", None)
     st.session_state.setdefault("ad_current_section", AD_SECTION_IDS["top"])
     st.session_state.setdefault("ad_metric_filter", "total")
+    st.session_state.setdefault("ad_year_from", "All")
+    st.session_state.setdefault("ad_year_to", "All")
 
 
 def _get_pic_display_name(pic_key: str) -> str:
@@ -270,8 +273,22 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         active_filter = st.session_state.get("ad_metric_filter", "total")
         filtered_data = _filter_by_status(filtered_data, active_filter)
 
-        # Stage stepper with clickable filtering
+        # Year-range filter (drives stage badge counts)
+        years = _available_years(filtered_data)
+        year_options = ["All"] + list(range(min(years), max(years) + 1)) if years else ["All"]
         st.markdown('<div class="content-card"><h3>Hiring Pipeline Stages</h3>', unsafe_allow_html=True)
+        yc1, yc2, yc3 = st.columns([6, 1, 1])
+        with yc2:
+            st.selectbox("From Year", year_options, key="ad_year_from", label_visibility="collapsed")
+        with yc3:
+            st.selectbox("To Year", year_options, key="ad_year_to", label_visibility="collapsed")
+        filtered_data = filter_by_year_range(
+            filtered_data,
+            st.session_state.get("ad_year_from", "All"),
+            st.session_state.get("ad_year_to", "All"),
+        )
+
+        # Stage stepper with clickable filtering
         selected_stage = render_progress_stepper(filtered_data, session_key="ad_stage_filter", show_counts=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -328,10 +345,11 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
                 hire_type_info = f"Replacement for {row['Replacement For']}"
             else:
                 hire_type_info = "Additional"
+            status_label_pos = row.get('Status', 'Contract') or 'Contract'
 
             anchor_id = f"ad-position-{idx}"
             _inline_anchor(anchor_id)
-            with st.expander(f"{row['Job Position']} · {status_label} · {pic_display} · {hire_type_info}"):
+            with st.expander(f"{row['Job Position']} · {status_label} · {pic_display} · {hire_type_info} · {status_label_pos}"):
                 can_edit = st.session_state.get("role") in ["HR Superadmin", "HR Admin"]
                 render_position_form(idx, row, can_edit, stages)
         

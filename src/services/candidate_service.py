@@ -198,6 +198,70 @@ def update_candidate_status(candidate_id: str, new_status: str) -> bool:
     return False
 
 
+def submit_skill_review(
+    candidate_id: str,
+    reviewer_division: str,
+    reviewer: str,
+    ratings: Dict[str, int],
+    note: str,
+    decision: str,
+) -> bool:
+    """Persist a Division-side skill review for a candidate.
+
+    ratings: {"soft_skill": 1-4, "value_kg": 1-4, "technical_skill": 1-4}
+    decision: one of Candidate.STATUS_RECOMMENDED / STATUS_NOT_RECOMMENDED / STATUS_RESERVE
+    """
+    valid_decisions = {
+        Candidate.STATUS_RECOMMENDED,
+        Candidate.STATUS_NOT_RECOMMENDED,
+        Candidate.STATUS_RESERVE,
+    }
+    if decision not in valid_decisions:
+        return False
+
+    def _clamp(v):
+        try:
+            v = int(v)
+        except (TypeError, ValueError):
+            return 1
+        return max(1, min(4, v))
+
+    entry = {
+        "soft_skill": _clamp(ratings.get("soft_skill", 1)),
+        "value_kg": _clamp(ratings.get("value_kg", 1)),
+        "technical_skill": _clamp(ratings.get("technical_skill", 1)),
+        "note": (note or "").strip(),
+        "decision": decision,
+        "reviewer": reviewer,
+        "submitted_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+
+    candidates = load_candidates()
+    for i, c in enumerate(candidates):
+        if c.get("id") != candidate_id:
+            continue
+
+        candidate = Candidate(c)
+        candidate.skill_ratings[reviewer_division] = entry
+        candidate.status = decision
+
+        # Mirror the review as a comment so HR sees the trail
+        summary = (
+            f"Skill review — Soft Skill: {entry['soft_skill']}/4, "
+            f"Value KG: {entry['value_kg']}/4, "
+            f"Technical Skill: {entry['technical_skill']}/4. "
+            f"Decision: {decision}."
+        )
+        if entry["note"]:
+            summary += f" Catatan: {entry['note']}"
+        candidate.add_comment(reviewer, reviewer_division, summary, action="review")
+
+        candidates[i] = candidate.to_dict()
+        save_candidates(candidates)
+        return True
+    return False
+
+
 def reset_candidate_status(candidate_id: str) -> bool:
     """Reset a candidate's status back to Escalated (undo approve/reject)."""
     return update_candidate_status(candidate_id, Candidate.STATUS_ESCALATED)

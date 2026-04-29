@@ -145,6 +145,26 @@ def render_position_form(idx: int, row: pd.Series, can_edit: bool, stages: List[
                 placeholder="Enter name being replaced",
                 key=f"replacement_for_{idx}"
             )
+
+        # Status (Contract / Intern / Freelance) — auto-detected from Planner
+        # labels/task name on sync, but editable here.
+        status_options = ["Contract", "Intern", "Freelance"]
+        current_status = row.get("Status", "Contract") or "Contract"
+        if current_status not in status_options:
+            status_options = [current_status] + status_options
+        new_status = st.selectbox(
+            "Status",
+            options=status_options,
+            index=status_options.index(current_status),
+            key=f"status_{idx}",
+        )
+        if new_status != current_status:
+            st.session_state.hiring_data.at[idx, "Status"] = new_status
+            st.session_state.hiring_data.at[idx, "Last Updated"] = get_current_timestamp()
+            save_hiring_data(st.session_state.hiring_data)
+            st.success(f"✅ Status updated to {new_status}")
+            st.rerun()
+
         st.markdown("<hr>", unsafe_allow_html=True)
     else:
         hire_type = row.get("Hire Type", "Additional")

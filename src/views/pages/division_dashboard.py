@@ -10,6 +10,7 @@ from src.views.components.metrics import render_metrics
 from src.views.components.data_table import render_reference_table
 from src.models.hiring import calculate_position_progress, get_progress_badge
 from src.config.settings import BASE_STAGES
+from src.utils.helpers import filter_by_year_range, available_years as _available_years
 
 
 DIV_SECTION_IDS = {
@@ -29,6 +30,8 @@ def _init_div_state() -> None:
     st.session_state.setdefault("div_current_section", DIV_SECTION_IDS["top"])
     st.session_state.setdefault("div_active_position", None)
     st.session_state.setdefault("div_metric_filter", "total")
+    st.session_state.setdefault("div_year_from", "All")
+    st.session_state.setdefault("div_year_to", "All")
 
 
 def _anchor(section_id: str) -> None:
@@ -176,6 +179,28 @@ def _render_pipeline_tab(filtered_data: pd.DataFrame) -> None:
     # Display hiring pipeline (metrics only) at the top
     filtered_data = display_hiring_pipeline_metrics(filtered_data)
 
+    # Hiring Pipeline Stages with year-range filter (drives stage counts)
+    if len(filtered_data) > 0:
+        from src.views.components.progress_stepper import render_progress_stepper, filter_by_stage
+
+        years = _available_years(filtered_data)
+        year_options = ["All"] + list(range(min(years), max(years) + 1)) if years else ["All"]
+        st.markdown('<div class="content-card"><h3>Hiring Pipeline Stages</h3>', unsafe_allow_html=True)
+        yc1, yc2, yc3 = st.columns([6, 1, 1])
+        with yc2:
+            st.selectbox("From Year", year_options, key="div_year_from", label_visibility="collapsed")
+        with yc3:
+            st.selectbox("To Year", year_options, key="div_year_to", label_visibility="collapsed")
+        filtered_data = filter_by_year_range(
+            filtered_data,
+            st.session_state.get("div_year_from", "All"),
+            st.session_state.get("div_year_to", "All"),
+        )
+        selected_stage = render_progress_stepper(filtered_data, session_key="div_stage_filter", show_counts=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        if selected_stage:
+            filtered_data = filter_by_stage(filtered_data, selected_stage)
+
     # Summary table
     _anchor(DIV_SECTION_IDS["summary"])
     st.markdown("<br>", unsafe_allow_html=True)
@@ -259,12 +284,13 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
             hire_type_info = f"Replacement for {row['Replacement For']}"
         else:
             hire_type_info = "Additional"
-    
+        status_label_pos = row.get('Status', 'Contract') or 'Contract'
+
         anchor_id = f"div-position-{idx}"
         _inline_anchor(anchor_id)
         key_sig = f"{row['Division']}::{row['Job Position']}::{idx}"
         is_active = st.session_state.get("div_active_position") == key_sig
-        with st.expander(f"**{row['Job Position']}** • {pic_info} • {hire_type_info}", expanded=is_active):
+        with st.expander(f"**{row['Job Position']}** • {pic_info} • {hire_type_info} • {status_label_pos}", expanded=is_active):
             st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
             
@@ -290,10 +316,12 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
 def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     """
     Render the Candidates tab for division users.
-    Shows escalated candidates with commenting and approve/reject actions.
+    Shows escalated candidates (resume-only view) and lets reviewers submit
+    Soft Skill / Value KG / Technical Skill ratings (1–4) plus a decision:
+    Rekomendasi, Tidak Direkomendasi, or Cadangan.
     """
     from src.services.candidate_service import (
-        get_candidates_for_division, add_comment_to_candidate,
+        get_candidates_for_division, submit_skill_review,
         reset_candidate_status, clear_candidate_comments
     )
     from src.services.feedback_service import add_feedback_for_position
@@ -301,7 +329,11 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     from src.models.candidate import Candidate
 
     st.markdown("### Candidates for User Interview")
-    st.info("Review candidates escalated from HR screening. Add comments, approve, or reject candidates. Your feedback will improve future screening accuracy.")
+    st.info(
+        "Tinjau resume kandidat lalu beri penilaian Soft Skill, Value KG, dan "
+        "Technical Skill (skala 1–4). Pilih: Rekomendasi, Tidak Direkomendasi, "
+        "atau Cadangan."
+    )
 
     candidates = get_candidates_for_division(user_div)
 
@@ -324,6 +356,13 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
         key="div_candidate_status_filter"
     )
 
+    # Map decision → feedback action understood downstream by feedback_service
+    decision_to_action = {
+        Candidate.STATUS_RECOMMENDED: "approve",
+        Candidate.STATUS_NOT_RECOMMENDED: "reject",
+        Candidate.STATUS_RESERVE: "reserve",
+    }
+
     for position_key, pos_candidates in positions.items():
         # Get job description for feedback
         job_desc = ""
@@ -344,29 +383,38 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
         st.caption(f"{len(pos_candidates)} candidate(s)")
 
         for i, candidate in enumerate(pos_candidates):
-            def make_approve_handler(cid, pos=position_key, jd=job_desc):
-                def handler(candidate_id, text):
-                    add_comment_to_candidate(
-                        candidate_id, f"User {user_div}", user_div, text, "approve"
+            def make_review_handler(cand=candidate, pos=position_key, jd=job_desc):
+                def handler(candidate_id, ratings, note, decision):
+                    ok = submit_skill_review(
+                        candidate_id=candidate_id,
+                        reviewer_division=user_div,
+                        reviewer=f"User {user_div}",
+                        ratings=ratings,
+                        note=note,
+                        decision=decision,
                     )
-                    add_feedback_for_position(
-                        pos, user_div, jd, f"User {user_div}",
-                        candidate.name, "approve", text
+                    if not ok:
+                        st.error("Failed to submit review.")
+                        return
+                    # Mirror to feedback for cv-matching-auto sync
+                    feedback_text = (
+                        f"Soft Skill: {ratings['soft_skill']}/4, "
+                        f"Value KG: {ratings['value_kg']}/4, "
+                        f"Technical Skill: {ratings['technical_skill']}/4. "
+                        f"Decision: {decision}."
                     )
-                    st.success("Candidate approved!")
-                    st.rerun()
-                return handler
-
-            def make_reject_handler(cid, pos=position_key, jd=job_desc):
-                def handler(candidate_id, text):
-                    add_comment_to_candidate(
-                        candidate_id, f"User {user_div}", user_div, text, "reject"
-                    )
-                    add_feedback_for_position(
-                        pos, user_div, jd, f"User {user_div}",
-                        candidate.name, "reject", text
-                    )
-                    st.success("Candidate rejected. Feedback sent to screening.")
+                    if note:
+                        feedback_text += f" Catatan: {note}"
+                    try:
+                        add_feedback_for_position(
+                            pos, user_div, jd, f"User {user_div}",
+                            cand.name,
+                            decision_to_action.get(decision, "comment"),
+                            feedback_text,
+                        )
+                    except Exception:
+                        pass
+                    st.success(f"Penilaian disimpan: {decision}")
                     st.rerun()
                 return handler
 
@@ -388,8 +436,9 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
                 candidate,
                 key_prefix=f"div_cand_{position_key}_{i}",
                 show_actions=True,
-                on_approve=make_approve_handler(candidate.id),
-                on_reject=make_reject_handler(candidate.id),
+                division_view=True,
+                reviewer_division=user_div,
+                on_skill_review=make_review_handler(),
                 on_reset=make_reset_handler(candidate.id),
                 on_clear_comments=make_clear_comments_handler(candidate.id),
             )

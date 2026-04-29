@@ -269,7 +269,8 @@ def load_hiring_data() -> pd.DataFrame:
                     "HR & User Interview (Stage 1)", "Skill Test", "Final Interview",
                     "Offering", "Contract Sign", "On Boarding",
                     "PIC", "Notes", "Last Updated", "Has Skill Test",
-                    "Hire Type", "Replacement For", "Job Description", "Freeze"
+                    "Hire Type", "Replacement For", "Job Description", "Freeze",
+                    "Status"
                 ]
                 for col in expected_columns:
                     if col not in df.columns:
@@ -277,8 +278,15 @@ def load_hiring_data() -> pd.DataFrame:
                                   "Skill Test", "Final Interview", "Offering", 
                                   "Contract Sign", "On Boarding", "Has Skill Test", "Freeze"]:
                             df[col] = False  # Boolean for checkbox stages
+                        elif col == "Status":
+                            df[col] = "Contract"
                         else:
                             df[col] = ""
+                # Backfill empty Status with Contract default
+                if "Status" in df.columns:
+                    df["Status"] = df["Status"].apply(
+                        lambda v: v if isinstance(v, str) and v.strip() else "Contract"
+                    )
                 
                 # Ensure Attachments column exists (as list for each entry)
                 if "Attachments" not in df.columns:
@@ -347,5 +355,5 @@ def load_hiring_data() -> pd.DataFrame:
         "Offering": [], "Contract Sign": [], "On Boarding": [],
         "PIC": [], "Notes": [], "Last Updated": [], "Has Skill Test": [],
         "Hire Type": [], "Replacement For": [], "Job Description": [], "Freeze": [],
-        "Attachments": [], "CV Matching Position": []
+        "Status": [], "Attachments": [], "CV Matching Position": []
     })

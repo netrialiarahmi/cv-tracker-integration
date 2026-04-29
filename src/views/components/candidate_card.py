@@ -41,6 +41,9 @@ def _status_color(status: str) -> str:
         "Approved": "#16a34a",
         "Rejected": "#dc2626",
         "Pending": "#64748b",
+        "Rekomendasi": "#16a34a",
+        "Tidak Direkomendasi": "#dc2626",
+        "Cadangan": "#d97706",
     }.get(status, "#64748b")
 
 
@@ -51,13 +54,19 @@ def _status_bg(status: str) -> str:
         "Approved": "#f0fdf4",
         "Rejected": "#fef2f2",
         "Pending": "#f8fafc",
+        "Rekomendasi": "#f0fdf4",
+        "Tidak Direkomendasi": "#fef2f2",
+        "Cadangan": "#fffbeb",
     }.get(status, "#f8fafc")
 
 
 def render_candidate_card(candidate: Candidate, key_prefix: str,
                           show_actions: bool = False,
                           on_comment=None, on_approve=None, on_reject=None,
-                          on_reset=None, on_clear_comments=None) -> None:
+                          on_reset=None, on_clear_comments=None,
+                          on_skill_review=None,
+                          reviewer_division: str = "",
+                          division_view: bool = False) -> None:
     score = candidate.match_score
     color = _score_color(score)
     label = _score_label(score)
@@ -96,46 +105,80 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
         if edu_parts:
             st.markdown(f"<div class='candidate-info-row'>{''.join(edu_parts)}</div>", unsafe_allow_html=True)
 
-        # Links as pills
+        # Links as pills (Division view: only Resume)
         links = []
         if candidate.resume_link:
             links.append(f"<a href='{candidate.resume_link}' target='_blank' class='candidate-link-pill'>Resume</a>")
-        if candidate.kalibrr_link:
-            links.append(f"<a href='{candidate.kalibrr_link}' target='_blank' class='candidate-link-pill'>Kalibrr Profile</a>")
-        if candidate.application_link:
-            links.append(f"<a href='{candidate.application_link}' target='_blank' class='candidate-link-pill'>Application</a>")
+        if not division_view:
+            if candidate.kalibrr_link:
+                links.append(f"<a href='{candidate.kalibrr_link}' target='_blank' class='candidate-link-pill'>Kalibrr Profile</a>")
+            if candidate.application_link:
+                links.append(f"<a href='{candidate.application_link}' target='_blank' class='candidate-link-pill'>Application</a>")
         if links:
             st.markdown(f"<div style='display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;'>{''.join(links)}</div>", unsafe_allow_html=True)
 
-        # AI Analysis section
-        if candidate.ai_summary:
+        # AI Analysis section (hidden in division view — only resume is shown)
+        if candidate.ai_summary and not division_view:
             st.markdown(
                 f"<div class='ai-analysis-card'><h5>AI Summary</h5><p style='font-size:0.85rem;color:#1e293b;margin:0;line-height:1.6;'>{candidate.ai_summary}</p></div>",
                 unsafe_allow_html=True
             )
 
-        # Strengths / Weaknesses / Gaps in cards
-        col_s, col_w, col_g = st.columns(3)
-        with col_s:
-            if candidate.strengths:
-                items = "".join(f"<li>{s}</li>" for s in candidate.strengths)
+        # Strengths / Weaknesses / Gaps in cards (hidden in division view)
+        if not division_view:
+            col_s, col_w, col_g = st.columns(3)
+            with col_s:
+                if candidate.strengths:
+                    items = "".join(f"<li>{s}</li>" for s in candidate.strengths)
+                    st.markdown(
+                        f"<div class='ai-analysis-card'><h5>Strengths</h5><ul>{items}</ul></div>",
+                        unsafe_allow_html=True
+                    )
+            with col_w:
+                if candidate.weaknesses:
+                    items = "".join(f"<li>{w}</li>" for w in candidate.weaknesses)
+                    st.markdown(
+                        f"<div class='ai-analysis-card'><h5>Weaknesses</h5><ul>{items}</ul></div>",
+                        unsafe_allow_html=True
+                    )
+            with col_g:
+                if candidate.gaps:
+                    items = "".join(f"<li>{g}</li>" for g in candidate.gaps)
+                    st.markdown(
+                        f"<div class='ai-analysis-card'><h5>Gaps</h5><ul>{items}</ul></div>",
+                        unsafe_allow_html=True
+                    )
+
+        # Division skill reviews (visible to HR / Superadmin)
+        if candidate.skill_ratings and not division_view:
+            st.markdown("---")
+            st.markdown(
+                f"<p style='font-size:0.9rem;font-weight:600;color:#0f172a;margin:0 0 0.5rem 0;'>Skill Reviews ({len(candidate.skill_ratings)})</p>",
+                unsafe_allow_html=True,
+            )
+            for div_name, entry in candidate.skill_ratings.items():
+                dec = entry.get("decision", "")
+                dec_color = _status_color(dec)
+                dec_bg = _status_bg(dec)
+                note_html = (
+                    f"<div style='font-size:0.82rem;color:#334155;margin-top:0.4rem;'>"
+                    f"<strong>Catatan:</strong> {entry.get('note','')}</div>"
+                ) if entry.get("note") else ""
                 st.markdown(
-                    f"<div class='ai-analysis-card'><h5>Strengths</h5><ul>{items}</ul></div>",
-                    unsafe_allow_html=True
-                )
-        with col_w:
-            if candidate.weaknesses:
-                items = "".join(f"<li>{w}</li>" for w in candidate.weaknesses)
-                st.markdown(
-                    f"<div class='ai-analysis-card'><h5>Weaknesses</h5><ul>{items}</ul></div>",
-                    unsafe_allow_html=True
-                )
-        with col_g:
-            if candidate.gaps:
-                items = "".join(f"<li>{g}</li>" for g in candidate.gaps)
-                st.markdown(
-                    f"<div class='ai-analysis-card'><h5>Gaps</h5><ul>{items}</ul></div>",
-                    unsafe_allow_html=True
+                    f"""<div class='comment-card'>
+                        <div class='comment-header'>
+                            <span><span class='comment-author'>{div_name}</span>
+                            <span class='comment-action-badge' style='background:{dec_bg};color:{dec_color};'>{dec}</span></span>
+                            <span class='comment-time'>{entry.get('submitted_at','')}</span>
+                        </div>
+                        <div class='comment-text'>
+                            Soft Skill: <strong>{entry.get('soft_skill','-')}/4</strong> ·
+                            Value KG: <strong>{entry.get('value_kg','-')}/4</strong> ·
+                            Technical Skill: <strong>{entry.get('technical_skill','-')}/4</strong>
+                        </div>
+                        {note_html}
+                    </div>""",
+                    unsafe_allow_html=True,
                 )
 
         # Comments section
@@ -175,7 +218,76 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                 )
 
         # Action buttons
-        if show_actions and candidate.status not in [Candidate.STATUS_APPROVED, Candidate.STATUS_REJECTED]:
+        actioned = candidate.status in Candidate.ACTIONED_STATUSES
+
+        if show_actions and division_view and on_skill_review:
+            # Division reviewer flow: 3 ratings (1-4) + note + 3 decision buttons
+            st.markdown("---")
+
+            # Show this division's previous review (if any) so the reviewer
+            # sees what was last submitted before re-rating.
+            existing = candidate.skill_ratings.get(reviewer_division) if reviewer_division else None
+
+            default_soft = int(existing.get("soft_skill", 1)) if existing else 1
+            default_value = int(existing.get("value_kg", 1)) if existing else 1
+            default_tech = int(existing.get("technical_skill", 1)) if existing else 1
+            default_note = existing.get("note", "") if existing else ""
+
+            st.markdown(
+                "<p style='font-size:0.9rem;font-weight:600;color:#0f172a;margin:0 0 0.25rem 0;'>Penilaian (skala 1–4)</p>",
+                unsafe_allow_html=True,
+            )
+
+            r1, r2, r3 = st.columns(3)
+            with r1:
+                soft_skill = st.slider(
+                    "Soft Skill", min_value=1, max_value=4, step=1,
+                    value=default_soft, key=f"{key_prefix}_rate_soft",
+                )
+            with r2:
+                value_kg = st.slider(
+                    "Value KG", min_value=1, max_value=4, step=1,
+                    value=default_value, key=f"{key_prefix}_rate_value",
+                )
+            with r3:
+                technical_skill = st.slider(
+                    "Technical Skill", min_value=1, max_value=4, step=1,
+                    value=default_tech, key=f"{key_prefix}_rate_tech",
+                )
+
+            note_text = st.text_area(
+                "Catatan",
+                value=default_note,
+                key=f"{key_prefix}_rate_note",
+                placeholder="Tambahkan catatan untuk kandidat ini...",
+                height=80,
+            )
+
+            ratings = {
+                "soft_skill": soft_skill,
+                "value_kg": value_kg,
+                "technical_skill": technical_skill,
+            }
+
+            b1, b2, b3 = st.columns(3)
+            with b1:
+                if st.button("Rekomendasi", key=f"{key_prefix}_btn_rec",
+                             use_container_width=True, type="primary"):
+                    on_skill_review(candidate.id, ratings, note_text,
+                                    Candidate.STATUS_RECOMMENDED)
+            with b2:
+                if st.button("Tidak Direkomendasi", key=f"{key_prefix}_btn_notrec",
+                             use_container_width=True):
+                    on_skill_review(candidate.id, ratings, note_text,
+                                    Candidate.STATUS_NOT_RECOMMENDED)
+            with b3:
+                if st.button("Cadangan", key=f"{key_prefix}_btn_reserve",
+                             use_container_width=True):
+                    on_skill_review(candidate.id, ratings, note_text,
+                                    Candidate.STATUS_RESERVE)
+
+        elif show_actions and not division_view and not actioned:
+            # Legacy HR flow (kept for backwards compatibility)
             st.markdown("---")
             comment_text = st.text_area(
                 "Your feedback on this candidate",
@@ -196,8 +308,8 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                     elif on_reject:
                         st.warning("Please provide a reason for rejection")
 
-        # Reset button for approved/rejected candidates
-        if show_actions and on_reset and candidate.status in [Candidate.STATUS_APPROVED, Candidate.STATUS_REJECTED]:
+        # Reset button for already-actioned candidates
+        if show_actions and on_reset and actioned:
             st.markdown("---")
             if st.button(f"Reset Status (currently {candidate.status})",
                          key=f"{key_prefix}_btn_reset", use_container_width=True):

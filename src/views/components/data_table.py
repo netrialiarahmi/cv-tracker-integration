@@ -21,6 +21,7 @@ def build_summary_dataframe(display_data: pd.DataFrame) -> pd.DataFrame:
         "Division": display_data["Division"],
         "Job Position": display_data["Job Position"],
         "Hire Type": display_data.apply(get_hire_type_display, axis=1),
+        "Status": display_data.get("Status", "Contract"),
         "PIC": display_data.get("PIC", ""),
         "Initial Int. (HR)": display_data["Initial Interview (HR)"].apply(lambda x: "✓" if x else "—"),
         "HR & User Int.": display_data["HR & User Interview (Stage 1)"].apply(lambda x: "✓" if x else "—"),

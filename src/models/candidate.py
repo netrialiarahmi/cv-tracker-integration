@@ -34,10 +34,31 @@ class Candidate:
     STATUS_PENDING = "Pending"
     STATUS_ESCALATED = "Escalated"
     STATUS_INTERVIEW = "Interview"
+    # Legacy values (kept for backwards compatibility with existing data)
     STATUS_APPROVED = "Approved"
     STATUS_REJECTED = "Rejected"
+    # New decision values used by the Division dashboard review flow
+    STATUS_RECOMMENDED = "Rekomendasi"
+    STATUS_NOT_RECOMMENDED = "Tidak Direkomendasi"
+    STATUS_RESERVE = "Cadangan"
 
-    ALL_STATUSES = [STATUS_PENDING, STATUS_ESCALATED, STATUS_INTERVIEW, STATUS_APPROVED, STATUS_REJECTED]
+    # Map legacy → new value at read time so existing candidates.json renders
+    # with the new labels without a data migration.
+    LEGACY_STATUS_MAP = {
+        STATUS_APPROVED: STATUS_RECOMMENDED,
+        STATUS_REJECTED: STATUS_NOT_RECOMMENDED,
+    }
+
+    # Decision values that mark a candidate as actioned (not pending review)
+    ACTIONED_STATUSES = (
+        STATUS_APPROVED, STATUS_REJECTED,
+        STATUS_RECOMMENDED, STATUS_NOT_RECOMMENDED, STATUS_RESERVE,
+    )
+
+    ALL_STATUSES = [
+        STATUS_PENDING, STATUS_ESCALATED, STATUS_INTERVIEW,
+        STATUS_RECOMMENDED, STATUS_NOT_RECOMMENDED, STATUS_RESERVE,
+    ]
 
     def __init__(self, data: Dict[str, Any]):
         self.id = data.get("id", "")
@@ -57,13 +78,22 @@ class Candidate:
         self.education = data.get("education", "")
         self.university = data.get("university", "")
         self.major = data.get("major", "")
-        self.status = data.get("status", self.STATUS_ESCALATED)
+        raw_status = data.get("status", self.STATUS_ESCALATED)
+        # Normalize legacy statuses to the new labels at read time
+        self.status = self.LEGACY_STATUS_MAP.get(raw_status, raw_status)
         self.position_key = data.get("position_key", "")
         self.division = data.get("division", "")
         self.escalated_by = data.get("escalated_by", "")
         self.escalated_at = data.get("escalated_at", "")
         self.date_applied = data.get("date_applied", "")
         self.date_processed = data.get("date_processed", "")
+        # Per-division skill review entries:
+        # { "<reviewer_division>": {soft_skill, value_kg, technical_skill,
+        #                          note, decision, reviewer, submitted_at} }
+        ratings = data.get("skill_ratings") or {}
+        self.skill_ratings: Dict[str, Dict[str, Any]] = (
+            ratings if isinstance(ratings, dict) else {}
+        )
         self.comments = [
             CandidateComment(c) if isinstance(c, dict) else c
             for c in data.get("comments", [])
@@ -105,6 +135,7 @@ class Candidate:
             "escalated_at": self.escalated_at,
             "date_applied": self.date_applied,
             "date_processed": self.date_processed,
+            "skill_ratings": self.skill_ratings,
             "comments": [c.to_dict() for c in self.comments],
         }
 

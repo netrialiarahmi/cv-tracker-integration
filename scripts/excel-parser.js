@@ -57,21 +57,53 @@ async function parseExcelFile(filePath) {
   // Search all worksheets for the one containing task data
   let bestWorksheet = null;
   let bestSheetMatch = { sheetIndex: 0, rowIndex: 0, matchCount: 0, allRows: [], headers: [] };
-  
-  for (let si = 0; si < workbook.worksheets.length; si++) {
+
+  // Helper: scan a worksheet, return best header-row match for it
+  const scanWorksheet = (si) => {
     const ws = workbook.worksheets[si];
     const allRows = [];
     ws.eachRow((row, rowNumber) => {
       const values = row.values.slice(1).map(v => v !== null && v !== undefined ? String(v).trim() : '');
       allRows.push({ rowNumber, values });
     });
-    
+    let best = { sheetIndex: si, rowIndex: 0, matchCount: 0, allRows, headers: allRows.length > 0 ? allRows[0].values : [] };
     for (let i = 0; i < allRows.length; i++) {
-      const matchCount = allRows[i].values.filter(v => 
-        knownColumns.includes(v.toLowerCase().trim())
+      const matchCount = allRows[i].values.filter(v =>
+        allKnownNames.has(v.toLowerCase().trim())
       ).length;
-      if (matchCount > bestSheetMatch.matchCount) {
-        bestSheetMatch = { sheetIndex: si, rowIndex: i, matchCount, allRows, headers: allRows[i].values };
+      if (matchCount > best.matchCount) {
+        best = { sheetIndex: si, rowIndex: i, matchCount, allRows, headers: allRows[i].values };
+      }
+    }
+    return best;
+  };
+
+  // 1) Prefer the configured sheet name (e.g. "Consolidate Data") when present
+  const preferredName = (require('./config').preferredSheetName || '').toLowerCase().trim();
+  let preferredIndex = -1;
+  if (preferredName) {
+    preferredIndex = workbook.worksheets.findIndex(ws =>
+      String(ws.name || '').toLowerCase().trim() === preferredName
+    );
+  }
+  if (preferredIndex >= 0) {
+    const preferredMatch = scanWorksheet(preferredIndex);
+    if (preferredMatch.matchCount >= 2) {
+      console.log(`  ℹ Using preferred worksheet "${workbook.worksheets[preferredIndex].name}" (matched ${preferredMatch.matchCount} known columns)`);
+      bestSheetMatch = preferredMatch;
+    } else {
+      console.log(`  ⚠️  Preferred worksheet "${workbook.worksheets[preferredIndex].name}" found but has too few known columns (${preferredMatch.matchCount}); falling back to auto-detect`);
+    }
+  } else if (preferredName) {
+    console.log(`  ⚠️  Preferred worksheet "${preferredName}" not found in workbook; falling back to auto-detect`);
+  }
+
+  // 2) Otherwise, auto-detect across all worksheets
+  if (bestSheetMatch.matchCount < 2) {
+    for (let si = 0; si < workbook.worksheets.length; si++) {
+      const cand = scanWorksheet(si);
+      if (cand.matchCount > bestSheetMatch.matchCount) {
+        bestSheetMatch = cand;
       }
     }
   }

@@ -134,6 +134,46 @@ const config = {
     replacement: 'Replacement'
   },
 
+  // Status detection keywords (checked against Labels + Task Name, case-insensitive)
+  // Order matters: first match wins.
+  statusKeywords: [
+    { keyword: 'intern', value: 'Intern' },
+    { keyword: 'freelance', value: 'Freelance' }
+  ],
+  // Default status when no keyword matches
+  defaultStatus: 'Contract',
+
+  // Preferred sheet name to read (case-insensitive). Falls back to current
+  // detection logic (most-known-columns, then most-rows) when not present.
+  preferredSheetName: 'Consolidate Data',
+
+  // Short bucket-name aliases used in the "Consolidate Data" tab.
+  // Each maps a short/alt label to one of the canonical keys in `bucketStages`.
+  bucketAliases: {
+    'backlog': 'Backlog (Employee Req Form)',
+    'employee req form': 'Backlog (Employee Req Form)',
+    'initial': 'Approval Circular & Review (Paralel Screening CV)',
+    'initial screening': 'Approval Circular & Review (Paralel Screening CV)',
+    'initial hr': 'Approval Circular & Review (Paralel Screening CV)',
+    'approval circular': 'Approval Circular & Review (Paralel Screening CV)',
+    'paralel screening': 'Approval Circular & Review (Paralel Screening CV)',
+    'hr & user interview': 'HR & User Interview + Skill Test',
+    'hr user interview': 'HR & User Interview + Skill Test',
+    'user interview': 'HR & User Interview + Skill Test',
+    'skill test': 'HR & User Interview + Skill Test',
+    'final interview': 'HR & User Interview + Skill Test',
+    'final': 'HR & User Interview + Skill Test',
+    'offering': 'Offering',
+    'job offer': 'Offering',
+    'order for contract sign': 'Order for Contract Sign & ID dkk',
+    'contract sign': 'Order for Contract Sign & ID dkk',
+    'contract': 'Order for Contract Sign & ID dkk',
+    'sudah sign contract': 'Sudah Sign Contract Lanjut Onboarding',
+    'onboarding': 'Sudah Sign Contract Lanjut Onboarding',
+    'on boarding': 'Sudah Sign Contract Lanjut Onboarding',
+    'on board': 'Sudah Sign Contract Lanjut Onboarding'
+  },
+
   // PIC name mapping
   picMapping: {
     'Adelia Galuh H': 'adelia',
@@ -165,7 +205,8 @@ const config = {
     freeze: false,
     hireType: 'Additional',
     replacementFor: '',
-    createdDate: ''
+    createdDate: '',
+    status: 'Contract'
   }
 };
 

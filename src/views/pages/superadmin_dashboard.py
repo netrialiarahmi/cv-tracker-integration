@@ -13,6 +13,7 @@ from src.services.hiring_service import add_new_position, render_position_form
 from src.controllers.auth import get_hr_roles
 from src.config.settings import BASE_STAGES
 from src.models.hiring import calculate_position_progress, get_progress_badge
+from src.utils.helpers import filter_by_year_range, available_years as _available_years
 
 
 SECTION_IDS = {
@@ -282,8 +283,22 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         active_filter = st.session_state.get("sa_metric_filter", "total")
         filtered_data = _filter_by_status(filtered_data, active_filter)
 
-        # Stage stepper with clickable filtering
+        # Year-range filter (drives stage badge counts)
+        years = _available_years(filtered_data)
+        year_options = ["All"] + list(range(min(years), max(years) + 1)) if years else ["All"]
         st.markdown('<div class="content-card"><h3>Hiring Pipeline Stages</h3>', unsafe_allow_html=True)
+        yc1, yc2, yc3 = st.columns([6, 1, 1])
+        with yc2:
+            st.selectbox("From Year", year_options, key="sa_year_from", label_visibility="collapsed")
+        with yc3:
+            st.selectbox("To Year", year_options, key="sa_year_to", label_visibility="collapsed")
+        filtered_data = filter_by_year_range(
+            filtered_data,
+            st.session_state.get("sa_year_from", "All"),
+            st.session_state.get("sa_year_to", "All"),
+        )
+
+        # Stage stepper with clickable filtering
         selected_stage = render_progress_stepper(filtered_data, session_key="sa_stage_filter", show_counts=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -307,32 +322,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     with col2:
         st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="sa_sort_by", label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Apply year range filter
-    year_from = st.session_state.get("sa_year_from", "All")
-    year_to = st.session_state.get("sa_year_to", "All")
-    
-    if (year_from != "All" or year_to != "All") and "Created Date" in filtered_data.columns:
-        def _in_year_range(date_str):
-            if not date_str or pd.isna(date_str) or date_str == "":
-                return False
-            year = _extract_year_from_date(date_str)
-            if year == 0:
-                return False
-            
-            # If only year_from is set
-            if year_from != "All" and year_to == "All":
-                return year >= year_from
-            # If only year_to is set
-            elif year_from == "All" and year_to != "All":
-                return year <= year_to
-            # If both are set
-            elif year_from != "All" and year_to != "All":
-                return year_from <= year <= year_to
-            return True
-        
-        filtered_data = filtered_data[filtered_data["Created Date"].apply(_in_year_range)]
-    
+
     # Apply sorting
     sort_by = st.session_state.get("sa_sort_by", "Default")
     if sort_by != "Default" and "Created Date" in filtered_data.columns:
@@ -384,41 +374,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     if len(filtered_data) > 0:
         _section_anchor(SECTION_IDS["manage"])
         st.markdown('<div class="content-card"><h3>Manage Positions</h3>', unsafe_allow_html=True)
-        
-        # Year range filter
-        col1, col2, col3 = st.columns([4, 1, 1])
-        with col1:
-            st.markdown("### ")
-        with col2:
-            # Extract available years from Created Date
-            available_years = []
-            if "Created Date" in filtered_data.columns:
-                for date_str in filtered_data["Created Date"].dropna():
-                    try:
-                        for fmt in ["%m/%d/%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%d %H:%M:%S"]:
-                            try:
-                                year = datetime.strptime(str(date_str), fmt).year
-                                if year not in available_years:
-                                    available_years.append(year)
-                                break
-                            except ValueError:
-                                continue
-                    except Exception:
-                        pass
-            available_years = sorted(available_years) if available_years else []
-            
-            # Year range options
-            if available_years:
-                min_year = min(available_years)
-                max_year = max(available_years)
-                year_options = ["All"] + list(range(min_year, max_year + 1))
-            else:
-                year_options = ["All"]
-            
-            st.selectbox("From Year", year_options, key="sa_year_from", label_visibility="collapsed")
-        with col3:
-            st.selectbox("To Year", year_options, key="sa_year_to", label_visibility="collapsed")
-        
+
         # --- Pagination Config ---
         items_per_page = 10  # Fixed at 10 items per page
         total_positions = len(filtered_data)
@@ -471,8 +427,9 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
                 hire_type_info = f"Replacement for {row['Replacement For']}"
             else:
                 hire_type_info = "Additional"
-            
-            expander_title = f"{row['Job Position']} · {status_label} · {pic_display} · {hire_type_info}"
+            status_label_pos = row.get('Status', 'Contract') or 'Contract'
+
+            expander_title = f"{row['Job Position']} · {status_label} · {pic_display} · {hire_type_info} · {status_label_pos}"
             anchor_id = f"sa-position-{idx}"
             _inline_anchor(anchor_id)
             with st.expander(expander_title):
