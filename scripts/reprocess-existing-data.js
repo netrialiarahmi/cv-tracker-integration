@@ -19,11 +19,13 @@ const {
   extractReplacementFor,
   dedupeNotes,
   hasReplacementKeyword,
+  hasAdditionalMarker,
 } = require('./data-transformer');
 const { resolveDivision } = require('./division-lookup');
 
 const DATA_PATH = path.join(__dirname, '..', 'data', 'hiring-data.json');
 const BACKUP_PATH = DATA_PATH + '.bak';
+const ANOMALY_PATH = path.join(__dirname, '..', 'data', 'replacement_anomalies.json');
 
 function readJsonAllowingNaN(filePath) {
   // Python pandas writes NaN tokens which JSON.parse rejects.
@@ -54,17 +56,25 @@ function main() {
 
   let notesFixed = 0;
   let hireTypeFixed = 0;
+  let hireTypeReverted = 0;
   let replacementFilled = 0;
+  let replacementCleared = 0;
   let divisionCorrected = 0;
   let statusBackfilled = 0;
+  const anomalies = [];
 
   const updated = data.map((entry) => {
     const out = { ...entry };
     const taskName = String(out['Job Position'] || '').trim();
     const originalNotes = out['Notes'] || '';
 
-    // 1) Dedupe notes
-    const cleanedNotes = dedupeNotes(originalNotes);
+    // 1) Clean Excel newline artifacts and dedupe notes
+    const sanitizedNotes = String(originalNotes)
+      .replace(/_x000d_/gi, ' ')
+      .replace(/[\r\n]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const cleanedNotes = dedupeNotes(sanitizedNotes);
     if (cleanedNotes !== originalNotes) {
       out['Notes'] = cleanedNotes;
       notesFixed++;
@@ -72,7 +82,7 @@ function main() {
 
     // 2) Re-detect Replacement For from cleaned Notes; fall back to the
     //    Job Position itself for tasks named like "Account Executive
-    //    Pasangiklan (replace Rio)" or "Strategic Marketing (Replace Yemima)".
+    //    Pasangiklan (replace Rio)".
     let detectedName = extractReplacementFor(cleanedNotes);
     let detectedFrom = detectedName ? 'notes' : '';
     if (!detectedName) {
@@ -82,30 +92,58 @@ function main() {
         detectedFrom = 'title';
       }
     }
-    if (detectedName) {
+
+    // --- Hire Type precedence (mirrors transformRow) ---
+    // Re-derive Hire Type from current signals. Title-Additional override
+    // wins over any stray "replace" keyword in the notes.
+    const titleAdditional = hasAdditionalMarker(taskName);
+    const previousHireType = out['Hire Type'] || '';
+    let newHireType;
+
+    if (titleAdditional) {
+      newHireType = 'Additional';
+    } else if (detectedName) {
+      newHireType = 'Replacement';
+    } else if (
+      hasReplacementKeyword(taskName) || hasReplacementKeyword(cleanedNotes)
+    ) {
+      newHireType = 'Replacement';
+    } else {
+      // No signals — keep whatever the Planner labels said previously.
+      newHireType = previousHireType || 'Additional';
+    }
+
+    // Apply name (only when not overridden to Additional by title)
+    if (newHireType === 'Additional' && titleAdditional) {
+      // Title-Additional override: clear any speculative replacement-for
+      if (out['Replacement For']) {
+        console.log(
+          `  ⊖ "${taskName}" → cleared Replacement For (title says Additional)`
+        );
+        out['Replacement For'] = '';
+        replacementCleared++;
+      }
+    } else if (detectedName) {
       if ((out['Replacement For'] || '') !== detectedName) {
         out['Replacement For'] = detectedName;
         replacementFilled++;
       }
-      // 3) Force Hire Type = Replacement when a name was found
-      if (out['Hire Type'] !== 'Replacement') {
+    }
+
+    if (newHireType !== previousHireType) {
+      if (newHireType === 'Replacement') {
         console.log(
-          `  ↻ "${taskName}" → Hire Type=Replacement, For="${detectedName}" (from ${detectedFrom})`
+          `  ↻ "${taskName}" → Hire Type=Replacement` +
+          (detectedName ? `, For="${detectedName}" (${detectedFrom})` : ' (keyword only)')
         );
-        out['Hire Type'] = 'Replacement';
         hireTypeFixed++;
+      } else {
+        console.log(
+          `  ↺ "${taskName}" → Hire Type=Additional (was ${previousHireType})`
+        );
+        hireTypeReverted++;
       }
-    } else if (
-      out['Hire Type'] !== 'Replacement' &&
-      (hasReplacementKeyword(taskName) || hasReplacementKeyword(cleanedNotes))
-    ) {
-      // Replacement intent detected but no specific name (e.g.
-      // "Reporter Tren | Replacement")
-      console.log(
-        `  ↻ "${taskName}" → Hire Type=Replacement (keyword only, no name)`
-      );
-      out['Hire Type'] = 'Replacement';
-      hireTypeFixed++;
+      out['Hire Type'] = newHireType;
     }
 
     // 4) Division auto-correction
@@ -148,20 +186,77 @@ function main() {
       statusBackfilled++;
     }
 
+    // 6) Anomaly classification (HR review queue)
+    const finalHireType = out['Hire Type'] || '';
+    const finalRepFor = (out['Replacement For'] || '').trim();
+    const notesLower = (cleanedNotes || '').toLowerCase();
+    const titleLower = taskName.toLowerCase();
+
+    if (finalHireType === 'Replacement' && !finalRepFor) {
+      anomalies.push({
+        category: 'missing_name',
+        job_position: taskName,
+        notes: cleanedNotes.substring(0, 200),
+        reason: 'Labelled Replacement but no replaceable name parsed from title or notes',
+      });
+    } else if (
+      finalHireType === 'Replacement' &&
+      /\b(atau|or)\b/i.test(notesLower) &&
+      hasReplacementKeyword(notesLower)
+    ) {
+      anomalies.push({
+        category: 'ambiguous_multiple',
+        job_position: taskName,
+        replacement_for: finalRepFor,
+        notes: cleanedNotes.substring(0, 200),
+        reason: 'Notes mention multiple targets joined by "atau"/"or"; replacement target ambiguous',
+      });
+    } else if (
+      finalHireType === 'Additional' &&
+      hasReplacementKeyword(notesLower)
+    ) {
+      anomalies.push({
+        category: 'label_text_conflict',
+        job_position: taskName,
+        notes: cleanedNotes.substring(0, 200),
+        reason: 'Title marked Additional but notes mention "replace" keyword',
+      });
+    } else if (
+      finalRepFor &&
+      // Only flag when the EXTRACTED NAME itself looks truncated (ends in
+      // "..." or the notes contain a "<keyword> <Capitalised>..." pattern
+      // that suggests another replacement was cut mid-name).
+      (/\.\.\.$/.test(finalRepFor) ||
+        /\b(replace|repl|pengganti|menggantikan)\s+[A-Z][a-z]*\.\.\./i.test(cleanedNotes))
+    ) {
+      anomalies.push({
+        category: 'truncated_notes',
+        job_position: taskName,
+        replacement_for: finalRepFor,
+        notes: cleanedNotes.substring(0, 200),
+        reason: 'Notes appear truncated mid-name (further replacement target may be cut off)',
+      });
+    }
+
     return out;
   });
 
   fs.writeFileSync(DATA_PATH, JSON.stringify(updated, null, 4), 'utf-8');
+  fs.writeFileSync(ANOMALY_PATH, JSON.stringify(anomalies, null, 2), 'utf-8');
 
   console.log('');
   console.log('✅ Re-process complete');
   console.log(`   Notes deduped:        ${notesFixed}`);
   console.log(`   Replacement For set:  ${replacementFilled}`);
+  console.log(`   Replacement For cleared (Additional override): ${replacementCleared}`);
   console.log(`   Hire Type → Replace:  ${hireTypeFixed}`);
+  console.log(`   Hire Type → Additional (reverted): ${hireTypeReverted}`);
   console.log(`   Division corrected:   ${divisionCorrected}`);
   console.log(`   Status backfilled:    ${statusBackfilled}`);
   console.log(`   Total entries:        ${updated.length}`);
+  console.log(`   Anomalies for HR review: ${anomalies.length}`);
   console.log(`💾 Saved: ${DATA_PATH}`);
+  console.log(`📋 Anomalies: ${ANOMALY_PATH}`);
 }
 
 if (require.main === module) {

@@ -183,8 +183,43 @@ const config = {
     'default': 'adelia'
   },
 
-  // Replacement keywords (matched with word boundaries)
-  replacementKeywords: ['replacement', 'replace', 'pengganti', 'repl'],
+  // Replacement keywords (matched with word boundaries). Sorted by length
+  // at use time so 'replacement' wins over 'replace'. 'menggantikan' covers
+  // the Indonesian verb form; 'ganti' is shorter form of 'pengganti'.
+  replacementKeywords: [
+    'replacement',
+    'menggantikan',
+    'pengganti',
+    'replace',
+    'ganti',
+    'repl',
+  ],
+
+  // Stop-words: when a captured "Replacement For" name matches one of these
+  // (case-insensitive, exact match), reject the capture entirely. Prevents
+  // accidental matches like "Replace slot Oik" capturing "slot" instead of
+  // "Oik" before the multi-word logic kicks in.
+  replacementStopWords: [
+    'slot', 'ex', 'the', 'dan', 'dari', 'untuk', 'freelance', 'konpro',
+    'kandidat', 'yang', 'yg', 'yng', 'akan', 'sudah', 'belum', 'maternity',
+    'resign', 'mundur', 'pindah', 'rotasi', 'posisi', 'sementara', 'magang',
+    'kampus', 'sales', 'ke', 'saja', 'bulan', 'akhir', 'nya', 'prev',
+    'previous', 'ment', 'a', 'an', 'atas', 'nama', 'na', 'tbc', 'update',
+  ],
+
+  // Truncate a captured name at the first occurrence of any of these
+  // junk-suffix tokens (case-insensitive, word-boundary). Picks up
+  // narrative continuations like "Idris yg di rolling" → "Idris".
+  replacementJunkSuffixes: [
+    'yang', 'yg', 'yng', 'maternity', 'resign', 'mundur', 'pindah',
+    'dipromosi', 'dipromote', 'rotasi', 'karena', 'untuk', 'update',
+    'belum', 'dari', 'ke', 'akan', 'sudah', 'sedang', 'tetap',
+    'atau', 'or', 'tapi', 'but', 'dengan', 'with',
+  ],
+
+  // Maximum length for the merged Notes field (raised from 500 to avoid
+  // mid-name truncation in long update logs).
+  notesMaxLength: 1000,
 
   // Fields to preserve from existing data
   preserveFields: [
