@@ -7826,7 +7826,7 @@
         "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Kompas.com Marketing Division",
         "Job Position": "Strategic Marketing (Replace Audie)",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -7839,12 +7839,17 @@
         "Notes": "",
         "Last Updated": "2026-04-29 17:34:14",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Audie",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-01"
+        "Created Date": "2024-08-01",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "",
+        "Section": "",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
@@ -7891,10 +7896,11 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-02"
+        "Created Date": "2024-08-02",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "KOMPAS.COM News Division",
         "Job Position": "Socmed Content Creator (Solo)",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -7912,10 +7918,15 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-06"
+        "Created Date": "2024-08-06",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "Kompas.com News - Video & Social Media Department",
+        "Section": "",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Technology Engineering Division",
         "Job Position": "DevOps",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -7933,10 +7944,15 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-07"
+        "Created Date": "2024-08-07",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "Technology Directorate",
+        "Department": "DevOps Department",
+        "Section": "",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Integrated Marketing KG Media Division",
         "Job Position": "Content Superintendent Kompasiana",
         "Initial screening": false,
         "HR & User Interview (Stage 1)": false,
@@ -7955,14 +7971,14 @@
         "Attachments": [],
         "Freeze": true,
         "Created Date": null,
-        "Planner Division": null,
-        "Directorate": null,
-        "Department": null,
-        "Section": null,
+        "Planner Division": "Product & Data Division",
+        "Directorate": "Marketing Directorate",
+        "Department": "Lative Ads Department",
+        "Section": "",
         "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "KOMPAS.COM News Division",
         "Job Position": "Assistant Producer (Creative Program)",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -7981,14 +7997,14 @@
         "Attachments": [],
         "Freeze": false,
         "Created Date": null,
-        "Planner Division": null,
-        "Directorate": null,
-        "Department": null,
-        "Section": null,
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "Kompas.com News - Video & Social Media Department",
+        "Section": "",
         "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Kompas.com Marketing Division",
         "Job Position": "Strategic Marketing (Replace Danael)",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -8001,12 +8017,17 @@
         "Notes": "",
         "Last Updated": "2026-04-29 17:34:14",
         "Has Skill Test": true,
-        "Hire Type": "Additional",
-        "Replacement For": "",
+        "Hire Type": "Replacement",
+        "Replacement For": "Danael",
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-21"
+        "Created Date": "2024-08-21",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "",
+        "Section": "",
+        "Status": "Contract"
     },
     {
         "Division": "Technology Engineering Division",
@@ -8027,7 +8048,10 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-21"
+        "Created Date": "2024-08-21",
+        "Directorate": "Technology Directorate",
+        "Department": "Development Department",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
@@ -8048,7 +8072,10 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-22"
+        "Created Date": "2024-08-22",
+        "Directorate": "Technology Directorate",
+        "Department": "Data & Customer Intelligence Department",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
@@ -8069,10 +8096,13 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-23"
+        "Created Date": "2024-08-23",
+        "Directorate": "Technology Directorate",
+        "Department": "Product Department",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "VCBL & Pasangiklan Division",
         "Job Position": "VCBL Account Executive",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -8090,10 +8120,15 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-29"
+        "Created Date": "2024-08-29",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "Sales Directorate",
+        "Department": "VCBL Sales Department",
+        "Section": "",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Kompas.com Sales Division",
         "Job Position": "Pasangiklan Account Executive",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -8111,7 +8146,12 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-29"
+        "Created Date": "2024-08-29",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "Kompas.com Sales Department - Government 2 & Brand 3",
+        "Section": "",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
@@ -8132,10 +8172,11 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-08-30"
+        "Created Date": "2024-08-30",
+        "Status": "Contract"
     },
     {
-        "Division": "Product & Data Division",
+        "Division": "Kompas.com Marketing Division",
         "Job Position": "Strategic Marketing Superintendent",
         "Initial screening": true,
         "HR & User Interview (Stage 1)": true,
@@ -8153,7 +8194,12 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2024-09-03"
+        "Created Date": "2024-09-03",
+        "Planner Division": "Product & Data Division",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "",
+        "Section": "",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
@@ -9032,7 +9078,10 @@
         "Job Description": "",
         "Attachments": [],
         "Freeze": false,
-        "Created Date": "2026-03-31"
+        "Created Date": "2026-03-31",
+        "Directorate": "KOMPAS.COM Directorate",
+        "Department": "Kompas.com Sales Department - Government 2 & Brand 3",
+        "Status": "Contract"
     },
     {
         "Division": "Product & Data Division",
