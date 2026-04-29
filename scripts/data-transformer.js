@@ -236,11 +236,12 @@ function extractReplacementFor(description) {
     if (index !== -1) {
       // Extract text after keyword (next few words)
       const afterKeyword = description.substring(index + keyword.length).trim();
-      
-      // Try to extract name (first 2-3 words, up to punctuation)
-      const match = afterKeyword.match(/^[:\s]*([A-Za-z\s]+?)(?:[,.\n]|$)/);
+
+      // Try to extract name (first 2-3 words, up to punctuation OR | / ; separators).
+      const match = afterKeyword.match(/^[:\s]*([A-Za-z][A-Za-z\s.'-]*?)(?:[,.\n|;]|$)/);
       if (match && match[1]) {
-        return match[1].trim();
+        const name = match[1].trim();
+        if (name) return name;
       }
     }
   }
@@ -257,25 +258,43 @@ function extractReplacementFor(description) {
 function mergeNotes(existingNotes, newDescription) {
   // Clean up description
   const cleanDesc = newDescription ? newDescription.replace(/[\r\n]+/g, ' ').trim() : '';
-  
-  // If no new description, keep existing
+
+  // If no new description, keep existing (deduplicated)
   if (!cleanDesc) {
-    return existingNotes || config.defaults.notes;
+    return dedupeNotes(existingNotes || config.defaults.notes);
   }
-  
+
   // If no existing notes, use new description
   if (!existingNotes) {
     return cleanDesc;
   }
-  
+
   // If they're the same, just return one
   if (existingNotes === cleanDesc) {
     return existingNotes;
   }
-  
-  // Otherwise append (but limit length)
-  const combined = `${existingNotes} | ${cleanDesc}`;
+
+  // Append, deduplicate segments split by ' | ', then cap length
+  const combined = dedupeNotes(`${existingNotes} | ${cleanDesc}`);
   return combined.length > 500 ? combined.substring(0, 497) + '...' : combined;
+}
+
+/**
+ * Deduplicate ' | '-separated note segments while preserving order.
+ */
+function dedupeNotes(notes) {
+  if (!notes) return '';
+  const seen = new Set();
+  const out = [];
+  for (const seg of String(notes).split('|')) {
+    const s = seg.trim();
+    if (!s) continue;
+    const key = s.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(s);
+  }
+  return out.join(' | ');
 }
 
 /**
@@ -487,5 +506,6 @@ module.exports = {
   extractStatus,
   resolveBucketAlias,
   mergeNotes,
+  dedupeNotes,
   findExisting
 };
