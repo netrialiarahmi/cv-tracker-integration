@@ -35,10 +35,14 @@ jobs:
           # Create target dir
           mkdir -p hiring-tracker/data/processed
 
+          # Refresh result files so deletions or renames in source are mirrored here
+          find hiring-tracker/data/processed -maxdepth 1 -type f -name 'results_*.csv' -delete
+
           # Copy all position-specific results CSVs
-          if ls cv-matching/data/processed/results_*.csv 1>/dev/null 2>&1; then
+          RESULT_COUNT=$(find cv-matching/data/processed -maxdepth 1 -type f -name 'results_*.csv' | wc -l | tr -d ' ')
+          if [ "$RESULT_COUNT" -gt 0 ]; then
             cp cv-matching/data/processed/results_*.csv hiring-tracker/data/processed/
-            echo "Copied $(ls cv-matching/data/processed/results_*.csv | wc -l) result file(s)"
+            echo "Copied ${RESULT_COUNT} result file(s)"
           else
             echo "No results_*.csv files found in cv-matching/data/processed/"
           fi
@@ -55,9 +59,13 @@ jobs:
         id: git-check
         working-directory: hiring-tracker
         run: |
-          git diff --exit-code data/processed/ data/job_positions.csv 2>/dev/null \
-            && echo "changed=false" >> $GITHUB_OUTPUT \
-            || echo "changed=true" >> $GITHUB_OUTPUT
+          git add -A data/processed data/job_positions.csv
+
+          if git diff --cached --quiet -- data/processed data/job_positions.csv; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit and push if changed
         if: steps.git-check.outputs.changed == 'true'
