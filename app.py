@@ -20,7 +20,7 @@ from datetime import datetime
 # --------------------------
 # Page Configuration
 # --------------------------
-# Load logo for page icon
+# Load logo for page iconx
 logo_file = LOGO_PATH
 try:
     logo = Image.open(logo_file)
