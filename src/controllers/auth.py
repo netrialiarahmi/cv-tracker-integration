@@ -6,9 +6,24 @@ Handles login validation, logout, and HR roles configuration loading.
 import streamlit as st
 import os
 import json
+import hashlib
 from typing import Dict, Any, Optional
 from src.config.settings import HR_ROLES_FILE, DEFAULT_HR_ROLES, DIVISION_USERNAMES
 from src.controllers.session_manager import qp_clear
+
+_HASH_SALT = "kgmedia26:"
+
+
+def _check_password(plain: str, stored: str) -> bool:
+    """Compare a plain-text password against a stored value (plain or sha256: hash)."""
+    if stored.startswith("sha256:"):
+        return stored == "sha256:" + hashlib.sha256((_HASH_SALT + plain).encode()).hexdigest()
+    return plain == stored
+
+
+def hash_password(plain: str) -> str:
+    """Return sha256-hashed password for storage in credentials.json."""
+    return "sha256:" + hashlib.sha256((_HASH_SALT + plain).encode()).hexdigest()
 
 
 def get_hr_roles() -> Dict[str, Any]:
@@ -161,7 +176,8 @@ def authenticate_user(username: str, password: str, admin_name: str = None) -> O
     division_name = DIVISION_USERNAMES.get(username_lower)
     if division_name:
         credentials = st.session_state.get("credentials", {})
-        if password == credentials.get(division_name, ""):
+        stored = credentials.get(division_name, "")
+        if _check_password(password, stored):
             return {
                 "role": "Division",
                 "division": division_name,

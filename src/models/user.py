@@ -7,6 +7,7 @@ import streamlit as st
 from typing import Optional
 from src.repositories.data_manager import save_credentials, save_hiring_data
 from src.config.settings import PROTECTED_DIVISION
+from src.controllers.auth import hash_password
 
 
 class User:
@@ -44,7 +45,7 @@ def add_new_user(division: str, password: str) -> None:
         division: Division name
         password: User password
     """
-    st.session_state.credentials[division] = password
+    st.session_state.credentials[division] = hash_password(password)
     save_credentials(st.session_state.credentials)
 
 
@@ -64,7 +65,7 @@ def update_user(old_division: str, new_division: str, new_password: str) -> None
             st.session_state.hiring_data['Division'] == old_division, 'Division'
         ] = new_division
         save_hiring_data(st.session_state.hiring_data)
-    st.session_state.credentials[new_division] = new_password
+    st.session_state.credentials[new_division] = hash_password(new_password)
     save_credentials(st.session_state.credentials)
 
 
