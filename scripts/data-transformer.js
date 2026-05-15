@@ -567,7 +567,6 @@ function transformRow(row, existing = null) {
   // Build transformed entry
   return {
     Division: finalDivision,
-    'Planner Division': division,
     Directorate: resolved.directorate || existing?.Directorate || '',
     Department: resolved.department || existing?.Department || '',
     Section: resolved.section || existing?.Section || '',

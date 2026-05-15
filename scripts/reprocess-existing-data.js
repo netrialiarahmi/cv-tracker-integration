@@ -159,7 +159,6 @@ function main() {
         console.log(
           `  ⇄ "${taskName}": "${currentDivision}" → "${resolved.division}" (${resolved.source})`
         );
-        out['Planner Division'] = out['Planner Division'] || currentDivision;
         out['Division'] = resolved.division;
         out['Directorate'] = resolved.directorate || out['Directorate'] || '';
         out['Department'] = resolved.department || out['Department'] || '';
