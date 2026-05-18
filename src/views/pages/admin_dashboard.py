@@ -259,6 +259,13 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             (filtered_data["Division"].str.contains(search_term, case=False, na=False))
         ]
 
+    # Apply status filter early (Intern / Freelance / Contract)
+    status_filter = st.session_state.get("ad_status_filter", "All")
+    if status_filter and status_filter != "All" and "Status" in filtered_data.columns:
+        filtered_data = filtered_data[
+            filtered_data["Status"].astype(str).str.strip() == status_filter
+        ]
+
     # Metrics (interactive like superadmin)
     if len(filtered_data) > 0:
         from src.views.components.metrics import render_metrics
@@ -301,12 +308,16 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     # Search controls (after metrics for cleaner flow)
     _anchor(AD_SECTION_IDS["search"])
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    search_term = st.text_input(
-        "Search",
-        key="ad_search",
-        placeholder="Search by job title or division...",
-        label_visibility="collapsed"
-    )
+    col1, col2 = st.columns([5, 1])
+    with col1:
+        st.text_input(
+            "Search",
+            key="ad_search",
+            placeholder="Search by job title or division...",
+            label_visibility="collapsed"
+        )
+    with col2:
+        st.selectbox("Status", ["All", "Contract", "Intern", "Freelance"], key="ad_status_filter", label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
     
     # Manage positions section

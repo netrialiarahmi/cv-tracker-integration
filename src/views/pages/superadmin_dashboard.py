@@ -240,6 +240,13 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             (filtered_data["Division"].str.contains(search_term, case=False, na=False))
         ]
 
+    # Apply status filter early (Intern / Freelance / Contract)
+    status_filter = st.session_state.get("sa_status_filter", "All")
+    if status_filter and status_filter != "All" and "Status" in filtered_data.columns:
+        filtered_data = filtered_data[
+            filtered_data["Status"].astype(str).str.strip() == status_filter
+        ]
+
     # Add new position - ONLY FOR SUPERADMIN (moved to the top)
     _section_anchor(SECTION_IDS["add"])
     st.markdown('<div class="content-card"><h3>Add New Position</h3>', unsafe_allow_html=True)
@@ -311,7 +318,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     # Search bar with sort (positioned after metrics for visual flow)
     _section_anchor(SECTION_IDS["search"])
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    col1, col2 = st.columns([5, 1])
+    col1, col2, col3 = st.columns([4, 1, 1])
     with col1:
         st.text_input(
             "Search",
@@ -320,6 +327,8 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             label_visibility="collapsed"
         )
     with col2:
+        st.selectbox("Status", ["All", "Contract", "Intern", "Freelance"], key="sa_status_filter", label_visibility="collapsed")
+    with col3:
         st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="sa_sort_by", label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
 
