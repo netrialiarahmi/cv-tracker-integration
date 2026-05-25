@@ -283,14 +283,20 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         _anchor(AD_SECTION_IDS["metrics"])
         st.markdown('<div class="content-card">', unsafe_allow_html=True)
         
-        # Top Header + Year Filter
-        m_col1, m_col2, m_col3 = st.columns([6, 1, 1])
-        with m_col1:
-            st.markdown('<h3>Pipeline Metrics</h3>', unsafe_allow_html=True)
-        with m_col2:
+        # All Filters (Search, Status, Year, Sort)
+        f_col1, f_col2, f_col3, f_col4, f_col5 = st.columns([3, 2, 1, 1, 1.2])
+        with f_col1:
+            st.text_input("Search", key="ad_search", placeholder="Search by job title or division...", label_visibility="collapsed")
+        with f_col2:
+            st.multiselect("Status", options=["All Status", "Contract", "Intern", "Freelance"], default=st.session_state.get("ad_status_filter", ["All Status"]), key="ad_status_filter", label_visibility="collapsed")
+        with f_col3:
             st.selectbox("From Year", year_options, key="ad_year_from", label_visibility="collapsed")
-        with m_col3:
+        with f_col4:
             st.selectbox("To Year", year_options, key="ad_year_to", label_visibility="collapsed")
+        with f_col5:
+            st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="ad_sort_by", label_visibility="collapsed")
+            
+        st.markdown('<h3 style="margin-top: 1rem;">Pipeline Metrics</h3>', unsafe_allow_html=True)
             
         filtered_data = filter_by_year_range(
             filtered_data,
@@ -317,27 +323,33 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     else:
         st.info("No results match the current filters.")
 
-    # Search controls (after metrics for cleaner flow)
-    _anchor(AD_SECTION_IDS["search"])
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    col1, col2 = st.columns([5, 1])
-    with col1:
-        st.text_input(
-            "Search",
-            key="ad_search",
-            placeholder="Search by job title or division...",
-            label_visibility="collapsed"
-        )
-    with col2:
-        st.multiselect(
-            "Status",
-            options=["All Status", "Contract", "Intern", "Freelance"],
-            default=st.session_state.get("ad_status_filter", ["All Status"]),
-            key="ad_status_filter",
-            label_visibility="collapsed",
-        )
-    st.markdown('</div>', unsafe_allow_html=True)
-    
+    # Apply sorting
+    sort_by = st.session_state.get("ad_sort_by", "Default")
+    if sort_by != "Default" and "Created Date" in filtered_data.columns:
+        from src.views.pages.superadmin_dashboard import _calculate_hiring_days
+        def _get_sort_priority(row):
+            is_frozen = bool(row.get('Freeze', False))
+            is_completed = bool(row.get('On Boarding', False)) and not is_frozen
+            created_date = row.get('Created Date', '')
+            if is_frozen or is_completed:
+                return (1, 0)
+            if not created_date or str(created_date).strip() == '':
+                return (1, 0)
+            hiring_days = _calculate_hiring_days(created_date)
+            if hiring_days <= 0:
+                return (1, 0)
+            return (0, hiring_days)
+        
+        sort_data = filtered_data.apply(_get_sort_priority, axis=1)
+        filtered_data["_sort_priority"] = sort_data.apply(lambda x: x[0])
+        filtered_data["_hiring_days"] = sort_data.apply(lambda x: x[1])
+        
+        if sort_by == "Hiring Days ↑":
+            filtered_data = filtered_data.sort_values(["_sort_priority", "_hiring_days"], ascending=[True, True])
+        elif sort_by == "Hiring Days ↓":
+            filtered_data = filtered_data.sort_values(["_sort_priority", "_hiring_days"], ascending=[True, False])
+        filtered_data = filtered_data.drop(columns=["_sort_priority", "_hiring_days"])
+
     # --- Sort by zone priority (active first, completed last) ---
     if len(filtered_data) > 0:
         filtered_data["_zone"] = filtered_data.apply(get_stage_zone, axis=1)

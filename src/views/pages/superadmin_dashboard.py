@@ -293,14 +293,20 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         _section_anchor(SECTION_IDS["metrics"])
         st.markdown('<div class="content-card">', unsafe_allow_html=True)
         
-        # Top Header + Year Filter
-        m_col1, m_col2, m_col3 = st.columns([6, 1, 1])
-        with m_col1:
-            st.markdown('<h3>Pipeline Metrics</h3>', unsafe_allow_html=True)
-        with m_col2:
+        # All Filters (Search, Status, Year, Sort)
+        f_col1, f_col2, f_col3, f_col4, f_col5 = st.columns([3, 2, 1, 1, 1.2])
+        with f_col1:
+            st.text_input("Search", key="super_search", placeholder="Search by job title or division...", label_visibility="collapsed")
+        with f_col2:
+            st.multiselect("Status", options=["All Status", "Contract", "Intern", "Freelance"], default=st.session_state.get("sa_status_filter", ["All Status"]), key="sa_status_filter", label_visibility="collapsed")
+        with f_col3:
             st.selectbox("From Year", year_options, key="sa_year_from", label_visibility="collapsed")
-        with m_col3:
+        with f_col4:
             st.selectbox("To Year", year_options, key="sa_year_to", label_visibility="collapsed")
+        with f_col5:
+            st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="sa_sort_by", label_visibility="collapsed")
+            
+        st.markdown('<h3 style="margin-top: 1rem;">Pipeline Metrics</h3>', unsafe_allow_html=True)
             
         filtered_data = filter_by_year_range(
             filtered_data,
@@ -326,29 +332,6 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             filtered_data = filter_by_stage(filtered_data, selected_stage)
     else:
         st.info("No positions match the current filters.")
-
-    # Search bar with sort (positioned after metrics for visual flow)
-    _section_anchor(SECTION_IDS["search"])
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([4, 1, 1])
-    with col1:
-        st.text_input(
-            "Search",
-            key="super_search",
-            placeholder="Search by job title or division...",
-            label_visibility="collapsed"
-        )
-    with col2:
-        st.multiselect(
-            "Status",
-            options=["All Status", "Contract", "Intern", "Freelance"],
-            default=st.session_state.get("sa_status_filter", ["All Status"]),
-            key="sa_status_filter",
-            label_visibility="collapsed",
-        )
-    with col3:
-        st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="sa_sort_by", label_visibility="collapsed")
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # Apply sorting
     sort_by = st.session_state.get("sa_sort_by", "Default")
