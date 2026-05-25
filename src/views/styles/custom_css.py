@@ -297,15 +297,28 @@ div[data-testid="column"] .stButton>button:disabled {
     background-color: var(--card-background);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
-    padding: 0.85rem 1rem;
+    padding: 0.5rem 0.75rem;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-primary);
     transition: all var(--transition-fast);
 }
 .streamlit-expanderHeader:hover {
     background-color: #f8fafc;
     border-color: var(--border-default);
+}
+/* Compact expander spacing */
+div[data-testid="stExpander"] {
+    margin-bottom: 0.3rem !important;
+}
+div[data-testid="stExpander"] details {
+    border: 1px solid var(--border-light) !important;
+    border-radius: var(--radius-sm) !important;
+}
+div[data-testid="stExpander"] summary {
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
 }
 
 /* --- BADGES --- */
@@ -689,6 +702,23 @@ th, td {
     background: rgba(37, 99, 235, 0.06) !important;
     color: var(--brand-primary) !important;
     border-color: var(--brand-primary) !important;
+}
+
+/* --- MULTISELECT TAG STYLING --- */
+div[data-testid="stMultiSelect"] span[data-baseweb="tag"] {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark)) !important;
+    color: white !important;
+    border-radius: 999px !important;
+    padding: 0.15rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+}
+div[data-testid="stMultiSelect"] span[data-baseweb="tag"] span[role="presentation"] {
+    color: rgba(255,255,255,0.8) !important;
+}
+div[data-testid="stMultiSelect"] span[data-baseweb="tag"]:hover span[role="presentation"] {
+    color: white !important;
 }
 
 /* --- CANDIDATE CARD --- */

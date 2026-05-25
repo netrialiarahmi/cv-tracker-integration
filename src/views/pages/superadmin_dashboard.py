@@ -13,7 +13,10 @@ from src.services.hiring_service import add_new_position, render_position_form
 from src.controllers.auth import get_hr_roles
 from src.config.settings import BASE_STAGES
 from src.models.hiring import calculate_position_progress, get_progress_badge
-from src.utils.helpers import filter_by_year_range, available_years as _available_years
+from src.utils.helpers import (
+    filter_by_year_range, available_years as _available_years,
+    get_current_stage, get_stage_zone, split_by_pipeline_zone,
+)
 
 
 SECTION_IDS = {
@@ -32,8 +35,8 @@ def _init_pipeline_state() -> None:
     st.session_state.setdefault("sa_nav_target", None)
     st.session_state.setdefault("sa_current_section", SECTION_IDS["top"])
     st.session_state.setdefault("sa_metric_filter", "total")
-    st.session_state.setdefault("sa_year_from", "All")
-    st.session_state.setdefault("sa_year_to", "All")
+    st.session_state.setdefault("sa_year_from", 2026)
+    st.session_state.setdefault("sa_year_to", 2026)
     st.session_state.setdefault("sa_sort_by", "Default")
 
 
@@ -240,11 +243,13 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             (filtered_data["Division"].str.contains(search_term, case=False, na=False))
         ]
 
-    # Apply status filter early (Intern / Freelance / Contract)
-    status_filter = st.session_state.get("sa_status_filter", "All")
-    if status_filter and status_filter != "All" and "Status" in filtered_data.columns:
+    # Apply status filter early (Intern / Freelance / Contract) — multiselect
+    status_filter = st.session_state.get("sa_status_filter", ["All Status"])
+    if isinstance(status_filter, str):
+        status_filter = [status_filter]  # backward compat
+    if status_filter and "All Status" not in status_filter and "Status" in filtered_data.columns:
         filtered_data = filtered_data[
-            filtered_data["Status"].astype(str).str.strip() == status_filter
+            filtered_data["Status"].astype(str).str.strip().isin(status_filter)
         ]
 
     # Add new position - ONLY FOR SUPERADMIN (moved to the top)
@@ -327,7 +332,13 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             label_visibility="collapsed"
         )
     with col2:
-        st.selectbox("Status", ["All", "Contract", "Intern", "Freelance"], key="sa_status_filter", label_visibility="collapsed")
+        st.multiselect(
+            "Status",
+            options=["All Status", "Contract", "Intern", "Freelance"],
+            default=st.session_state.get("sa_status_filter", ["All Status"]),
+            key="sa_status_filter",
+            label_visibility="collapsed",
+        )
     with col3:
         st.selectbox("Sort", ["Default", "Hiring Days ↑", "Hiring Days ↓"], key="sa_sort_by", label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -378,14 +389,19 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             )
         # Remove the temporary columns
         filtered_data = filtered_data.drop(columns=["_sort_priority", "_hiring_days"])
-    
+
+    # --- Sort by zone priority (active first, completed last) ---
+    if len(filtered_data) > 0:
+        filtered_data["_zone"] = filtered_data.apply(get_stage_zone, axis=1)
+        filtered_data = filtered_data.sort_values("_zone", kind="stable").drop(columns=["_zone"])
+
     # Manage positions section with smooth, stateful pagination
     if len(filtered_data) > 0:
         _section_anchor(SECTION_IDS["manage"])
         st.markdown('<div class="content-card"><h3>Manage Positions</h3>', unsafe_allow_html=True)
 
         # --- Pagination Config ---
-        items_per_page = 10  # Fixed at 10 items per page
+        items_per_page = 7  # Fit manage positions + pagination in one viewport
         total_positions = len(filtered_data)
         total_pages = max(1, (total_positions + items_per_page - 1) // items_per_page)
         # Reset to page 1 if data changes
@@ -438,7 +454,10 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
                 hire_type_info = "Additional"
             status_label_pos = row.get('Status', 'Contract') or 'Contract'
 
-            expander_title = f"{row['Job Position']} · {status_label} · {pic_display} · {hire_type_info} · {status_label_pos}"
+            current_stage = get_current_stage(row)
+            zone = get_stage_zone(row)
+            stage_part = f" · {current_stage}" if current_stage and current_stage != "On Boarding" else ""
+            expander_title = f"{row['Job Position']}{stage_part} · {status_label} · {pic_display} · {hire_type_info} · {status_label_pos}"
             anchor_id = f"sa-position-{idx}"
             _inline_anchor(anchor_id)
             with st.expander(expander_title):
@@ -450,7 +469,6 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
             prev_disabled = (page == 1)
             next_disabled = (page == total_pages)
             
-            # Center the pagination
             outer_cols = st.columns([2, 3, 2])
             with outer_cols[1]:
                 cols = st.columns([1, 3, 1])
@@ -465,6 +483,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
                         st.session_state.manage_position_page = min(total_pages, page + 1)
                         st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
+
     if len(filtered_data) > 0:
         _section_anchor(SECTION_IDS["summary"])
         st.markdown("<br>", unsafe_allow_html=True)
@@ -497,12 +516,17 @@ def render_screening_dashboard() -> None:
     st.markdown("### Screening Dashboard")
 
     # Build position options grouped by CV Matching position (deduplicate)
+    # Exclude Pool (completed) positions from the dropdown
     cv_to_hiring = {}
     hiring_data = st.session_state.hiring_data
     for job_position, cv_position in position_links.items():
         match = hiring_data[hiring_data["Job Position"] == job_position]
         if not match.empty:
-            division = match.iloc[0]["Division"]
+            row = match.iloc[0]
+            # Skip completed/pool positions (zone 3)
+            if get_stage_zone(row) == 3:
+                continue
+            division = row["Division"]
             if cv_position not in cv_to_hiring:
                 cv_to_hiring[cv_position] = []
             cv_to_hiring[cv_position].append((job_position, division))
@@ -531,6 +555,17 @@ def render_screening_dashboard() -> None:
     linked_entries = cv_to_hiring.get(selected_cv, [])
     job_position = linked_entries[0][0] if linked_entries else selected_cv
     division = linked_entries[0][1] if linked_entries else ""
+
+    # Check pipeline zone for selected position — warn if Offering+
+    hiring_data = st.session_state.hiring_data
+    pos_match = hiring_data[hiring_data["Job Position"] == job_position]
+    if not pos_match.empty:
+        pos_zone = get_stage_zone(pos_match.iloc[0])
+        if pos_zone == 3:
+            st.info("ℹ️ Posisi ini sudah **selesai** (masuk Pool). Screening tidak diperlukan.")
+            return
+        if pos_zone == 2:
+            st.warning("⚠️ Posisi ini sudah di tahap **Offering / Contract Sign**. Screening kandidat baru tidak diprioritaskan.")
 
     # Fetch screening results (cached)
     cache_key = selected_cv

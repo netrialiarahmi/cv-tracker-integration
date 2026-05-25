@@ -10,7 +10,10 @@ from src.views.components.metrics import render_metrics
 from src.views.components.data_table import render_reference_table
 from src.models.hiring import calculate_position_progress, get_progress_badge
 from src.config.settings import BASE_STAGES
-from src.utils.helpers import filter_by_year_range, available_years as _available_years
+from src.utils.helpers import (
+    filter_by_year_range, available_years as _available_years,
+    get_current_stage, get_stage_zone, split_by_pipeline_zone,
+)
 
 
 DIV_SECTION_IDS = {
@@ -266,7 +269,15 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
             filtered_data.get("Notes", pd.Series("", index=filtered_data.index)).astype(str).str.contains(search_term, case=False, na=False)
         ]
     
-    # Display position cards
+    # Split pool and sort active by zone priority
+    _zones = filtered_data.apply(get_stage_zone, axis=1)
+    pool_data = filtered_data[_zones == 3].copy()
+    filtered_data = filtered_data[_zones != 3].copy()
+    if len(filtered_data) > 0:
+        filtered_data["_zone"] = filtered_data.apply(get_stage_zone, axis=1)
+        filtered_data = filtered_data.sort_values("_zone", kind="stable").drop(columns=["_zone"])
+
+    # Display active position cards
     for idx, row in filtered_data.iterrows():
         # Determine active stages based on Has Skill Test
         if row.get('Has Skill Test', True):
@@ -311,6 +322,41 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
                 st.info(row["Notes"])
             if "Last Updated" in row:
                 st.caption(f"Last Updated: {row['Last Updated']}")
+
+    # --- Pool section: completed positions ---
+    if len(pool_data) > 0:
+        st.markdown("<br>", unsafe_allow_html=True)
+        with st.expander(f"🗂 Completed Positions — {len(pool_data)}", expanded=False):
+            st.caption("Posisi yang sudah selesai direkrut.")
+            for idx, row in pool_data.iterrows():
+                active_stages = stages if row.get('Has Skill Test', True) else [s for s in stages if s != "Skill Test"]
+                completed_date = str(row.get('Completed Date', '') or '').strip()
+                pool_status = completed_date if completed_date else "Completed"
+                pic_info = f"PIC: {row.get('PIC', 'Unassigned')}" if "PIC" in row else ""
+                hire_type = row.get('Hire Type', 'Additional')
+                if hire_type == 'Replacement' and row.get('Replacement For'):
+                    hire_type_info = f"Replacement for {row['Replacement For']}"
+                else:
+                    hire_type_info = "Additional"
+                status_label_pos = row.get('Status', 'Contract') or 'Contract'
+                _inline_anchor(f"div-pool-{idx}")
+                with st.expander(f"**{row['Job Position']}** • {pool_status} • {pic_info} • {hire_type_info} • {status_label_pos}"):
+                    progress_pct = calculate_position_progress(row, stages)
+                    badge_class, badge_text = get_progress_badge(progress_pct)
+                    st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    st.markdown("#### Hiring Stages")
+                    cols = st.columns(4)
+                    for i, stage in enumerate(active_stages):
+                        with cols[i % 4]:
+                            status = "Done" if row.get(stage) else "Pending"
+                            st.markdown(f"{status} **{stage}**")
+                    if row.get("Notes"):
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        st.markdown("#### Notes")
+                        st.info(row["Notes"])
+                    if "Last Updated" in row:
+                        st.caption(f"Last Updated: {row['Last Updated']}")
 
 
 def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:

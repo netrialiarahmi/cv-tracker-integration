@@ -4,12 +4,104 @@ Helper utilities for the Hiring Tracker application.
 
 import base64
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional, Union, Tuple
 import os
 
 import pandas as pd
 
-from src.config.settings import LOGO_PATH
+from src.config.settings import LOGO_PATH, BASE_STAGES
+
+
+# ---------------------------------------------------------------------------
+# Pipeline zone helpers
+# ---------------------------------------------------------------------------
+
+# Zone 0 = Urgent (needs screening): Initial Interview, HR User Interview
+# Zone 1 = In Process: Skill Test, Final Interview
+# Zone 2 = Nearing Completion: Offering, Contract Sign
+# Zone 3 = Pool (completed): On Boarding = True or Completed Date set
+# Zone 4 = Frozen
+
+_STAGE_ZONE_MAP: dict = {
+    "Initial Interview (HR)": 0,
+    "HR & User Interview (Stage 1)": 0,
+    "Skill Test": 1,
+    "Final Interview": 1,
+    "Offering": 2,
+    "Contract Sign": 2,
+    "On Boarding": 3,
+}
+
+ZONE_LABELS: dict = {
+    0: "Needs Screening",
+    1: "In Process",
+    2: "Nearing Completion",
+}
+
+
+def get_current_stage(row) -> Optional[str]:
+    """Return the current (last True) hiring stage for a position row.
+
+    Iterates BASE_STAGES in reverse to find the furthest completed stage.
+    Respects the Has Skill Test flag.  Returns None when no stage is True.
+    """
+    has_skill_test = bool(row.get("Has Skill Test", True))
+    for stage in reversed(BASE_STAGES):
+        if stage == "Skill Test" and not has_skill_test:
+            continue
+        try:
+            val = row.get(stage) if hasattr(row, "get") else row[stage]
+        except (KeyError, TypeError):
+            continue
+        if val is True:
+            return stage
+    return None
+
+
+def get_stage_zone(row) -> int:
+    """Return the pipeline zone integer for a position row.
+
+    0 = Urgent (needs screening)
+    1 = In Process
+    2 = Nearing Completion
+    3 = Pool / Completed
+    4 = Frozen
+    """
+    if bool(row.get("Freeze", False)):
+        return 4
+
+    if bool(row.get("On Boarding", False)):
+        return 3
+    completed_date = str(row.get("Completed Date", "") or "").strip()
+    if completed_date:
+        return 3
+
+    stage = get_current_stage(row)
+    if stage is None:
+        return 0  # Nothing started yet → treat as urgent
+    return _STAGE_ZONE_MAP.get(stage, 1)
+
+
+def split_by_pipeline_zone(df: pd.DataFrame) -> Tuple[
+    pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame
+]:
+    """Split a hiring DataFrame into pipeline zone sub-DataFrames.
+
+    Returns:
+        (urgent, in_process, nearing_done, pooled, frozen)
+    """
+    if df is None or len(df) == 0:
+        empty = pd.DataFrame(columns=df.columns if df is not None else [])
+        return empty, empty, empty, empty, empty
+
+    zones = df.apply(get_stage_zone, axis=1)
+    return (
+        df[zones == 0].copy(),
+        df[zones == 1].copy(),
+        df[zones == 2].copy(),
+        df[zones == 3].copy(),
+        df[zones == 4].copy(),
+    )
 
 
 _DATE_FORMATS = ("%m/%d/%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%d %H:%M:%S")

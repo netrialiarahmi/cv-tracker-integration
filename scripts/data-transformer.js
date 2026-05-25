@@ -626,16 +626,7 @@ function transformData(csvData, existingData = []) {
     }
   }
   
-  // Add existing entries that weren't in CSV (preserve them)
-  for (const existing of existingData) {
-    const jobPosition = existing['Job Position'];
-    if (!updatedPositions.has(jobPosition)) {
-      transformed.push(existing);
-      console.log(`  ✓ Preserved: ${jobPosition}`);
-    }
-  }
-  
-  console.log(`✅ Transformation complete: ${transformed.length} total entries`);
+  console.log(`✅ Transformation complete: ${transformed.length} total entries (full replace from Planner)`);
   return transformed;
 }
 
