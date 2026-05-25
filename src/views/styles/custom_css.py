@@ -789,6 +789,21 @@ div[data-testid="stMultiSelect"] span[data-baseweb="tag"]:hover span[role="prese
     background: #dbeafe;
     border-color: rgba(37, 99, 235, 0.3);
 }
+.candidate-link-pill.link-expired-fallback {
+    background: #fffbeb;
+    color: #92400e;
+    border-color: rgba(217, 119, 6, 0.2);
+}
+.candidate-link-pill.link-expired-fallback:hover {
+    background: #fef3c7;
+    border-color: rgba(217, 119, 6, 0.4);
+}
+.candidate-link-pill.link-expired {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: rgba(239, 68, 68, 0.15);
+    cursor: default;
+}
 .ai-analysis-card {
     background: #f8fafc;
     border: 1px solid var(--border-light);

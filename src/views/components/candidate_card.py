@@ -106,9 +106,21 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
             st.markdown(f"<div class='candidate-info-row'>{''.join(edu_parts)}</div>", unsafe_allow_html=True)
 
         # Links as pills (Division view: only Resume)
+        from src.utils.resume_helpers import get_resume_display_info
         links = []
-        if candidate.resume_link:
-            links.append(f"<a href='{candidate.resume_link}' target='_blank' class='candidate-link-pill'>Resume</a>")
+        resume_url, resume_label, resume_expired = get_resume_display_info(
+            candidate.resume_link,
+            candidate.application_link,
+            candidate.kalibrr_link,
+        )
+        if resume_url:
+            pill_class = "candidate-link-pill"
+            if resume_expired:
+                resume_label = f"⚠️ {resume_label}"
+                pill_class += " link-expired-fallback"
+            links.append(f"<a href='{resume_url}' target='_blank' class='{pill_class}' title='{'Link resume asli sudah expired, buka via Kalibrr' if resume_expired else 'Buka resume'}'>{resume_label}</a>")
+        elif resume_expired:
+            links.append("<span class='candidate-link-pill link-expired' title='Link resume sudah expired dan tidak ada fallback'>⚠️ Resume Expired</span>")
         if not division_view:
             if candidate.kalibrr_link:
                 links.append(f"<a href='{candidate.kalibrr_link}' target='_blank' class='candidate-link-pill'>Kalibrr Profile</a>")

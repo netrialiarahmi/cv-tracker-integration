@@ -180,12 +180,20 @@ def render_screening_table(results_df: pd.DataFrame, position_key: str,
                         st.markdown(f"- {g}")
 
             # Links
+            from src.utils.resume_helpers import get_resume_display_info
             links = []
             resume = _clean(row.get("Resume Link"))
             profile = _clean(row.get("Kalibrr Profile"))
             application = _clean(row.get("Application Link"))
-            if resume:
-                links.append(f"[Resume]({resume})")
+            resume_url, resume_label, resume_expired = get_resume_display_info(
+                resume, application, profile
+            )
+            if resume_url:
+                if resume_expired:
+                    resume_label = f"⚠️ {resume_label}"
+                links.append(f"[{resume_label}]({resume_url})")
+            elif resume_expired:
+                links.append("⚠️ ~~Resume~~ (expired)")
             if profile:
                 links.append(f"[Profile]({profile})")
             if application:
