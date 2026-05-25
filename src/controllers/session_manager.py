@@ -17,8 +17,8 @@ def initialize_session_state() -> None:
     """
     from src.repositories.data_manager import load_credentials, load_hiring_data
     
-    if "credentials" not in st.session_state:
-        st.session_state.credentials = load_credentials()
+    # Always load fresh credentials from disk so division options are up to date
+    st.session_state.credentials = load_credentials()
     if "hiring_data" not in st.session_state:
         st.session_state.hiring_data = load_hiring_data()
     if "logged_in" not in st.session_state:
