@@ -234,33 +234,20 @@ function validateColumns(records) {
   // Try exact match first
   let missingColumns = requiredColumns.filter(col => !(col in firstRecord));
   
-  // If exact match fails, try case-insensitive matching and remap
-  if (missingColumns.length > 0) {
-    console.log('  ℹ Exact column match failed, trying case-insensitive match...');
-    const columnMap = buildColumnMap(actualColumns, requiredColumns);
-    
-    if (columnMap) {
-      // Remap all records to use expected column names
-      for (let i = 0; i < records.length; i++) {
-        for (const [expected, actual] of Object.entries(columnMap)) {
-          if (actual !== expected && actual in records[i]) {
-            records[i][expected] = records[i][actual];
-          }
+  // We should remap ALL config columns using aliases if needed
+  const allExpectedColumns = Object.values(config.columns);
+  const columnMap = buildColumnMap(actualColumns, allExpectedColumns);
+  
+  if (columnMap) {
+    // Remap all records to use expected column names
+    for (let i = 0; i < records.length; i++) {
+      for (const [expected, actual] of Object.entries(columnMap)) {
+        if (actual !== expected && actual in records[i] && !(expected in records[i])) {
+          records[i][expected] = records[i][actual];
         }
       }
-      // Also remap all config columns
-      for (const [key, expected] of Object.entries(config.columns)) {
-        const match = actualColumns.find(col => col.toLowerCase().trim() === expected.toLowerCase().trim());
-        if (match && match !== expected) {
-          for (let i = 0; i < records.length; i++) {
-            if (match in records[i] && !(expected in records[i])) {
-              records[i][expected] = records[i][match];
-            }
-          }
-        }
-      }
-      missingColumns = requiredColumns.filter(col => !(col in records[0]));
     }
+    missingColumns = requiredColumns.filter(col => !(col in records[0]));
   }
   
   if (missingColumns.length > 0) {
