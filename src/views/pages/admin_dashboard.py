@@ -275,30 +275,37 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
     if len(filtered_data) > 0:
         from src.views.components.metrics import render_metrics
         from src.views.components.progress_stepper import render_progress_stepper, filter_by_stage
-
-        _anchor(AD_SECTION_IDS["metrics"])
-        st.markdown('<div class="content-card"><h3>Pipeline Metrics</h3>', unsafe_allow_html=True)
-        render_metrics(filtered_data, interactive_key="ad_metric_filter")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        # Apply pipeline status filter
-        active_filter = st.session_state.get("ad_metric_filter", "total")
-        filtered_data = _filter_by_status(filtered_data, active_filter)
-
-        # Year-range filter (drives stage badge counts)
+        
+        # Year-range filter applied to everything (metrics + stages)
         years = _available_years(filtered_data)
         year_options = ["All"] + list(range(min(years), max(years) + 1)) if years else ["All"]
-        st.markdown('<div class="content-card"><h3>Hiring Pipeline Stages</h3>', unsafe_allow_html=True)
-        yc1, yc2, yc3 = st.columns([6, 1, 1])
-        with yc2:
+
+        _anchor(AD_SECTION_IDS["metrics"])
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
+        
+        # Top Header + Year Filter
+        m_col1, m_col2, m_col3 = st.columns([6, 1, 1])
+        with m_col1:
+            st.markdown('<h3>Pipeline Metrics</h3>', unsafe_allow_html=True)
+        with m_col2:
             st.selectbox("From Year", year_options, key="ad_year_from", label_visibility="collapsed")
-        with yc3:
+        with m_col3:
             st.selectbox("To Year", year_options, key="ad_year_to", label_visibility="collapsed")
+            
         filtered_data = filter_by_year_range(
             filtered_data,
             st.session_state.get("ad_year_from", "All"),
             st.session_state.get("ad_year_to", "All"),
         )
+
+        render_metrics(filtered_data, interactive_key="ad_metric_filter")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # Apply metric card filter
+        active_filter = st.session_state.get("ad_metric_filter", "total")
+        filtered_data = _filter_by_status(filtered_data, active_filter)
+
+        st.markdown('<div class="content-card"><h3>Hiring Pipeline Stages</h3>', unsafe_allow_html=True)
 
         # Stage stepper with clickable filtering
         selected_stage = render_progress_stepper(filtered_data, session_key="ad_stage_filter", show_counts=True)
