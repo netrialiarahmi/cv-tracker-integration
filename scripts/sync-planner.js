@@ -65,7 +65,7 @@ async function loginMicrosoft(page) {
     
     // Handle "Stay signed in?" prompt
     try {
-      await page.waitForSelector('input[type="submit"]', { timeout: 10000 });
+      await page.waitForSelector('input[type="password"]', { state: 'hidden', timeout: 10000 }); await page.waitForSelector('input[type="submit"]', { timeout: 10000 });
       // Click "Yes" to stay signed in
       await page.click('input[type="submit"]');
       console.log('  ✓ Accepted stay signed in');
@@ -73,6 +73,8 @@ async function loginMicrosoft(page) {
       console.log('  ℹ No "stay signed in" prompt');
     }
     
+    await page.waitForURL(url => !url.href.includes("login.microsoftonline.com"), { timeout: 30000 }).catch(() => {}); 
+
     console.log('✅ Login successful');
     
   } catch (error) {
@@ -128,6 +130,11 @@ async function exportPlannerToExcel(page) {
     if (!dropdownButton) {
       // Take a screenshot for debugging
       const screenshotPath = path.join(DOWNLOAD_DIR, `debug-no-dropdown-${Date.now()}.png`);
+      const htmlPath = path.join(DOWNLOAD_DIR, `debug-page-${Date.now()}.html`); 
+      const htmlContent = await page.content(); 
+      fs.writeFileSync(htmlPath, htmlContent); 
+      console.error(`  ❌ Debug HTML saved: ${htmlPath}`); 
+
       await page.screenshot({ path: screenshotPath, fullPage: true });
       console.error(`  ❌ Debug screenshot saved: ${screenshotPath}`);
       throw new Error('Dropdown menu button not found. Please check the Planner URL and page structure. A debug screenshot has been saved.');
@@ -178,6 +185,11 @@ async function exportPlannerToExcel(page) {
     if (!exportButton) {
       // Take a screenshot for debugging
       const screenshotPath = path.join(DOWNLOAD_DIR, `debug-no-export-${Date.now()}.png`);
+      const htmlPath = path.join(DOWNLOAD_DIR, `debug-page-${Date.now()}.html`); 
+      const htmlContent = await page.content(); 
+      fs.writeFileSync(htmlPath, htmlContent); 
+      console.error(`  ❌ Debug HTML saved: ${htmlPath}`); 
+
       await page.screenshot({ path: screenshotPath, fullPage: true });
       console.error(`  ❌ Debug screenshot saved: ${screenshotPath}`);
       throw new Error('Export plan to Excel option not found in dropdown menu. Please check the page structure. A debug screenshot has been saved.');
@@ -224,7 +236,7 @@ async function syncPlanner() {
     // Launch browser
     console.log('🌐 Launching browser...');
     browser = await chromium.launch({
-      headless: true,
+      headless: false,
       args: ['--disable-blink-features=AutomationControlled']
     });
     
