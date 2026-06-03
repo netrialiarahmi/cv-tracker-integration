@@ -85,6 +85,18 @@ function tokenSetMatch(query, entries) {
  * @returns {{division:string, directorate:string, department:string, section:string, source:string}}
  */
 function resolveDivision(jobPosition, currentDivision = '') {
+  // Manual overrides requested by user
+  const lowerJob = (jobPosition || '').toLowerCase().trim();
+  if (lowerJob === 'socmed ohayo intern' || lowerJob.startsWith('marcomm officer (partnership)')) {
+    return {
+      division: 'Kompas.com Marketing Division',
+      directorate: '',
+      department: '',
+      section: '',
+      source: 'manual_override'
+    };
+  }
+
   const entries = loadLookup();
   const fallback = {
     division: currentDivision || '',

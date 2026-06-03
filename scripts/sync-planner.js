@@ -49,6 +49,7 @@ async function loginMicrosoft(page) {
   try {
     // Wait for email input
     await page.waitForSelector('input[type="email"]', { timeout: 30000 });
+    await page.waitForTimeout(1000);
     await page.fill('input[type="email"]', MICROSOFT_EMAIL);
     console.log('  ✓ Email entered');
     
@@ -56,24 +57,39 @@ async function loginMicrosoft(page) {
     await page.click('input[type="submit"]');
     
     // Wait for password input
-    await page.waitForSelector('input[type="password"]', { timeout: 30000 });
+    await page.waitForSelector('input[type="password"]', { state: 'visible', timeout: 30000 });
+    await page.waitForTimeout(2000); // Wait for animations
     await page.fill('input[type="password"]', MICROSOFT_PASSWORD);
     console.log('  ✓ Password entered');
     
     // Click sign in
+    await page.waitForTimeout(1000);
     await page.click('input[type="submit"]');
     
     // Handle "Stay signed in?" prompt
     try {
-      await page.waitForSelector('input[type="password"]', { state: 'hidden', timeout: 10000 }); await page.waitForSelector('input[type="submit"]', { timeout: 10000 });
-      // Click "Yes" to stay signed in
-      await page.click('input[type="submit"]');
-      console.log('  ✓ Accepted stay signed in');
+      await page.waitForSelector('input[type="password"]', { state: 'hidden', timeout: 10000 }); 
+      await page.waitForTimeout(2000); // Give it time to render the next page
+      
+      const submitButton = await page.$('input[type="submit"]');
+      if (submitButton) {
+        await page.click('input[type="submit"]');
+        console.log('  ✓ Accepted stay signed in');
+      }
     } catch (e) {
       console.log('  ℹ No "stay signed in" prompt');
     }
     
+    // Wait explicitly for the login process to complete
+    await page.waitForTimeout(5000);
     await page.waitForURL(url => !url.href.includes("login.microsoftonline.com"), { timeout: 30000 }).catch(() => {}); 
+
+    // Verify if we actually left the login page
+    if (page.url().includes("login.microsoftonline.com")) {
+      console.error('❌ Still on login page after attempting to sign in');
+      await page.screenshot({ path: path.join(__dirname, '..', 'downloads', 'login-failed.png'), fullPage: true });
+      throw new Error("Login failed - stuck on login page");
+    }
 
     console.log('✅ Login successful');
     
