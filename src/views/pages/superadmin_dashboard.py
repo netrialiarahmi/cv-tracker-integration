@@ -506,16 +506,18 @@ def render_screening_dashboard() -> None:
     st.markdown("### Screening Dashboard")
 
     # Build position options grouped by CV Matching position (deduplicate)
-    # Exclude Pool (completed) positions from the dropdown
     cv_to_hiring = {}
     hiring_data = st.session_state.hiring_data
     for job_position, cv_position in position_links.items():
         match = hiring_data[hiring_data["Job Position"] == job_position]
         if not match.empty:
-            row = match.iloc[0]
-            # Skip completed/pool positions (zone 3)
-            if get_stage_zone(row) == 3:
-                continue
+            # Check if there is any active position among the matches
+            active_rows = [row for _, row in match.iterrows() if get_stage_zone(row) != 3]
+            if active_rows:
+                row = active_rows[0]
+            else:
+                continue # All are completed, so skip
+
             division = row["Division"]
             if cv_position not in cv_to_hiring:
                 cv_to_hiring[cv_position] = []
@@ -547,13 +549,17 @@ def render_screening_dashboard() -> None:
     division = linked_entries[0][1] if linked_entries else ""
 
     # Check pipeline zone for selected position — warn if Offering+
+    # Use the active (non-pool) entry when there are duplicates
     hiring_data = st.session_state.hiring_data
     pos_match = hiring_data[hiring_data["Job Position"] == job_position]
     if not pos_match.empty:
-        pos_zone = get_stage_zone(pos_match.iloc[0])
-        if pos_zone == 3:
-            st.info("ℹ️ Posisi ini sudah **selesai** (masuk Pool). Screening tidak diperlukan.")
-            return
+        # Find the active entry (not zone 3) if one exists
+        active_entry = None
+        for _, pm_row in pos_match.iterrows():
+            if get_stage_zone(pm_row) != 3:
+                active_entry = pm_row
+                break
+        pos_zone = get_stage_zone(active_entry) if active_entry is not None else get_stage_zone(pos_match.iloc[-1])
         if pos_zone == 2:
             st.warning("⚠️ Posisi ini sudah di tahap **Offering / Contract Sign**. Screening kandidat baru tidak diprioritaskan.")
 
@@ -565,27 +571,33 @@ def render_screening_dashboard() -> None:
 
     results_df = st.session_state.screening_cache.get(cache_key)
 
-    # Build set of already-escalated emails
+    # Build set of already-escalated identifiers (emails or names)
     all_candidates = load_candidates()
-    escalated_emails = {c.get("email", "").lower() for c in all_candidates if c.get("email")}
+    escalated_identifiers = set()
+    for c in all_candidates:
+        if c.get("email"):
+            escalated_identifiers.add(c["email"].lower())
+        elif c.get("name"):
+            escalated_identifiers.add(c["name"].lower())
 
     def handle_escalate(row_dict, pk=job_position, div=division):
         user = st.session_state.get("hr_admin") or "HR Superadmin"
         candidate = escalate_candidate(row_dict, pk, div, user)
         st.success(f"{candidate.name} escalated to user interview!")
-        st.rerun()
 
-    def handle_reset_escalation(email):
+    def handle_reset_escalation(identifier):
         candidates = load_candidates()
         for c in candidates:
-            if c.get("email", "").lower() == email.lower():
+            c_email = c.get("email", "").lower()
+            c_name = c.get("name", "").lower()
+            if (c_email and c_email == identifier.lower()) or (c_name and c_name == identifier.lower()):
                 delete_candidate(c["id"])
         st.success("Escalation reset!")
         st.rerun()
 
     render_screening_table(
         results_df, job_position, division,
-        escalated_emails, on_escalate=handle_escalate,
+        escalated_identifiers, on_escalate=handle_escalate,
         on_reset_escalation=handle_reset_escalation,
         key_prefix=f"sa_screen_{selected_cv.replace(' ', '_')}"
     )

@@ -368,11 +368,13 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     """
     from src.services.candidate_service import (
         get_candidates_for_division, submit_skill_review,
-        reset_candidate_status, clear_candidate_comments
+        reset_candidate_status, clear_candidate_comments,
+        fetch_job_positions_from_cv_matching
     )
     from src.services.feedback_service import add_feedback_for_position
     from src.views.components.candidate_card import render_candidate_card
     from src.models.candidate import Candidate
+    from src.utils.helpers import extract_technical_skills_from_jd
 
     st.markdown("### Candidates for User Interview")
     st.info(
@@ -408,14 +410,19 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
         Candidate.STATUS_NOT_RECOMMENDED: "reject",
         Candidate.STATUS_RESERVE: "reserve",
     }
+    
+    cv_positions_df = fetch_job_positions_from_cv_matching()
 
     for position_key, pos_candidates in positions.items():
-        # Get job description for feedback
+        # Get job description for feedback and auto-skills
         job_desc = ""
-        for _, row in filtered_data.iterrows():
-            if row["Job Position"] == position_key:
-                job_desc = row.get("Job Description", "")
-                break
+        if cv_positions_df is not None and not cv_positions_df.empty:
+            match = cv_positions_df[cv_positions_df["Job Position"] == position_key]
+            if not match.empty:
+                job_desc = match.iloc[0].get("Job Description", "")
+        
+        # Auto-extract skills if we found a JD
+        auto_skills = extract_technical_skills_from_jd(job_desc) if job_desc else []
 
         # Filter by status
         if status_filter != "All":
@@ -443,10 +450,17 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
                         st.error("Failed to submit review.")
                         return
                     # Mirror to feedback for cv-matching-auto sync
+                    tech_detail = ""
+                    tech_skills = ratings.get("technical_skills", {})
+                    if tech_skills:
+                        tech_parts = ", ".join(f"{k}: {v}/4" for k, v in tech_skills.items())
+                        tech_detail = f"Technical Skills: {tech_parts}."
+                    else:
+                        tech_detail = f"Technical Skill: {ratings['technical_skill']}/4."
                     feedback_text = (
                         f"Soft Skill: {ratings['soft_skill']}/4, "
                         f"Value KG: {ratings['value_kg']}/4, "
-                        f"Technical Skill: {ratings['technical_skill']}/4. "
+                        f"{tech_detail} "
                         f"Decision: {decision}."
                     )
                     if note:
@@ -487,4 +501,5 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
                 on_skill_review=make_review_handler(),
                 on_reset=make_reset_handler(candidate.id),
                 on_clear_comments=make_clear_comments_handler(candidate.id),
+                auto_skills=auto_skills,
             )

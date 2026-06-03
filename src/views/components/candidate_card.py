@@ -66,7 +66,8 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                           on_reset=None, on_clear_comments=None,
                           on_skill_review=None,
                           reviewer_division: str = "",
-                          division_view: bool = False) -> None:
+                          division_view: bool = False,
+                          auto_skills: list = None) -> None:
     score = candidate.match_score
     color = _score_color(score)
     label = _score_label(score)
@@ -176,6 +177,15 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                     f"<div style='font-size:0.82rem;color:#334155;margin-top:0.4rem;'>"
                     f"<strong>Catatan:</strong> {entry.get('note','')}</div>"
                 ) if entry.get("note") else ""
+
+                # Build technical skills display
+                tech_skills = entry.get("technical_skills", {})
+                if tech_skills:
+                    tech_parts = "".join(f"<li style='margin-bottom:0.15rem;'>{k}: <strong>{v}/4</strong></li>" for k, v in tech_skills.items())
+                    tech_html = f"<div style='font-size:0.82rem;color:#334155;margin-top:0.3rem;'><strong>Technical Skills:</strong><ul style='margin-top:0.25rem;margin-bottom:0.25rem;padding-left:1.5rem;'>{tech_parts}</ul></div>"
+                else:
+                    tech_html = ""
+
                 st.markdown(
                     f"""<div class='comment-card'>
                         <div class='comment-header'>
@@ -185,9 +195,10 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                         </div>
                         <div class='comment-text'>
                             Soft Skill: <strong>{entry.get('soft_skill','-')}/4</strong> ·
-                            Value KG: <strong>{entry.get('value_kg','-')}/4</strong> ·
-                            Technical Skill: <strong>{entry.get('technical_skill','-')}/4</strong>
+                            Value KG: <strong>{entry.get('value_kg','-')}/4</strong>
+                            {f" · Technical Skill: <strong>{entry.get('technical_skill','-')}/4</strong>" if not tech_skills else ""}
                         </div>
+                        {tech_html}
                         {note_html}
                     </div>""",
                     unsafe_allow_html=True,
@@ -233,7 +244,7 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
         actioned = candidate.status in Candidate.ACTIONED_STATUSES
 
         if show_actions and division_view and on_skill_review:
-            # Division reviewer flow: 3 ratings (1-4) + note + 3 decision buttons
+            # Division reviewer flow: 2 fixed ratings + dynamic technical skills + note + 3 decision buttons
             st.markdown("---")
 
             # Show this division's previous review (if any) so the reviewer
@@ -242,15 +253,17 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             default_soft = int(existing.get("soft_skill", 1)) if existing else 1
             default_value = int(existing.get("value_kg", 1)) if existing else 1
-            default_tech = int(existing.get("technical_skill", 1)) if existing else 1
             default_note = existing.get("note", "") if existing else ""
+            existing_tech_skills = existing.get("technical_skills", {}) if existing else {}
+            # Legacy single value fallback
+            legacy_tech = int(existing.get("technical_skill", 0)) if existing else 0
 
             st.markdown(
                 "<p style='font-size:0.9rem;font-weight:600;color:#0f172a;margin:0 0 0.25rem 0;'>Penilaian (skala 1–4)</p>",
                 unsafe_allow_html=True,
             )
 
-            r1, r2, r3 = st.columns(3)
+            r1, r2 = st.columns(2)
             with r1:
                 soft_skill = st.slider(
                     "Soft Skill", min_value=1, max_value=4, step=1,
@@ -261,11 +274,60 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                     "Value KG", min_value=1, max_value=4, step=1,
                     value=default_value, key=f"{key_prefix}_rate_value",
                 )
-            with r3:
-                technical_skill = st.slider(
-                    "Technical Skill", min_value=1, max_value=4, step=1,
-                    value=default_tech, key=f"{key_prefix}_rate_tech",
-                )
+
+            # Technical Skills — dynamic from job requirements
+            st.markdown(
+                "<p style='font-size:0.85rem;font-weight:600;color:#0f172a;margin:0.75rem 0 0.25rem 0;'>Technical Skills (from Job Requirements)</p>",
+                unsafe_allow_html=True,
+            )
+            st.caption("Berikan skala 1–4 untuk setiap requirement berikut.")
+
+            MAX_TECH_SKILLS = 15
+            # Pre-fill from existing review or fallback to auto_skills
+            if existing_tech_skills:
+                existing_skill_names = list(existing_tech_skills.keys())
+            elif auto_skills:
+                existing_skill_names = auto_skills[:MAX_TECH_SKILLS]
+            else:
+                existing_skill_names = [""]
+
+            num_skills = min(len(existing_skill_names), MAX_TECH_SKILLS)
+            if num_skills == 0:
+                num_skills = 1
+                existing_skill_names = [""]
+
+            # Session key for number of skills shown
+            num_key = f"{key_prefix}_num_tech_skills"
+            if num_key not in st.session_state:
+                st.session_state[num_key] = num_skills
+
+            tech_skills_data = {}
+            for si in range(st.session_state[num_key]):
+                tc1, tc2 = st.columns([3, 2])
+                default_name = existing_skill_names[si] if si < len(existing_skill_names) else ""
+                default_rating = int(existing_tech_skills.get(default_name, 1)) if default_name else 1
+                with tc1:
+                    skill_name = st.text_input(
+                        f"Skill {si+1}",
+                        value=default_name,
+                        key=f"{key_prefix}_tech_name_{si}",
+                        placeholder="e.g. Digital Ads, SEO, Data Analysis...",
+                        label_visibility="collapsed",
+                    )
+                with tc2:
+                    skill_rating = st.slider(
+                        f"Rating {si+1}", min_value=1, max_value=4, step=1,
+                        value=default_rating, key=f"{key_prefix}_tech_rate_{si}",
+                        label_visibility="collapsed",
+                    )
+                if skill_name.strip():
+                    tech_skills_data[skill_name.strip()] = skill_rating
+
+            # Add more skills button
+            if st.session_state[num_key] < MAX_TECH_SKILLS:
+                if st.button("+ Tambah Skill", key=f"{key_prefix}_add_tech"):
+                    st.session_state[num_key] += 1
+                    st.rerun()
 
             note_text = st.text_area(
                 "Catatan",
@@ -275,10 +337,14 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                 height=80,
             )
 
+            # Compute average technical skill for backwards compatibility
+            avg_tech = round(sum(tech_skills_data.values()) / len(tech_skills_data)) if tech_skills_data else 1
+
             ratings = {
                 "soft_skill": soft_skill,
                 "value_kg": value_kg,
-                "technical_skill": technical_skill,
+                "technical_skill": avg_tech,
+                "technical_skills": tech_skills_data,
             }
 
             b1, b2, b3 = st.columns(3)

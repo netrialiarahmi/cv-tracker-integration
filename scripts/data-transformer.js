@@ -588,7 +588,7 @@ function transformRow(row, existing = null) {
     Attachments: Array.isArray(existing?.Attachments) ? existing.Attachments : config.defaults.attachments,
     Freeze: freeze,
     'Created Date': createdDate || existing?.['Created Date'] || config.defaults.createdDate,
-    'Completed Date': completedDate || existing?.['Completed Date'] || '',
+    'Completed Date': progress === config.completedStatus ? (completedDate || existing?.['Completed Date'] || '') : '',
     Status: status || existing?.Status || config.defaults.status
   };
 }

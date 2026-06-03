@@ -213,3 +213,49 @@ def decode_file_base64(encoded_str: str) -> bytes:
         Decoded file bytes
     """
     return base64.b64decode(encoded_str)
+
+
+def extract_technical_skills_from_jd(jd_text: str) -> list[str]:
+    """
+    Extract technical skills from a job description text
+    by parsing bullet points and excluding generic experience requirements.
+    """
+    if not jd_text or not isinstance(jd_text, str):
+        return []
+    
+    import re
+    lines = jd_text.split('\n')
+    skills = []
+    
+    for line in lines:
+        line = line.strip()
+        if not line: continue
+        
+        # Skip headers
+        if "Minimum Qualifications" in line or "Job Description:" in line or "Requirements" in line or "Role Expectations" in line:
+            continue
+            
+        # Clean up bullet points, numbers, and dashes
+        line = re.sub(r'^(\d+\.|-|\u2022|\*)\s*', '', line).strip()
+        if not line: continue
+        
+        lower = line.lower()
+        
+        # Exclude patterns
+        if "year" in lower and "experience" in lower: continue
+        if "degree" in lower: continue
+        if "internship" in lower: continue
+        if "month" in lower and "experience" in lower: continue
+        if "sarjana" in lower: continue
+        if "diploma" in lower: continue
+        
+        # Clean up trailing periods
+        line = line.rstrip('.').strip()
+        
+        # Capitalize first letter
+        if line:
+            line = line[0].upper() + line[1:]
+            skills.append(line)
+            
+    # Remove duplicates preserving order, limit to 15
+    return list(dict.fromkeys(skills))[:15]

@@ -23,5 +23,30 @@
         ],
         "adjusted_requirements": "\n\n\n--- USER INTERVIEW FEEDBACK (Approved Qualities) ---\nThe following qualities were noted in approved candidates. Prioritize candidates with similar attributes:\n- Asep Rosidin: candidate sangat baik\n\n\n--- USER INTERVIEW FEEDBACK (General Notes) ---\nAdditional notes from hiring managers:\n- Asep Rosidin: candidate sangat baik",
         "last_updated": "2026-04-16 11:52:35"
+    },
+    "Account Executive VCBL": {
+        "position_name": "Account Executive VCBL",
+        "division": "VCBL & Pasangiklan Division",
+        "original_requirements": "",
+        "user_feedback": [
+            {
+                "author": "User VCBL & Pasangiklan Division",
+                "division": "VCBL & Pasangiklan Division",
+                "candidate_name": "Annisa Karinda",
+                "action": "approve",
+                "text": "Soft Skill: 4/4, Value KG: 4/4, Technical Skill: 4/4. Decision: Rekomendasi.",
+                "timestamp": "2026-06-03 10:28:53"
+            },
+            {
+                "author": "User VCBL & Pasangiklan Division",
+                "division": "VCBL & Pasangiklan Division",
+                "candidate_name": "Annisa Karinda",
+                "action": "approve",
+                "text": "Soft Skill: 4/4, Value KG: 4/4, Technical Skills: Experience in seek new prospective clients: 4/4, Have good networking track with direct client/advertising agency is a plus: 4/4, Have great communication, interpersonal & presentation skills: 4/4, Understand the newest advertising industry, digital programmatic ads & digital media trends: 4/4, Candidates with knowledge or experience in programmatic ads and programmatic sales are preferred: 4/4. Decision: Rekomendasi.",
+                "timestamp": "2026-06-03 10:45:17"
+            }
+        ],
+        "adjusted_requirements": "\n\n\n--- USER INTERVIEW FEEDBACK (Approved Qualities) ---\nThe following qualities were noted in approved candidates. Prioritize candidates with similar attributes:\n- Annisa Karinda: Soft Skill: 4/4, Value KG: 4/4, Technical Skill: 4/4. Decision: Rekomendasi.\n- Annisa Karinda: Soft Skill: 4/4, Value KG: 4/4, Technical Skills: Experience in seek new prospective clients: 4/4, Have good networking track with direct client/advertising agency is a plus: 4/4, Have great communication, interpersonal & presentation skills: 4/4, Understand the newest advertising industry, digital programmatic ads & digital media trends: 4/4, Candidates with knowledge or experience in programmatic ads and programmatic sales are preferred: 4/4. Decision: Rekomendasi.",
+        "last_updated": "2026-06-03 10:45:17"
     }
 }

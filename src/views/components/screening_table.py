@@ -41,7 +41,7 @@ def _score_badge_html(score: int) -> str:
 
 
 def render_screening_table(results_df: pd.DataFrame, position_key: str,
-                           division: str, escalated_emails: set,
+                           division: str, escalated_identifiers: set,
                            on_escalate: Optional[Callable] = None,
                            on_reset_escalation: Optional[Callable] = None,
                            key_prefix: str = "screen") -> None:
@@ -52,7 +52,7 @@ def render_screening_table(results_df: pd.DataFrame, position_key: str,
         results_df: DataFrame from CV Matching (columns: Candidate Name, Match Score, etc.)
         position_key: Position identifier for escalation
         division: Division this position belongs to
-        escalated_emails: Set of already-escalated candidate emails
+        escalated_identifiers: Set of already-escalated candidate emails or names
         on_escalate: Callback(row_dict) when escalate button is clicked
         key_prefix: Unique prefix for widget keys
     """
@@ -111,7 +111,11 @@ def render_screening_table(results_df: pd.DataFrame, position_key: str,
         education = _clean(row.get("Education"))
         university = _clean(row.get("University"))
         major = _clean(row.get("Major"))
-        already_escalated = email.lower() in {e.lower() for e in escalated_emails} if email else False
+        already_escalated = False
+        if email:
+            already_escalated = email.lower() in escalated_identifiers
+        elif name and name != "Unknown":
+            already_escalated = name.lower() in escalated_identifiers
 
         # Header line outside expander
         escalated_tag = " [Escalated]" if already_escalated else ""
@@ -179,27 +183,48 @@ def render_screening_table(results_df: pd.DataFrame, position_key: str,
                     for g in gaps:
                         st.markdown(f"- {g}")
 
-            # Links
+            # Links as styled buttons
             from src.utils.resume_helpers import get_resume_display_info
-            links = []
             resume = _clean(row.get("Resume Link"))
             profile = _clean(row.get("Kalibrr Profile"))
             application = _clean(row.get("Application Link"))
             resume_url, resume_label, resume_expired = get_resume_display_info(
                 resume, application, profile
             )
+
+            link_buttons = []
+            btn_style = (
+                'display:inline-block;padding:6px 16px;border-radius:8px;'
+                'font-size:0.85rem;font-weight:600;text-decoration:none;'
+                'margin-right:8px;margin-bottom:4px;'
+            )
             if resume_url:
                 if resume_expired:
-                    resume_label = f"⚠️ {resume_label}"
-                links.append(f"[{resume_label}]({resume_url})")
+                    color = 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;'
+                    label = f"⚠️ {resume_label}"
+                else:
+                    color = 'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;'
+                    label = f"📄 {resume_label}"
+                link_buttons.append(
+                    f'<a href="{resume_url}" target="_blank" style="{btn_style}{color}">{label}</a>'
+                )
             elif resume_expired:
-                links.append("⚠️ ~~Resume~~ (expired)")
+                link_buttons.append(
+                    f'<span style="{btn_style}background:#fee2e2;color:#991b1b;border:1px solid #ef4444;">'
+                    f'⚠️ Resume (expired)</span>'
+                )
             if profile:
-                links.append(f"[Profile]({profile})")
+                link_buttons.append(
+                    f'<a href="{profile}" target="_blank" style="{btn_style}'
+                    f'background:#e0e7ff;color:#3730a3;border:1px solid #6366f1;">👤 Profile</a>'
+                )
             if application:
-                links.append(f"[Application]({application})")
-            if links:
-                st.markdown(" | ".join(links))
+                link_buttons.append(
+                    f'<a href="{application}" target="_blank" style="{btn_style}'
+                    f'background:#d1fae5;color:#065f46;border:1px solid #10b981;">📋 Application</a>'
+                )
+            if link_buttons:
+                st.markdown("".join(link_buttons), unsafe_allow_html=True)
 
             # Escalation button
             if on_escalate and not already_escalated:
@@ -215,4 +240,4 @@ def render_screening_table(results_df: pd.DataFrame, position_key: str,
                         "Reset Escalation", key=f"{key_prefix}_reset_esc_{idx}",
                         use_container_width=True
                     ):
-                        on_reset_escalation(email)
+                        on_reset_escalation(email or name)

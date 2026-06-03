@@ -174,6 +174,14 @@ def authenticate_user(username: str, password: str, admin_name: str = None) -> O
 
     # 3. Check divisions by short username
     division_name = DIVISION_USERNAMES.get(username_lower)
+
+    # Also allow full division name as username (reverse lookup)
+    if not division_name:
+        for full_name in st.session_state.get("credentials", {}).keys():
+            if username_lower == full_name.strip().lower():
+                division_name = full_name
+                break
+
     if division_name:
         credentials = st.session_state.get("credentials", {})
         stored = credentials.get(division_name, "")

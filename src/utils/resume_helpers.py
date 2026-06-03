@@ -49,10 +49,13 @@ def is_gcs_url_expired(url: str) -> bool:
         if goog_date and goog_expires:
             try:
                 from datetime import datetime
+                import calendar
                 # X-Goog-Date format: 20250509T183203Z
                 dt = datetime.strptime(goog_date[0], "%Y%m%dT%H%M%SZ")
                 expires_seconds = int(goog_expires[0])
-                expiry_time = dt.timestamp() + expires_seconds
+                expiry_time = calendar.timegm(dt.timetuple()) + expires_seconds
+                
+                # Check if it really expired
                 return expiry_time < time.time()
             except (ValueError, TypeError):
                 return False
@@ -91,5 +94,5 @@ def get_resume_display_info(resume_link: str, application_link: str = "",
             return kalibrr_link.strip(), "Resume (via Profile)", True
         return "", "", True
 
-    # Resume link is still valid
-    return resume_link, "Resume", False
+    # Resume link is still valid — show as direct PDF
+    return resume_link, "Resume (PDF)", False

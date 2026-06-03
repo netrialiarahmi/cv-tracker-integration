@@ -230,6 +230,9 @@ def submit_skill_review(
         "soft_skill": _clamp(ratings.get("soft_skill", 1)),
         "value_kg": _clamp(ratings.get("value_kg", 1)),
         "technical_skill": _clamp(ratings.get("technical_skill", 1)),
+        "technical_skills": {
+            k: _clamp(v) for k, v in (ratings.get("technical_skills") or {}).items()
+        },
         "note": (note or "").strip(),
         "decision": decision,
         "reviewer": reviewer,
@@ -246,14 +249,25 @@ def submit_skill_review(
         candidate.status = decision
 
         # Mirror the review as a comment so HR sees the trail
+        tech_str = ""
+        if entry["technical_skills"]:
+            parts = [f"<li style='margin-bottom:0.15rem;'>{k}: <strong>{v}/4</strong></li>" for k, v in entry["technical_skills"].items()]
+            tech_str = f"<strong>Technical Skills:</strong><ul style='margin-top:0.25rem;margin-bottom:0.25rem;padding-left:1.5rem;'>{''.join(parts)}</ul>"
+        else:
+            tech_str = f"<strong>Technical Skill:</strong> {entry['technical_skill']}/4<br>"
+
         summary = (
-            f"Skill review — Soft Skill: {entry['soft_skill']}/4, "
-            f"Value KG: {entry['value_kg']}/4, "
-            f"Technical Skill: {entry['technical_skill']}/4. "
-            f"Decision: {decision}."
+            f"<div style='line-height:1.5;'>"
+            f"<strong>Skill review:</strong><br>"
+            f"Soft Skill: <strong>{entry['soft_skill']}/4</strong><br>"
+            f"Value KG: <strong>{entry['value_kg']}/4</strong><br>"
+            f"{tech_str}"
+            f"Decision: <span style='font-weight:600;color:#2563eb;'>{decision}</span>"
         )
         if entry["note"]:
-            summary += f" Catatan: {entry['note']}"
+            summary += f"<br><br><strong>Catatan:</strong><br>{entry['note']}"
+        summary += "</div>"
+        
         candidate.add_comment(reviewer, reviewer_division, summary, action="review")
 
         candidates[i] = candidate.to_dict()
