@@ -326,8 +326,8 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
     # --- Pool section: completed positions ---
     if len(pool_data) > 0:
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown(f"### 🗂 Completed Positions — {len(pool_data)}")
-        st.caption("Posisi yang sudah selesai direkrut.")
+        st.markdown(f'<div class="section-heading"><h3>Completed Positions ({len(pool_data)})</h3></div>', unsafe_allow_html=True)
+        st.caption("Positions that have successfully completed the recruitment process.")
         for idx, row in pool_data.iterrows():
             active_stages = stages if row.get('Has Skill Test', True) else [s for s in stages if s != "Skill Test"]
             completed_date = str(row.get('Completed Date', '') or '').strip()
