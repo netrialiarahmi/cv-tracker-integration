@@ -99,7 +99,7 @@ function resolveDivision(jobPosition, currentDivision = '') {
   
   if (lowerJob.includes('account executive pasangiklan') || lowerJob.includes('account executive vcbl')) {
     return {
-      division: 'VCBL & Pasang Iklan Division',
+      division: 'VCBL & Pasangiklan Division',
       directorate: '',
       department: '',
       section: '',
