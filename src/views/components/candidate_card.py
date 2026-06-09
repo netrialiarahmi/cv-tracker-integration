@@ -265,14 +265,16 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             r1, r2 = st.columns(2)
             with r1:
-                soft_skill = st.slider(
-                    "Soft Skill", min_value=1, max_value=4, step=1,
-                    value=default_soft, key=f"{key_prefix}_rate_soft",
+                soft_skill = st.radio(
+                    "Soft Skill", options=[1, 2, 3, 4],
+                    index=max(0, min(3, default_soft - 1)), key=f"{key_prefix}_rate_soft",
+                    horizontal=True
                 )
             with r2:
-                value_kg = st.slider(
-                    "Value KG", min_value=1, max_value=4, step=1,
-                    value=default_value, key=f"{key_prefix}_rate_value",
+                value_kg = st.radio(
+                    "Value KG", options=[1, 2, 3, 4],
+                    index=max(0, min(3, default_value - 1)), key=f"{key_prefix}_rate_value",
+                    horizontal=True
                 )
 
             # Technical Skills — dynamic from job requirements
@@ -315,9 +317,10 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                         label_visibility="collapsed",
                     )
                 with tc2:
-                    skill_rating = st.slider(
-                        f"Rating {si+1}", min_value=1, max_value=4, step=1,
-                        value=default_rating, key=f"{key_prefix}_tech_rate_{si}",
+                    skill_rating = st.radio(
+                        f"Rating {si+1}", options=[1, 2, 3, 4],
+                        index=max(0, min(3, default_rating - 1)), key=f"{key_prefix}_tech_rate_{si}",
+                        horizontal=True,
                         label_visibility="collapsed",
                     )
                 if skill_name.strip():
