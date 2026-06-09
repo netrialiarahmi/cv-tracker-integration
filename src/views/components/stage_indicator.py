@@ -25,21 +25,6 @@ def render_stage_indicator(row: pd.Series, active_stages: list[str]) -> None:
             icon = "○"
             border = "1px solid #e5e7eb"
             
-        html_str += f"""
-        <div style="
-            background-color: {bg_color};
-            color: {text_color};
-            border: {border};
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        ">
-            <span>{icon}</span> {stage}
-        </div>
-        """
+        html_str += f"""<div style="background-color: {bg_color}; color: {text_color}; border: {border}; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;"><span>{icon}</span> {stage}</div>"""
     html_str += "</div>"
     st.markdown(html_str, unsafe_allow_html=True)
