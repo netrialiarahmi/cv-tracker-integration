@@ -170,9 +170,13 @@ def render_position_form(idx: int, row: pd.Series, can_edit: bool, stages: List[
         hire_type = row.get("Hire Type", "Additional")
         replacement_for = row.get("Replacement For", "")
     
-    # Hiring stages checkboxes
+    # Hiring stages indicator
+    st.markdown("#### 📝 Hiring Stages")
+    from src.views.components.stage_indicator import render_stage_indicator
+    render_stage_indicator(row, stages)
+
     if can_edit:
-        st.markdown("#### 📝 Hiring Stages")
+        st.markdown("##### Update Stages")
         cols = st.columns(4)
         stage_changed = False
         for i, stage in enumerate(stages):

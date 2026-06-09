@@ -305,16 +305,10 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
             st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
             
-            # Read-only hiring stage display
+            # Beautiful read-only hiring stage display
             st.markdown("#### Hiring Stages")
-            
-            # Display stages as read-only status indicators
-            cols = st.columns(4)
-            for i, stage in enumerate(active_stages):
-                with cols[i % 4]:
-                    status = "Done" if row[stage] else "Pending"
-                    st.markdown(f"{status} **{stage}**")
-            st.markdown("<br>", unsafe_allow_html=True)
+            from src.views.components.stage_indicator import render_stage_indicator
+            render_stage_indicator(row, active_stages)
     
             # Notes and date
             if row.get("Notes"):
@@ -346,11 +340,8 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
                 st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown("#### Hiring Stages")
-                cols = st.columns(4)
-                for i, stage in enumerate(active_stages):
-                    with cols[i % 4]:
-                        status = "Done" if row.get(stage) else "Pending"
-                        st.markdown(f"{status} **{stage}**")
+                from src.views.components.stage_indicator import render_stage_indicator
+                render_stage_indicator(row, active_stages)
                 if row.get("Notes"):
                     st.markdown("<br>", unsafe_allow_html=True)
                     st.markdown("#### Notes")
