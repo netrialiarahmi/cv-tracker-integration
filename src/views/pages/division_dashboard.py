@@ -326,37 +326,37 @@ def display_position_details(filtered_data: pd.DataFrame) -> None:
     # --- Pool section: completed positions ---
     if len(pool_data) > 0:
         st.markdown("<br>", unsafe_allow_html=True)
-        with st.expander(f"🗂 Completed Positions — {len(pool_data)}", expanded=False):
-            st.caption("Posisi yang sudah selesai direkrut.")
-            for idx, row in pool_data.iterrows():
-                active_stages = stages if row.get('Has Skill Test', True) else [s for s in stages if s != "Skill Test"]
-                completed_date = str(row.get('Completed Date', '') or '').strip()
-                pool_status = completed_date if completed_date else "Completed"
-                pic_info = f"PIC: {row.get('PIC', 'Unassigned')}" if "PIC" in row else ""
-                hire_type = row.get('Hire Type', 'Additional')
-                if hire_type == 'Replacement' and row.get('Replacement For'):
-                    hire_type_info = f"Replacement for {row['Replacement For']}"
-                else:
-                    hire_type_info = "Additional"
-                status_label_pos = row.get('Status', 'Contract') or 'Contract'
-                _inline_anchor(f"div-pool-{idx}")
-                with st.expander(f"**{row['Job Position']}** • {pool_status} • {pic_info} • {hire_type_info} • {status_label_pos}"):
-                    progress_pct = calculate_position_progress(row, stages)
-                    badge_class, badge_text = get_progress_badge(progress_pct)
-                    st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
+        st.markdown(f"### 🗂 Completed Positions — {len(pool_data)}")
+        st.caption("Posisi yang sudah selesai direkrut.")
+        for idx, row in pool_data.iterrows():
+            active_stages = stages if row.get('Has Skill Test', True) else [s for s in stages if s != "Skill Test"]
+            completed_date = str(row.get('Completed Date', '') or '').strip()
+            pool_status = completed_date if completed_date else "Completed"
+            pic_info = f"PIC: {row.get('PIC', 'Unassigned')}" if "PIC" in row else ""
+            hire_type = row.get('Hire Type', 'Additional')
+            if hire_type == 'Replacement' and row.get('Replacement For'):
+                hire_type_info = f"Replacement for {row['Replacement For']}"
+            else:
+                hire_type_info = "Additional"
+            status_label_pos = row.get('Status', 'Contract') or 'Contract'
+            _inline_anchor(f"div-pool-{idx}")
+            with st.expander(f"**{row['Job Position']}** • {pool_status} • {pic_info} • {hire_type_info} • {status_label_pos}"):
+                progress_pct = calculate_position_progress(row, stages)
+                badge_class, badge_text = get_progress_badge(progress_pct)
+                st.markdown(f'<span class="progress-badge {badge_class}">{badge_text}</span>', unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("#### Hiring Stages")
+                cols = st.columns(4)
+                for i, stage in enumerate(active_stages):
+                    with cols[i % 4]:
+                        status = "Done" if row.get(stage) else "Pending"
+                        st.markdown(f"{status} **{stage}**")
+                if row.get("Notes"):
                     st.markdown("<br>", unsafe_allow_html=True)
-                    st.markdown("#### Hiring Stages")
-                    cols = st.columns(4)
-                    for i, stage in enumerate(active_stages):
-                        with cols[i % 4]:
-                            status = "Done" if row.get(stage) else "Pending"
-                            st.markdown(f"{status} **{stage}**")
-                    if row.get("Notes"):
-                        st.markdown("<br>", unsafe_allow_html=True)
-                        st.markdown("#### Notes")
-                        st.info(row["Notes"])
-                    if "Last Updated" in row:
-                        st.caption(f"Last Updated: {row['Last Updated']}")
+                    st.markdown("#### Notes")
+                    st.info(row["Notes"])
+                if "Last Updated" in row:
+                    st.caption(f"Last Updated: {row['Last Updated']}")
 
 
 def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
