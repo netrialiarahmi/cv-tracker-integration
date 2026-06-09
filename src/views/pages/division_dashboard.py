@@ -397,11 +397,12 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
             positions[pos] = []
         positions[pos].append(c)
 
-    # Status filter
-    status_filter = st.selectbox(
-        "Filter by status",
-        ["All"] + Candidate.ALL_STATUSES,
-        key="div_candidate_status_filter"
+    # Position filter
+    position_options = ["All"] + list(positions.keys())
+    position_filter = st.selectbox(
+        "Filter by position",
+        position_options,
+        key="div_candidate_position_filter"
     )
 
     # Map decision → feedback action understood downstream by feedback_service
@@ -414,6 +415,10 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     cv_positions_df = fetch_job_positions_from_cv_matching()
 
     for position_key, pos_candidates in positions.items():
+        # Apply position filter
+        if position_filter != "All" and position_key != position_filter:
+            continue
+
         # Get job description for feedback and auto-skills
         job_desc = ""
         if cv_positions_df is not None and not cv_positions_df.empty:
@@ -423,10 +428,6 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
         
         # Auto-extract skills if we found a JD
         auto_skills = extract_technical_skills_from_jd(job_desc) if job_desc else []
-
-        # Filter by status
-        if status_filter != "All":
-            pos_candidates = [c for c in pos_candidates if c.status == status_filter]
 
         if not pos_candidates:
             continue

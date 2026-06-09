@@ -96,6 +96,16 @@ function resolveDivision(jobPosition, currentDivision = '') {
       source: 'manual_override'
     };
   }
+  
+  if (lowerJob.includes('account executive pasangiklan') || lowerJob.includes('account executive vcbl')) {
+    return {
+      division: 'VCBL & Pasang Iklan Division',
+      directorate: '',
+      department: '',
+      section: '',
+      source: 'manual_override'
+    };
+  }
 
   const entries = loadLookup();
   const fallback = {

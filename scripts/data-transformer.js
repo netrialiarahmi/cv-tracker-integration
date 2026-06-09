@@ -461,7 +461,8 @@ function dedupeNotes(notes) {
  */
 function isFrozen(bucketName) {
   return bucketName.includes(config.specialBuckets.hold) ||
-         bucketName.includes(config.specialBuckets.canceled);
+         bucketName.includes(config.specialBuckets.canceled) ||
+         bucketName.includes(config.specialBuckets.inProgress);
 }
 
 /**
