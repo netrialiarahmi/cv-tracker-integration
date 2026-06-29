@@ -17,6 +17,31 @@ from src.config.settings import (
 from src.models.candidate import Candidate
 
 
+def _normalize_text(value: Any) -> str:
+    """Normalize free-text fields for case-insensitive matching."""
+    return str(value or "").strip().lower()
+
+
+def _load_position_division_map() -> Dict[str, str]:
+    """Build canonical position -> division mapping from hiring-data.json."""
+    try:
+        from src.repositories.data_manager import load_hiring_data
+
+        df = load_hiring_data()
+        if df is None or df.empty:
+            return {}
+
+        mapping: Dict[str, str] = {}
+        for _, row in df.iterrows():
+            pos = _normalize_text(row.get("Job Position", ""))
+            div = str(row.get("Division", "")).strip()
+            if pos and div:
+                mapping[pos] = div
+        return mapping
+    except Exception:
+        return {}
+
+
 def _get_github_token() -> Optional[str]:
     """Get GitHub token from environment or Streamlit secrets."""
     token = os.environ.get("GITHUB_TOKEN")
@@ -315,7 +340,30 @@ def get_candidates_for_position(position_key: str) -> List[Candidate]:
 def get_candidates_for_division(division: str) -> List[Candidate]:
     """Get all escalated candidates for a specific division."""
     candidates = load_candidates()
-    return [
-        Candidate(c) for c in candidates
-        if c.get("division") == division
-    ]
+    target_division = _normalize_text(division)
+    position_division_map = _load_position_division_map()
+
+    from src.services.division import resolve_division
+
+    scoped: List[Candidate] = []
+    for c in candidates:
+        if _normalize_text(c.get("status", "")) == "transferred":
+            continue
+
+        position_key = _normalize_text(c.get("position_key", ""))
+        effective_division = c.get("division", "")
+
+        # Reconcile stale candidate division with the canonical division
+        # currently assigned to that position in hiring-data.json.
+        canonical = position_division_map.get(position_key, "")
+        if canonical:
+            effective_division = canonical
+        else:
+            resolved = resolve_division(c.get("position_key", ""), str(effective_division or ""))
+            if resolved.get("division"):
+                effective_division = resolved["division"]
+
+        if _normalize_text(effective_division) == target_division:
+            scoped.append(Candidate(c))
+
+    return scoped

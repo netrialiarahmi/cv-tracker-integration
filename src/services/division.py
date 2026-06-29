@@ -30,7 +30,7 @@ _PREFIXES = (
 )
 
 _MANUAL_DIVISION_FALLBACKS = (
-    (re.compile(r"\bdata analyst\b.*\bbi\b", re.IGNORECASE), "Strategy Management Division"),
+    (re.compile(r"\bdata analyst\b.*(?:\bbi\b|\bbusiness intelligence\b)", re.IGNORECASE), "Strategy Management Division"),
     (re.compile(r"\bbusiness development\b", re.IGNORECASE), "Strategy Management Division"),
 )
 

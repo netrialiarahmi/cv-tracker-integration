@@ -23,7 +23,7 @@ const PREFIXES = [
 
 const MANUAL_DIVISION_FALLBACKS = [
   {
-    pattern: /\bdata analyst\b.*\bbi\b/i,
+    pattern: /\bdata analyst\b.*(?:\bbi\b|\bbusiness intelligence\b)/i,
     division: 'Strategy Management Division'
   },
   {
