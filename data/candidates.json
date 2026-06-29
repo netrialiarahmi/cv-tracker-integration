@@ -218,5 +218,47 @@
         "date_processed": "2026-06-09 11:23:50",
         "skill_ratings": {},
         "comments": []
+    },
+    {
+        "id": "Business_Development_Analyst_muhammadariefdarmawan10@gmail.com_2026-06-29_10:19:46",
+        "name": "Muhammad Arief Darmawan",
+        "email": "muhammadariefdarmawan10@gmail.com",
+        "phone": "0857-0013-6109",
+        "match_score": 72,
+        "ai_summary": "Kandidat memiliki pengalaman fungsi Business Development yang sangat relevan dan sesuai durasi yang dibutuhkan. Namun, kelemahan utamanya adalah tidak adanya pengalaman di industri media, yang merupakan risiko signifikan berdasarkan riwayat rekrutmen posisi ini.",
+        "strengths": [
+            "Pengalaman Business Development sangat relevan",
+            "Durasi pengalaman kerja ideal (3-5 tahun)",
+            "Latar belakang pendidikan sesuai",
+            "Berpengalaman riset dan analisis pasar",
+            "Lulusan dari universitas unggulan"
+        ],
+        "weaknesses": [
+            "Tidak ada pengalaman industri media",
+            "Kurang penekanan pada studi kelayakan",
+            "Proyeksi finansial tidak disebutkan eksplisit"
+        ],
+        "gaps": [
+            "Pemahaman proses bisnis industri media",
+            "Pengalaman membuat financial projection formal",
+            "Kemampuan Bahasa Inggris perlu diverifikasi"
+        ],
+        "resume_link": "https://storage.googleapis.com/candidate-file-uploads.kalibrr.com/jobseeker.kalibrr.com/candidate-assets/d43efc7a-8628-42a6-83b4-3b04c5231d72.pdf?Expires=1783306412&GoogleAccessId=abelian-backend%40kalibrr-platform.iam.gserviceaccount.com&Signature=qbl%2B9hR2tomQJJsxWXczmhkZLH1IA3y4iLmuEfJasmcyujBjNNApf0i17z9ymigporAUs3hxKGbNBXAl7dTU6yDj6HwhlfiP5kP48P9F%2F5ztM7P%2FyvxCQRYpKtaWZYf5ufRsvnGLnUfdZnGsTmA6I8YFUwYenVQfrG1YsP9aZuI4mT4IJ2P8SzXRFk0gJqwuvZGk0wwqKB7%2FsodpcZY6YNfCwgH%2Bez4hGngwueIpi%2BdgraN%2FttC8QapacfHq6sJ1aLoea9iWK1wBUeqifXD0%2BHlckQZVKRnJF4TF0h1Tl9lZz1jywgbP1hjB0%2BsHh%2FZCfanhCsKob8JjUOM8Rz1gXQ%3D%3D",
+        "kalibrr_link": "https://www.kalibrr.com/recruiter/sourcing/8761514",
+        "application_link": "https://www.kalibrr.com/ats/candidates/8761514/jobs/265100",
+        "latest_job_title": "Business Development Supervisor",
+        "latest_company": "PT GAMA INOVASI BERDIKARI (GIB)",
+        "education": "S1",
+        "university": "UNIVERSITAS GADJAH MADA (UGM)",
+        "major": "Business Management (Concentration: Marketing)",
+        "status": "Escalated",
+        "position_key": "Business Development Analyst",
+        "division": "Human Resources Media 1 Division",
+        "escalated_by": "HR Superadmin",
+        "escalated_at": "2026-06-29 10:19:46",
+        "date_applied": "2026-06-29 09:26:59",
+        "date_processed": "2026-06-29 09:26:59",
+        "skill_ratings": {},
+        "comments": []
     }
 ]
