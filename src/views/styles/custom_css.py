@@ -906,7 +906,7 @@ div[data-testid="stMultiSelect"] span[data-baseweb="tag"]:hover span[role="prese
     color: #1f2937;
     font-size: 0.86rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.55rem;
     padding: 0.5rem 0.7rem;
     margin-bottom: 0.2rem;
@@ -924,6 +924,15 @@ div[data-testid="stMultiSelect"] span[data-baseweb="tag"]:hover span[role="prese
     align-items: center;
     justify-content: center;
     flex: 0 0 1.25rem;
+    margin-top: 0.05rem;
+}
+.tech-skill-text {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* Compact radios for rating rows */

@@ -313,7 +313,7 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                 with tc1:
                     if default_name:
                         st.markdown(
-                            f"<div class='tech-skill-chip'><span class='tech-skill-idx'>{si+1}</span>{default_name}</div>",
+                            f"<div class='tech-skill-chip'><span class='tech-skill-idx'>{si+1}</span><span class='tech-skill-text'>{default_name}</span></div>",
                             unsafe_allow_html=True,
                         )
                         skill_name = default_name
