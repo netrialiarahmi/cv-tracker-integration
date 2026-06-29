@@ -5,11 +5,47 @@ Auto-detects role (Superadmin / Admin / Division) from credentials.
 
 import streamlit as st
 from src.utils.helpers import get_logo_base64
-from src.controllers.auth import authenticate_user
+from src.controllers.auth import authenticate_user, get_hr_roles
 from src.controllers.session_manager import qp_clear, qp_update
 
 
 LOGIN_SESSION_KEYS = ["logged_in", "user_division", "role", "hr_admin", "hr_admin_name"]
+
+
+def _build_username_dropdown_options() -> tuple[list[str], dict[str, str]]:
+    """Build login username options: superadmin, admins, then division users."""
+    options: list[str] = []
+    value_map: dict[str, str] = {}
+    used_usernames: set[str] = set()
+
+    def add_option(label: str, username: str) -> None:
+        uname = (username or "").strip()
+        if not uname:
+            return
+        key = uname.lower()
+        if key in used_usernames:
+            return
+        used_usernames.add(key)
+        options.append(label)
+        value_map[label] = uname
+
+    hr_roles = get_hr_roles()
+
+    superadmin = hr_roles.get("superadmin", {}) if isinstance(hr_roles, dict) else {}
+    superadmin_username = (superadmin.get("username", "") if isinstance(superadmin, dict) else "").strip() or "hrsuper"
+    add_option(f"HR Superadmin ({superadmin_username})", superadmin_username)
+
+    admins = hr_roles.get("admins", {}) if isinstance(hr_roles, dict) else {}
+    for admin_key in sorted(admins.keys(), key=lambda x: x.lower()):
+        admin_data = admins.get(admin_key, {})
+        admin_name = admin_data.get("name", admin_key) if isinstance(admin_data, dict) else admin_key
+        add_option(f"HR Admin - {admin_name} ({admin_key})", admin_key)
+
+    divisions = sorted(st.session_state.get("credentials", {}).keys(), key=lambda x: x.lower())
+    for division in divisions:
+        add_option(f"Division - {division}", division)
+
+    return options, value_map
 
 
 def _set_login_state(auth_result: dict) -> None:
@@ -56,7 +92,13 @@ def render() -> None:
     with col_form:
         st.markdown('<div class="login-form">', unsafe_allow_html=True)
         with st.form("login_form", clear_on_submit=False):
-            username = st.text_input("Username", placeholder="Enter your username")
+            dropdown_options, username_map = _build_username_dropdown_options()
+            username = ""
+            if dropdown_options:
+                selected_label = st.selectbox("Username", options=dropdown_options)
+                username = username_map.get(selected_label, "")
+            else:
+                st.warning("No login users available. Please check credentials and HR roles.")
             password = st.text_input("Password", type="password", placeholder="Enter your password")
             submitted = st.form_submit_button("Sign In", use_container_width=True)
 

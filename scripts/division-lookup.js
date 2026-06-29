@@ -21,6 +21,17 @@ const PREFIXES = [
   'managing '
 ];
 
+const MANUAL_DIVISION_FALLBACKS = [
+  {
+    pattern: /\bdata analyst\b.*\bbi\b/i,
+    division: 'Strategy Management Division'
+  },
+  {
+    pattern: /\bbusiness development\b/i,
+    division: 'Strategy Management Division'
+  }
+];
+
 let _cache = null;
 
 function loadLookup() {
@@ -78,6 +89,23 @@ function tokenSetMatch(query, entries) {
   return bestScore >= 0.5 ? bestKey : null;
 }
 
+function manualDivisionFallback(jobPosition) {
+  const sourceText = String(jobPosition || '').trim();
+  if (!sourceText) return null;
+  for (const rule of MANUAL_DIVISION_FALLBACKS) {
+    if (rule.pattern.test(sourceText)) {
+      return {
+        division: rule.division,
+        directorate: '',
+        department: '',
+        section: '',
+        source: 'manual_fallback'
+      };
+    }
+  }
+  return null;
+}
+
 /**
  * Resolve the canonical division hierarchy for a job title.
  * @param {string} jobPosition
@@ -85,6 +113,11 @@ function tokenSetMatch(query, entries) {
  * @returns {{division:string, directorate:string, department:string, section:string, source:string}}
  */
 function resolveDivision(jobPosition, currentDivision = '') {
+  const manual = manualDivisionFallback(jobPosition);
+  if (manual) {
+    return manual;
+  }
+
   // Manual overrides requested by user
   const lowerJob = (jobPosition || '').toLowerCase().trim();
   if (lowerJob === 'socmed ohayo intern' || lowerJob.startsWith('marcomm officer (partnership)')) {

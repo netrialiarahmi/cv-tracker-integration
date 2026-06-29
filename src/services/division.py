@@ -29,6 +29,11 @@ _PREFIXES = (
     "managing ",
 )
 
+_MANUAL_DIVISION_FALLBACKS = (
+    (re.compile(r"\bdata analyst\b.*\bbi\b", re.IGNORECASE), "Strategy Management Division"),
+    (re.compile(r"\bbusiness development\b", re.IGNORECASE), "Strategy Management Division"),
+)
+
 
 def normalize_title(title: str) -> str:
     """Match the normalization used by `scripts/build_division_lookup.py`."""
@@ -78,6 +83,24 @@ def _token_set_match(query: str, entries: Dict[str, dict]) -> Optional[str]:
     return best_key if best_score >= 0.5 else None
 
 
+def _manual_division_fallback(job_position: str) -> Optional[dict]:
+    """Apply fixed manual fallback rules for known position naming patterns."""
+    source_text = (job_position or "").strip()
+    if not source_text:
+        return None
+
+    for pattern, division in _MANUAL_DIVISION_FALLBACKS:
+        if pattern.search(source_text):
+            return {
+                "division": division,
+                "directorate": "",
+                "department": "",
+                "section": "",
+                "source": "manual_fallback",
+            }
+    return None
+
+
 def resolve_division(job_position: str, current_division: str = "") -> dict:
     """
     Resolve the canonical division hierarchy for a given job title.
@@ -98,6 +121,10 @@ def resolve_division(job_position: str, current_division: str = "") -> dict:
         "section": "",
         "source": "planner",
     }
+    manual = _manual_division_fallback(job_position)
+    if manual:
+        return manual
+
     if not entries or not job_position:
         return fallback
 
