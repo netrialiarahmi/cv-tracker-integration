@@ -324,6 +324,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         st.info("No results match the current filters.")
 
     # Apply sorting
+    filtered_data = filtered_data.copy()
     sort_by = st.session_state.get("ad_sort_by", "Default")
     if sort_by != "Default" and "Created Date" in filtered_data.columns:
         from src.views.pages.superadmin_dashboard import _calculate_hiring_days

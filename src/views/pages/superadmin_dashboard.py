@@ -334,6 +334,7 @@ def display_hiring_management(filtered_data: pd.DataFrame) -> None:
         st.info("No positions match the current filters.")
 
     # Apply sorting
+    filtered_data = filtered_data.copy()
     sort_by = st.session_state.get("sa_sort_by", "Default")
     if sort_by != "Default" and "Created Date" in filtered_data.columns:
         # Calculate hiring days for each row
