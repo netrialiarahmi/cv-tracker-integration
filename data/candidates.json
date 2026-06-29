@@ -294,5 +294,46 @@
         "date_processed": "2025-12-12 04:43:48",
         "skill_ratings": {},
         "comments": []
+    },
+    {
+        "id": "Account_Executive_Pasangiklan.com_felixfff1911@gmail.com_2026-06-29_03:27:24",
+        "name": "felix fernando",
+        "email": "felixfff1911@gmail.com",
+        "phone": "62-85926921144",
+        "match_score": 78,
+        "ai_summary": "Kandidat memiliki pengalaman yang sangat relevan sebagai Account Officer di bank, dengan tugas utama akuisisi klien B2B dan manajemen relasi yang selaras dengan peran Account Executive. Meskipun fungsi peran cocok, pengalamannya masih di bawah satu tahun dan berasal dari industri yang berbeda (perbankan vs. media digital). Terdapat kesenjangan pada pengalaman spesifik terkait industri periklanan seperti pelaporan kampanye dan koordinasi event.",
+        "strengths": [
+            "Pengalaman langsung dalam akuisisi dan pengelolaan klien B2B.",
+            "Fungsi pekerjaan saat ini sebagai Account Officer sangat cocok dengan posisi yang dilamar.",
+            "Memenuhi kualifikasi total pengalaman kerja di bawah 2 tahun.",
+            "Memiliki kemampuan dalam analisis keuangan dan penyusunan proposal yang dapat ditransfer."
+        ],
+        "weaknesses": [
+            "Pengalaman kerja relevan kurang dari 1 tahun, sedikit di bawah target ideal 1-2 tahun.",
+            "Latar belakang industri perbankan yang berbeda dengan industri periklanan digital.",
+            "Tidak ada pengalaman spesifik dalam mengelola kampanye iklan atau event klien."
+        ],
+        "gaps": [
+            "Tidak ada bukti pencapaian target penjualan di atas 90% yang disebutkan dalam profil.",
+            "Kurangnya pengalaman dalam membuat strategi untuk mencapai target pendapatan di industri media.",
+            "Tidak memiliki pengalaman dalam pelaporan kampanye klien dan pipeline penjualan mingguan secara spesifik."
+        ],
+        "resume_link": "https://storage.googleapis.com/cand-data.kalibrr.com/api.kalibrr.com/candidate-assets/KSRUYQZ9WD72Z3UJZSY2JH2QDDNDZ3SJPSZNTJKD-69e2ffc6.pdf?Expires=1782357557&GoogleAccessId=abelian-backend%40kalibrr-platform.iam.gserviceaccount.com&Signature=2Fc4AY8Cv6mDidP8tcEdB1euhs7D3BUHU2L5V1mmOFd3bbNY6eLTkkho2sIdXlbCgiwPc1r%2B1pRMd7p2jPJdIY0w%2FO1v76h0RRhfp6KQ2uFv3waAYkQgxS5Li8P%2BjHQOQPk3HvM2fD1Ib2vRRwLW7tJ3FpoyK%2FotThm2G7aHNCog81icSvKOxHa7R5zEfEIzf5rZ9E84UttViGOtld%2FVcjPztGK%2B1N6BXJjpGXJ1fqeH%2F3LJnWPV%2BtV7S3BSKQvmR2ccd2UW8tOsSkOBG4qqH5hezfe3PHBcCisCALx43SRKWwvvSyEtsg5kRewiN4E3GeHxawGJPuGzZPLv0QI8pA%3D%3D",
+        "kalibrr_link": "https://www.kalibrr.com/recruiter/sourcing/7506592",
+        "application_link": "https://www.kalibrr.com/ats/candidates/7506592/jobs/265354",
+        "latest_job_title": "Account Officer",
+        "latest_company": "PANIN BANK",
+        "education": "S1",
+        "university": "College Kwik Kian Gie School of Business",
+        "major": "Business Administration",
+        "status": "Escalated",
+        "position_key": "Account Executive Pasangiklan.com",
+        "division": "VCBL & Pasangiklan Division",
+        "escalated_by": "HR Superadmin",
+        "escalated_at": "2026-06-29 03:27:24",
+        "date_applied": "2026-05-04 06:57",
+        "date_processed": "2026-06-04 10:52:02",
+        "skill_ratings": {},
+        "comments": []
     }
 ]
