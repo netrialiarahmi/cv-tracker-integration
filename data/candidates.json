@@ -335,5 +335,39 @@
         "date_processed": "2026-06-04 10:52:02",
         "skill_ratings": {},
         "comments": []
+    },
+    {
+        "id": "Data_Analyst_(Business_Intelligence)_mradian183@gmail.com_2026-06-29_03:45:55",
+        "name": "Muhammad Radian Suriaatmaja",
+        "email": "mradian183@gmail.com",
+        "phone": "62-85882277068",
+        "match_score": 80,
+        "ai_summary": "Kandidat memiliki latar belakang pendidikan yang relevan dari universitas terkemuka dan pengalaman yang sesuai dalam analisis bisnis dan pengembangan strategi. Pengalaman di industri media dan keahlian analisis data yang kuat menjadi nilai tambah, meskipun pengalaman yang paling relevan berdurasi singkat dan peran terakhirnya kurang sejalan.",
+        "strengths": [
+            "Latar belakang pendidikan S1 Manajemen dari Universitas Padjadjaran sesuai dengan kualifikasi., Memiliki pengalaman langsung di industri media sebagai Head of Business Development di MyMedia.id., Keahlian analisis data kuantitatif/kualitatif dan pemodelan finansial yang kuat, relevan untuk analisis bisnis., Total pengalaman kerja yang relevan (sekitar 1 tahun 9 bulan) berada dalam batas maksimal 4 tahun yang disyaratkan., Kemampuan berbahasa Inggris yang baik, dibuktikan dengan riwayat pendidikan Magister di universitas luar negeri."
+        ],
+        "weaknesses": [
+            "Durasi pengalaman yang paling relevan di industri media (MyMedia.id) sangat singkat, hanya 6 bulan., Peran terakhir sebagai Public Policy Analyst kurang sejalan dengan lingkup pekerjaan Business Development., Beberapa pengalaman sebelumnya memiliki jabatan 'Head', yang mungkin tidak sepenuhnya selaras dengan ekspektasi untuk posisi 'Analyst', meskipun total pengalaman masih junior., Fokus CV dan proyek yang sangat kuat pada 'Data Analytics' mungkin menunjukkan minat utama yang berbeda dari pengembangan bisnis murni."
+        ],
+        "gaps": [
+            "Tidak ada pengalaman jangka panjang yang secara spesifik berfokus pada peran Business Development Analyst., Tidak disebutkan secara eksplisit pengalaman dalam menyusun proposal bisnis atau studi kelayakan (feasibility study) dari awal., Pengalaman kerja yang relevan tidak berurutan dan terpotong oleh peran di bidang kebijakan publik."
+        ],
+        "resume_link": "",
+        "kalibrr_link": "https://www.kalibrr.com/recruiter/sourcing/2362948",
+        "application_link": "https://www.kalibrr.com/ats/candidates/2362948/jobs/258955",
+        "latest_job_title": "Public Policy Analyst",
+        "latest_company": "Maxima Polhub",
+        "education": "Lulus program Magister (S2)",
+        "university": "Monash University",
+        "major": "Marketing",
+        "status": "Escalated",
+        "position_key": "Data Analyst (Business Intelligence)",
+        "division": "Product & Data Division",
+        "escalated_by": "HR Superadmin",
+        "escalated_at": "2026-06-29 03:45:55",
+        "date_applied": "",
+        "date_processed": "2026-06-29 03:45:53",
+        "skill_ratings": {},
+        "comments": []
     }
 ]
