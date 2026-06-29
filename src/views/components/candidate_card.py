@@ -41,9 +41,12 @@ def _status_color(status: str) -> str:
         "Approved": "#16a34a",
         "Rejected": "#dc2626",
         "Pending": "#64748b",
+        "Direkomendasikan": "#16a34a",
+        "Tidak Direkomendasikan": "#dc2626",
+        "Cadangan": "#d97706",
+        # Backward compatibility for old labels
         "Rekomendasi": "#16a34a",
         "Tidak Direkomendasi": "#dc2626",
-        "Cadangan": "#d97706",
     }.get(status, "#64748b")
 
 
@@ -54,9 +57,12 @@ def _status_bg(status: str) -> str:
         "Approved": "#f0fdf4",
         "Rejected": "#fef2f2",
         "Pending": "#f8fafc",
+        "Direkomendasikan": "#f0fdf4",
+        "Tidak Direkomendasikan": "#fef2f2",
+        "Cadangan": "#fffbeb",
+        # Backward compatibility for old labels
         "Rekomendasi": "#f0fdf4",
         "Tidak Direkomendasi": "#fef2f2",
-        "Cadangan": "#fffbeb",
     }.get(status, "#f8fafc")
 
 
@@ -361,12 +367,12 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             b1, b2, b3 = st.columns(3)
             with b1:
-                if st.button("Rekomendasi", key=f"{key_prefix}_btn_rec",
+                if st.button("Direkomendasikan", key=f"{key_prefix}_btn_rec",
                              use_container_width=True, type="primary"):
                     on_skill_review(candidate.id, ratings, note_text,
                                     Candidate.STATUS_RECOMMENDED)
             with b2:
-                if st.button("Tidak Direkomendasi", key=f"{key_prefix}_btn_notrec",
+                if st.button("Tidak Direkomendasikan", key=f"{key_prefix}_btn_notrec",
                              use_container_width=True):
                     on_skill_review(candidate.id, ratings, note_text,
                                     Candidate.STATUS_NOT_RECOMMENDED)

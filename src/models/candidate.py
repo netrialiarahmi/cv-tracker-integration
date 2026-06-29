@@ -38,8 +38,8 @@ class Candidate:
     STATUS_APPROVED = "Approved"
     STATUS_REJECTED = "Rejected"
     # New decision values used by the Division dashboard review flow
-    STATUS_RECOMMENDED = "Rekomendasi"
-    STATUS_NOT_RECOMMENDED = "Tidak Direkomendasi"
+    STATUS_RECOMMENDED = "Direkomendasikan"
+    STATUS_NOT_RECOMMENDED = "Tidak Direkomendasikan"
     STATUS_RESERVE = "Cadangan"
 
     # Map legacy → new value at read time so existing candidates.json renders
@@ -47,6 +47,8 @@ class Candidate:
     LEGACY_STATUS_MAP = {
         STATUS_APPROVED: STATUS_RECOMMENDED,
         STATUS_REJECTED: STATUS_NOT_RECOMMENDED,
+        "Rekomendasi": STATUS_RECOMMENDED,
+        "Tidak Direkomendasi": STATUS_NOT_RECOMMENDED,
     }
 
     # Decision values that mark a candidate as actioned (not pending review)

@@ -355,7 +355,7 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     Render the Candidates tab for division users.
     Shows escalated candidates (resume-only view) and lets reviewers submit
     Soft Skill / Value KG / Technical Skill ratings (1–4) plus a decision:
-    Rekomendasi, Tidak Direkomendasi, or Cadangan.
+    Direkomendasikan, Tidak Direkomendasikan, or Cadangan.
     """
     from src.services.candidate_service import (
         get_candidates_for_division, submit_skill_review,
@@ -370,7 +370,7 @@ def _render_candidates_tab(user_div: str, filtered_data: pd.DataFrame) -> None:
     st.markdown("### Candidates for User Interview")
     st.info(
         "Tinjau resume kandidat lalu beri penilaian Soft Skill, Value KG, dan "
-        "Technical Skill (skala 1–4). Pilih: Rekomendasi, Tidak Direkomendasi, "
+        "Technical Skill (skala 1–4). Pilih: Direkomendasikan, Tidak Direkomendasikan, "
         "atau Cadangan."
     )
 
