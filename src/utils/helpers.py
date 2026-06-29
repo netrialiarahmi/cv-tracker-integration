@@ -222,40 +222,78 @@ def extract_technical_skills_from_jd(jd_text: str) -> list[str]:
     """
     if not jd_text or not isinstance(jd_text, str):
         return []
-    
+
     import re
-    lines = jd_text.split('\n')
-    skills = []
-    
+
+    def _finalize(items: list[str]) -> list[str]:
+        out: list[str] = []
+        for item in items:
+            cleaned = re.sub(r"\s+", " ", str(item or "")).strip(" -.;,")
+            if not cleaned:
+                continue
+            cleaned = re.sub(r"\s*-\s*", " - ", cleaned)
+            cleaned = re.sub(r"\s+,", ",", cleaned)
+            if cleaned and cleaned[0].isalpha():
+                cleaned = cleaned[0].upper() + cleaned[1:]
+            if cleaned not in out:
+                out.append(cleaned)
+        return out[:15]
+
+    raw = jd_text.replace("\r", "\n").strip()
+
+    # Pattern A: JD exported as one long dash-delimited paragraph with wrapped lines.
+    # Example:
+    #   - Pengalaman ...\nanalis ... - Latar belakang ... - Kemampuan ...
+    compact = re.sub(r"\s+", " ", raw)
+    if compact.startswith("-") and " - " in compact:
+        dash_parts = [p.strip() for p in re.split(r"\s-\s+", compact.lstrip("- ")) if p.strip()]
+        merged: list[str] = []
+        for part in dash_parts:
+            # Keep the final requirement as one sentence when source is split like:
+            # "Kemampuan reporting & presentasi" + "Pengetahuan Lanskap Bisnis Media"
+            if (
+                merged
+                and part.lower().startswith("pengetahuan ")
+                and ("reporting" in merged[-1].lower() or "presentasi" in merged[-1].lower())
+            ):
+                merged[-1] = f"{merged[-1]} - {part}"
+            else:
+                merged.append(part)
+        return _finalize(merged)
+
+    # Pattern B: line-based bullets / numbered points.
+    lines = raw.split("\n")
+    skills: list[str] = []
+    current = ""
     for line in lines:
         line = line.strip()
-        if not line: continue
-        
-        # Skip headers
-        if "Minimum Qualifications" in line or "Job Description:" in line or "Requirements" in line or "Role Expectations" in line:
+        if not line:
             continue
-            
-        # Clean up bullet points, numbers, and dashes
-        line = re.sub(r'^(\d+\.|-|\u2022|\*)\s*', '', line).strip()
-        if not line: continue
-        
-        lower = line.lower()
-        
-        # Exclude patterns
-        if "year" in lower and "experience" in lower: continue
-        if "degree" in lower: continue
-        if "internship" in lower: continue
-        if "month" in lower and "experience" in lower: continue
-        if "sarjana" in lower: continue
-        if "diploma" in lower: continue
-        
-        # Clean up trailing periods
-        line = line.rstrip('.').strip()
-        
-        # Capitalize first letter
-        if line:
-            line = line[0].upper() + line[1:]
-            skills.append(line)
-            
-    # Remove duplicates preserving order, limit to 15
-    return list(dict.fromkeys(skills))[:15]
+
+        if any(h in line for h in ("Minimum Qualifications", "Job Description:", "Requirements", "Role Expectations")):
+            continue
+
+        line = re.sub(r"^(\d+[\.)]|-|\u2022|\*)\s*", "", line).strip()
+        if not line:
+            continue
+
+        is_continuation = bool(current) and (
+            bool(re.match(r"^[a-z]", line))
+            or current.endswith((",", "-", "/", "&"))
+        )
+
+        if is_continuation:
+            current = f"{current} {line}".strip()
+        else:
+            if current:
+                skills.append(current)
+            current = line
+
+        if re.search(r"[\.;:]$", line):
+            skills.append(current)
+            current = ""
+
+    if current:
+        skills.append(current)
+
+    return _finalize(skills)
