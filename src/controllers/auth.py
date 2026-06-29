@@ -29,15 +29,26 @@ def hash_password(plain: str) -> str:
 def get_hr_roles() -> Dict[str, Any]:
     """
     Load HR roles configuration from multiple sources with priority:
-    1. .streamlit/secrets.toml (for manual edits)
-    2. st.secrets (Streamlit-managed)
-    3. hr_roles.json (runtime-managed)
+    1. hr_roles.json (runtime-managed source of truth)
+    2. .streamlit/secrets.toml (for manual edits)
+    3. st.secrets (Streamlit-managed)
     4. Default values
     
     Returns:
         Dictionary containing superadmin and admins configuration
     """
-    # Try reading .streamlit/secrets.toml first so manual edits are visible immediately
+    # 1) Prefer runtime-managed JSON in repo/workspace.
+    if os.path.exists(HR_ROLES_FILE):
+        try:
+            with open(HR_ROLES_FILE, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            if isinstance(payload, dict):
+                return payload
+        except Exception:
+            # Continue to other providers when file is malformed/unreadable.
+            pass
+
+    # 2) Try reading .streamlit/secrets.toml
     toml_path = os.path.join(".streamlit", "secrets.toml")
     if os.path.exists(toml_path):
         try:
@@ -78,7 +89,7 @@ def get_hr_roles() -> Dict[str, Any]:
             # If file parsing fails, continue to try st.secrets / json fallback
             pass
 
-    # If no/invalid TOML, try st.secrets (Streamlit-managed)
+    # 3) If no/invalid TOML, try st.secrets (Streamlit-managed)
     try:
         hr_data = st.secrets.get("hr_roles")
         if hr_data:
@@ -104,10 +115,7 @@ def get_hr_roles() -> Dict[str, Any]:
     except Exception:
         pass
 
-    # fallback to hr_roles.json (runtime-managed) or defaults
-    if os.path.exists(HR_ROLES_FILE):
-        with open(HR_ROLES_FILE) as f:
-            return json.load(f)
+    # 4) Final fallback
     return DEFAULT_HR_ROLES
 
 

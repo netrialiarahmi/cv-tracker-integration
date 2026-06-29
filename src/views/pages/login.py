@@ -32,8 +32,9 @@ def _build_username_dropdown_options() -> tuple[list[str], dict[str, str]]:
     hr_roles = get_hr_roles()
 
     superadmin = hr_roles.get("superadmin", {}) if isinstance(hr_roles, dict) else {}
-    superadmin_username = (superadmin.get("username", "") if isinstance(superadmin, dict) else "").strip() or "hrsuper"
-    add_option(f"HR Superadmin ({superadmin_username})", superadmin_username)
+    superadmin_username = (superadmin.get("username", "") if isinstance(superadmin, dict) else "").strip()
+    if superadmin_username:
+        add_option(f"HR Superadmin ({superadmin_username})", superadmin_username)
 
     admins = hr_roles.get("admins", {}) if isinstance(hr_roles, dict) else {}
     for admin_key in sorted(admins.keys(), key=lambda x: x.lower()):
