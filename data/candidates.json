@@ -285,7 +285,7 @@
         "education": "Lulus program Magister (S2)",
         "university": "Monash University",
         "major": "Marketing",
-        "status": "Escalated",
+        "status": "Transferred",
         "position_key": "Business Development Analyst",
         "division": "Human Resources Media 1 Division",
         "escalated_by": "HR Superadmin",
@@ -293,7 +293,13 @@
         "date_applied": "",
         "date_processed": "2025-12-12 04:43:48",
         "skill_ratings": {},
-        "comments": []
+        "comments": [
+            {
+                "author": "HR Superadmin (System)",
+                "comment": "🔄 Candidate transferred to 'Data Analyst (Business Intelligence)' with reason: Diterima di posisi lain.",
+                "date": "2026-06-29 04:39:10"
+            }
+        ]
     },
     {
         "id": "Account_Executive_Pasangiklan.com_felixfff1911@gmail.com_2026-06-29_03:27:24",
@@ -368,6 +374,14 @@
         "date_applied": "",
         "date_processed": "2026-06-29 03:45:53",
         "skill_ratings": {},
-        "comments": []
+        "comments": [
+            {
+                "author": "HR Superadmin (System)",
+                "comment": "🚀 Candidate transferred from 'Business Development Analyst'. AI Re-screening performed successfully with New Score: 80.",
+                "date": "2026-06-29 04:39:10"
+            }
+        ],
+        "transferred_from": "Business Development Analyst",
+        "transferred_at": "2026-06-29 04:39:10"
     }
 ]
