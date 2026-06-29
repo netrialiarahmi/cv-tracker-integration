@@ -258,8 +258,9 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
             # Legacy single value fallback
             legacy_tech = int(existing.get("technical_skill", 0)) if existing else 0
 
+            st.markdown("<div class='review-panel'>", unsafe_allow_html=True)
             st.markdown(
-                "<p style='font-size:0.9rem;font-weight:600;color:#0f172a;margin:0 0 0.25rem 0;'>Penilaian (skala 1–4)</p>",
+                "<p class='review-panel-title'>Penilaian Kandidat (skala 1-4)</p>",
                 unsafe_allow_html=True,
             )
 
@@ -279,7 +280,7 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             # Technical Skills — dynamic from job requirements
             st.markdown(
-                "<p style='font-size:0.85rem;font-weight:600;color:#0f172a;margin:0.75rem 0 0.25rem 0;'>Technical Skills (from Job Requirements)</p>",
+                "<p class='review-subtitle'>Technical Skills (from Job Requirements)</p>",
                 unsafe_allow_html=True,
             )
             st.caption("Berikan skala 1–4 untuk setiap requirement berikut.")
@@ -305,17 +306,25 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             tech_skills_data = {}
             for si in range(st.session_state[num_key]):
-                tc1, tc2 = st.columns([3, 2])
+                tc1, tc2 = st.columns([4, 3])
                 default_name = existing_skill_names[si] if si < len(existing_skill_names) else ""
                 default_rating = int(existing_tech_skills.get(default_name, 1)) if default_name else 1
+                skill_name = ""
                 with tc1:
-                    skill_name = st.text_input(
-                        f"Skill {si+1}",
-                        value=default_name,
-                        key=f"{key_prefix}_tech_name_{si}",
-                        placeholder="e.g. Digital Ads, SEO, Data Analysis...",
-                        label_visibility="collapsed",
-                    )
+                    if default_name:
+                        st.markdown(
+                            f"<div class='tech-skill-chip'><span class='tech-skill-idx'>{si+1}</span>{default_name}</div>",
+                            unsafe_allow_html=True,
+                        )
+                        skill_name = default_name
+                    else:
+                        skill_name = st.text_input(
+                            f"Skill {si+1}",
+                            value="",
+                            key=f"{key_prefix}_tech_name_{si}",
+                            placeholder="Tambah skill kustom...",
+                            label_visibility="collapsed",
+                        )
                 with tc2:
                     skill_rating = st.radio(
                         f"Rating {si+1}", options=[1, 2, 3, 4],
@@ -328,7 +337,7 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
 
             # Add more skills button
             if st.session_state[num_key] < MAX_TECH_SKILLS:
-                if st.button("+ Tambah Skill", key=f"{key_prefix}_add_tech"):
+                if st.button("+ Tambah Skill Kustom", key=f"{key_prefix}_add_tech"):
                     st.session_state[num_key] += 1
                     st.rerun()
 
@@ -366,6 +375,7 @@ def render_candidate_card(candidate: Candidate, key_prefix: str,
                              use_container_width=True):
                     on_skill_review(candidate.id, ratings, note_text,
                                     Candidate.STATUS_RESERVE)
+            st.markdown("</div>", unsafe_allow_html=True)
 
         elif show_actions and not division_view and not actioned:
             # Legacy HR flow (kept for backwards compatibility)

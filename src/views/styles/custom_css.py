@@ -875,6 +875,76 @@ div[data-testid="stMultiSelect"] span[data-baseweb="tag"]:hover span[role="prese
     line-height: 1.5;
 }
 
+/* --- DIVISION REVIEW PANEL --- */
+.review-panel {
+    background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 0.9rem 0.4rem;
+    margin-top: 0.35rem;
+}
+.review-panel-title {
+    margin: 0 0 0.35rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+.review-subtitle {
+    margin: 0.7rem 0 0.2rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brand-primary-dark);
+}
+.tech-skill-chip {
+    min-height: 2.35rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: #f8fafc;
+    color: #1f2937;
+    font-size: 0.86rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.35;
+}
+.tech-skill-idx {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 1.25rem;
+}
+
+/* Compact radios for rating rows */
+div[data-testid="stRadio"] > label p {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Keep custom add-skill button subtle in review panel */
+.review-panel .stButton > button[kind="secondary"] {
+    background: #ffffff !important;
+    border: 1px solid rgba(37, 99, 235, 0.25) !important;
+    color: var(--brand-primary) !important;
+    box-shadow: none !important;
+}
+.review-panel .stButton > button[kind="secondary"]:hover {
+    background: #eff6ff !important;
+    border-color: rgba(37, 99, 235, 0.45) !important;
+}
+
 /* --- OPTION MENU OVERRIDE --- */
 div[data-testid="stHorizontalBlock"] .nav-link {
     font-family: 'Inter', sans-serif !important;
